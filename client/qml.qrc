@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/AgentsDefiner.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/MapEditor.qml</file>
+        <file>qml/WelcomeScreen.qml</file>
+        <file>resource/MapOfPoland.png</file>
+        <file>qml/StyledButton.qml</file>
+        <file>qml/StyledPopup.qml</file>
+    </qresource>
+</RCC>
