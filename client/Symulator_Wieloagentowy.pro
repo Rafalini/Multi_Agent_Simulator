@@ -1,4 +1,4 @@
-QT += quick quickcontrols2 websockets network
+QT += quick quickcontrols2 websockets network widgets
 
 CONFIG += c++11
 
@@ -7,6 +7,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        source/agent.cpp \
+        source/agents.cpp \
         source/city.cpp \
         source/linesegment.cpp \
         source/main.cpp \
@@ -28,6 +30,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    headers/agent.h \
+    headers/agents.h \
     headers/city.h \
     headers/linesegment.h \
     headers/mapproperties.h \

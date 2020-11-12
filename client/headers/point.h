@@ -10,15 +10,19 @@ class LineSegment; //forward declaration
 class Point : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(double x MEMBER x);
+    Q_PROPERTY(double y MEMBER y);
+
 public:
-    Point(double x, double y);
-    virtual QJsonObject toJson();
-    double getX() const;
-    double getY() const;
-    Q_INVOKABLE void addSegment(std::shared_ptr<LineSegment> seg);
+    Point(const double& x, const double& y);
+    const double& getX() const;
+    const double& getY() const;
+    Q_INVOKABLE void addSegment(LineSegment* seg);
+    Q_INVOKABLE void removeSegment(LineSegment* seg);
+    virtual QJsonObject toJson() const;
 
 protected:
-    QVector<std::shared_ptr<LineSegment>> segments;
+    QVector<LineSegment*> segments;
     double x;
     double y;
 };

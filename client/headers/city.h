@@ -7,10 +7,14 @@
 class City : public Point
 {
     Q_OBJECT
+    Q_PROPERTY(QString name MEMBER name);
+
 public:
     City(QString name, double x, double y);
-    Q_PROPERTY(QString name MEMBER name);
-    virtual QJsonObject toJson();
+    virtual QJsonObject toJson() const;
+
+signals:
+
 private:
     QString name;
 };

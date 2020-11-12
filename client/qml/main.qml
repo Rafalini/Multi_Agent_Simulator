@@ -3,10 +3,10 @@ import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 
 Window {
-//    width: Screen.Width
-//    height: Screen.Height
     visible: true
     id: root
+
+    readonly property string lightblue: "#6495ed"
 
     MouseArea {
         anchors.fill: parent
@@ -21,7 +21,7 @@ Window {
         height: 80
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        color: "#6495ed"
+        color: root.lightblue
 
         Row {
             anchors.leftMargin: 10
@@ -46,7 +46,7 @@ Window {
                 text: qsTr("Agenci")
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
-                    agentsDefiner.visible = true;
+                    agentsPage.visible = true;
                     welcomeScreen.visible = false;
                     mapSelector.visible = false;
                 }
@@ -57,7 +57,7 @@ Window {
                 text: qsTr("Mapa")
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
-                    agentsDefiner.visible = false;
+                    agentsPage.visible = false;
                     welcomeScreen.visible = false;
                     mapSelector.visible = true;
                 }
@@ -85,8 +85,8 @@ Window {
 
         }
 
-        AgentsDefiner {
-            id: agentsDefiner
+        AgentsPage {
+            id: agentsPage
             anchors.fill: parent
             visible: false
         }
@@ -98,5 +98,7 @@ Window {
         }
     }
 
-    StyledPopup { }
+    StyledPopup {
+        id: windowDialog
+    }
 }

@@ -9,15 +9,20 @@ class Point; //forward declaration
 class LineSegment : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Point* begining MEMBER begining);
+    Q_PROPERTY(Point* end MEMBER end);
+    Q_PROPERTY(double length MEMBER length );
+
 public:
-    LineSegment(int id, std::shared_ptr<Point> beg, std::shared_ptr<Point> en, double len);
-    QJsonObject toJson();
+    LineSegment(int id, Point* beg, Point* en, double len);
+    QJsonObject toJson() const;
     int getId() const;
+    ~LineSegment();
 
 private:
     int id;
-    std::shared_ptr<Point> begining;
-    std::shared_ptr<Point> end;
+    Point* begining;
+    Point* end;
     double length;
 };
 

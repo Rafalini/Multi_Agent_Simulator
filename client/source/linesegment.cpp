@@ -2,15 +2,18 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-LineSegment::LineSegment(int id, std::shared_ptr<Point> beg, std::shared_ptr<Point> en, double len) : id(id), begining(beg), end(en), length(len) {}
+LineSegment::LineSegment(int id, Point* beg, Point* en, double len) : id(id), begining(beg), end(en), length(len) {}
 
 int LineSegment::getId() const
 {
     return id;
 }
 
+LineSegment::~LineSegment() {
+    begining->removeSegment(this);
+}
 
-QJsonObject LineSegment::toJson() {
+QJsonObject LineSegment::toJson() const {
     QJsonObject obj;
     obj["id"] = id;
     obj["x1"] = begining->getX();

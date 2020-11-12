@@ -7,17 +7,21 @@ Popup {
     x: root.width/2 - width/2
     y: root.height/2 - height/2
     id: popup
-    closePolicy: Popup.CloseOnEscape
     contentItem: Text {
             id: popupText
 
             text: ""
             anchors.fill: parent
     }
+
+    function showError(text) {
+        popupText.text = text;
+        open();
+    }
     Connections {
         target: remoteConnector
         function onAnswerReceived(text) {
-            popupText.text = "<html>" + text + "<br><br>Nacisnij escape aby włączyć popup</html>";
+            popupText.text = "<html>" + text + "<br><br>Nacisnij escape aby wyłączyć popup</html>";
             popup.open();
         }
     }

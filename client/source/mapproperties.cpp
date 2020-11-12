@@ -8,9 +8,7 @@
 
 MapProperties::MapProperties() { }
 
-QJsonDocument MapProperties::toJson() {
-    QJsonDocument doc;
-
+QJsonObject MapProperties::toJson() const {
     QJsonObject obj;
     QJsonArray citiesArray;
     for(auto &city : cities) {
@@ -32,39 +30,49 @@ QJsonDocument MapProperties::toJson() {
         segmentsArray.append(jsonCity);
     }
     obj["segments"] = segmentsArray;
-
-    doc.setObject(obj);
-    return doc;
+    return obj;
 }
 
 void MapProperties::addCity(QString name, int x, int y) {
-    std::shared_ptr<City> city(new City(name, x, y));
+    City* city = new City(name, x, y);
     cities.push_back(city);
 }
 
 void MapProperties::addPoint(int x, int y) {
-    std::shared_ptr<Point> point(new Point(x, y));
+    Point* point = new Point(x, y);
     points.push_back(point);
 }
 
-void MapProperties::addSegment(int length, std::shared_ptr<Point> begining, std::shared_ptr<Point> end) {
-    std::shared_ptr<LineSegment> segment(new LineSegment(nextSegmentId++, begining, end, length));
+void MapProperties::addSegment(int length, Point* begining, Point* end) {
+    LineSegment* segment = new LineSegment(nextSegmentId++, begining, end, length);
     begining->addSegment(segment);
     end->addSegment(segment);
     segments.push_back(segment);
 }
 
-QVector<std::shared_ptr<City> > MapProperties::getCities() const
+MapProperties::~MapProperties() {
+    for(auto& city : cities) {
+        delete city;
+    }
+    for(auto& point : points) {
+        delete point;
+    }
+    for(auto& segment : segments) {
+        delete segment;
+    }
+}
+
+QVector<City*> MapProperties::getCities() const
 {
     return cities;
 }
 
-QVector<std::shared_ptr<Point> > MapProperties::getPoints() const
+QVector<Point*> MapProperties::getPoints() const
 {
     return points;
 }
 
-QVector<std::shared_ptr<LineSegment> > MapProperties::getSegments() const
+QVector<LineSegment*> MapProperties::getSegments() const
 {
     return segments;
 }

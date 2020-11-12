@@ -1,16 +1,18 @@
 #ifndef REMOTECONNECTOR_H
 #define REMOTECONNECTOR_H
 #include <QObject>
-#include "mapproperties.h"
 #include <QtWebSockets>
-
+#include "mapproperties.h"
+#include "agents.h"
 
 class RemoteConnector : public QObject
 {
     Q_OBJECT
+
 public:
-    RemoteConnector(MapProperties *map);
+    RemoteConnector(MapProperties *map, Agents* agents);
     Q_INVOKABLE void submit();
+
 signals:
     void answerReceived(QString);
 
@@ -21,10 +23,12 @@ private Q_SLOTS:
 
 private:
     void sendMessage(QString message);
-    MapProperties *map;
+    MapProperties* map;
+    Agents* agents;
     QWebSocket webSocket;
     QUrl url;
     bool connected;
+    QQueue<QString> messageQueue;
 };
 
 #endif // REMOTECONNECTOR_H

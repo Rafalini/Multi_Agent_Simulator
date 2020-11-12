@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
 
@@ -7,12 +7,13 @@
 #include "../headers/point.h"
 #include "../headers/linesegment.h"
 #include "../headers/mapproperties.h"
+#include "../headers/agents.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
@@ -21,6 +22,11 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
+
+    qRegisterMetaType<Agent*>("Agent");
+    qRegisterMetaType<Agents*>("Agents");
+    qRegisterMetaType<City*>();
+    qRegisterMetaType<QVector<City*>>();
 
     MapProperties map;
     map.addCity("Kraków", 10, 10);
@@ -32,9 +38,13 @@ int main(int argc, char *argv[])
     map.addSegment(80, map.getCities()[1], map.getPoints()[0]);
     map.addSegment(50, map.getCities()[1], map.getPoints()[1]);
 
-    RemoteConnector remote(&map);
+    Agents agents;
+
+    RemoteConnector remote(&map, &agents);
 
     engine.rootContext()->setContextProperty("remoteConnector", &remote);
+    engine.rootContext()->setContextProperty("map", &map);
+    engine.rootContext()->setContextProperty("agents", &agents);
 
     engine.load(url);
     return app.exec();
