@@ -35,7 +35,7 @@ void RemoteConnector::sendMessage(QString message) {
 void RemoteConnector::onConnected() {
     connected = true;
     qDebug() << "connected";
-    while(messageQueue.isEmpty()) {
+    while(!messageQueue.isEmpty()) {
         QString message = messageQueue.dequeue();
         sendMessage(message);
     }
