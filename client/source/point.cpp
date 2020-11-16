@@ -3,14 +3,16 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-Point::Point(const double& x, const double& y) : x(x), y(y) {}
+Point::Point(const double& x, const double& y) : x(x), y(y) {
+    segments = new QVector<LineSegment*>();
+}
 
 void Point::addSegment(LineSegment* seg) {
-    segments.push_back(seg);
+    segments->push_back(seg);
 }
 
 void Point::removeSegment(LineSegment* seg) {
-    segments.removeOne(seg);
+    segments->removeOne(seg);
 }
 
 QJsonObject Point::toJson() const {
@@ -18,7 +20,7 @@ QJsonObject Point::toJson() const {
     obj["x"] = x;
     obj["y"] = y;
     QJsonArray segmentsArray;
-    for(auto &segment : segments) {
+    for(auto &segment : *segments) {
         segmentsArray.append(segment->getId());
     }
     obj["segments"] = segmentsArray;

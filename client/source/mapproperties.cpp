@@ -33,17 +33,17 @@ QJsonObject MapProperties::toJson() const {
     return obj;
 }
 
-void MapProperties::addCity(QString name, int x, int y) {
+void MapProperties::addCity(const QString& name, const double& x, const double& y) {
     City* city = new City(name, x, y);
     cities.push_back(city);
 }
 
-void MapProperties::addPoint(int x, int y) {
+void MapProperties::addPoint(const double& x, const double& y) {
     Point* point = new Point(x, y);
     points.push_back(point);
 }
 
-void MapProperties::addSegment(int length, Point* begining, Point* end) {
+void MapProperties::addSegment(const double& length, Point* begining, Point* end) {
     LineSegment* segment = new LineSegment(nextSegmentId++, begining, end, length);
     begining->addSegment(segment);
     end->addSegment(segment);

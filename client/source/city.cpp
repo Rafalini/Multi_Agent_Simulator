@@ -1,9 +1,8 @@
 #include "../headers/city.h"
-#include "../headers/linesegment.h"
 #include <QJsonObject>
 #include <QJsonArray>
 
-City::City(QString name, double x, double y) : Point(x, y), name(name) {}
+City::City(const QString& name, const double& x, const double& y) : Point(x, y), name(name) {}
 
 QJsonObject City::toJson() const {
     QJsonObject obj = Point::toJson();

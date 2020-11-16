@@ -2,9 +2,12 @@
 #define LINESEGMENT_H
 
 #include <memory>
+#include <QVector>
 #include <QObject>
 #include "point.h"
-class Point; //forward declaration
+
+QT_FORWARD_DECLARE_CLASS(Point); //forward declaration
+
 
 class LineSegment : public QObject
 {

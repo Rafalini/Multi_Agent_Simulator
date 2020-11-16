@@ -3,9 +3,10 @@
 
 #include <QObject>
 #include <memory>
+#include <QVector>
 #include "linesegment.h"
 
-class LineSegment; //forward declaration
+QT_FORWARD_DECLARE_CLASS(LineSegment); //forward declaration
 
 class Point : public QObject
 {
@@ -22,7 +23,7 @@ public:
     virtual QJsonObject toJson() const;
 
 protected:
-    QVector<LineSegment*> segments;
+    QVector<LineSegment*>* segments;
     double x;
     double y;
 };

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QVector>
 #include "agent.h"
 
 class Agents : public QObject
