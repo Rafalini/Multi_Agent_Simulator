@@ -2,7 +2,6 @@
 *TMP
 *tmp
 *AUTOSAVE
-client/.qmake.stash
-client/dest
 client/build*
-build-Symulator_Wieloagentowy-Qt_5_15_1_WebAssembly-Debug/
+client/emsdk*
+build*/
