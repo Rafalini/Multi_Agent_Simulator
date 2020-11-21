@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
     qRegisterMetaType<QVector<City*>>();
 
     MapProperties map;
-    map.addCity("Kraków", 0.5, 0.5);
-    map.addCity("Warszawa", 0.1, 0.3);
+    map.addCity("Kraków", 0.55, 0.85);
+    map.addCity("Warszawa", 0.65, 0.4);
     map.addPoint(0.1, 0.5);
     map.addPoint(0.5, 0.2);
     map.addSegment(100, map.getCities()[0], map.getPoints()[0]);

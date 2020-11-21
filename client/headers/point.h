@@ -11,8 +11,8 @@ QT_FORWARD_DECLARE_CLASS(LineSegment); //forward declaration
 class Point : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(double x MEMBER x);
-    Q_PROPERTY(double y MEMBER y);
+    Q_PROPERTY(double x MEMBER x FINAL);
+    Q_PROPERTY(double y MEMBER y FINAL);
 
 public:
     Point(const double& x, const double& y);

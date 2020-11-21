@@ -5,3 +5,4 @@
 client/build*
 client/emsdk*
 build*/
+client/tests/build*
