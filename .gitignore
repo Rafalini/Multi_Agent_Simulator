@@ -6,3 +6,7 @@ client/build*
 client/emsdk*
 build*/
 client/tests/build*
+server/build*
+server/bin*
+server/__pycache__*
+server/server

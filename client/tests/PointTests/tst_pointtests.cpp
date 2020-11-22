@@ -1,5 +1,6 @@
 #include <QtTest>
 #include "../../headers/point.h"
+#include "../../headers/linesegment.h"
 
 class PointTests : public QObject
 {
