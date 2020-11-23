@@ -16,15 +16,19 @@ class MapProperties : public QObject
 public:
     MapProperties();
     QJsonObject toJson() const;
-    ~MapProperties();
-    Q_INVOKABLE QVector<LineSegment*> getSegments() const;
-    Q_INVOKABLE QVector<Point*> getPoints() const;
-    Q_INVOKABLE QVector<City*> getCities() const;
+    virtual ~MapProperties();
+    QVector<LineSegment*> getSegments() const;
+    QVector<Point*> getPoints() const;
+    QVector<City*> getCities() const;
     Q_INVOKABLE void addCity(const QString& name, const double& x, const double& y);
     Q_INVOKABLE void addPoint(const double& x, const double& y);
     Q_INVOKABLE void addSegment(const double& length, Point* begining, Point* end);
 
 signals:
+    void cityAdded(City*);
+    void duplicateCityName(QString);
+    void pointAdded(Point*);
+    void segmentAdded(LineSegment*);
 
 private:
     QVector<City*> cities;

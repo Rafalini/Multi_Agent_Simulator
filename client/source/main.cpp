@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<Agent*>("Agent");
     qRegisterMetaType<Agents*>("Agents");
-    qRegisterMetaType<City*>();
+    qRegisterMetaType<City*>("City");
     qRegisterMetaType<QVector<City*>>();
 
     MapProperties map;

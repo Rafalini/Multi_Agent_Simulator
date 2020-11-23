@@ -3,9 +3,11 @@
 
 Agent::Agent(QObject *parent) : QObject(parent) {}
 
-void Agent::update(const QString &begining, const QString &dest, const double &weight) {
-    beginingCityName = begining;
-    destinationCityName = dest;
+Agent::Agent(City* begining, City* destination, const double &weight) : beginingCity(begining), destinationCity(destination), weight(weight) {}
+
+void Agent::update(City* begining, City* destination, const double &weight) {
+    beginingCity = begining;
+    destinationCity = destination;
     this->weight = weight;
     emit edited();
 }
@@ -14,14 +16,14 @@ Agent::~Agent() {
     emit deleted();
 }
 
-QString Agent::getBegining() const
+City* Agent::getBegining() const
 {
-    return beginingCityName;
+    return beginingCity;
 }
 
-QString Agent::getDestination() const
+City* Agent::getDestination() const
 {
-    return destinationCityName;
+    return destinationCity;
 }
 
 double Agent::getWeight() const
@@ -31,8 +33,8 @@ double Agent::getWeight() const
 
 QJsonObject Agent::tojSON() const {
     QJsonObject obj;
-    obj["begining"] = beginingCityName;
-    obj["destination"] = destinationCityName;
+    obj["begining"] = beginingCity->getName();
+    obj["destination"] = destinationCity->getName();
     obj["weight"] = weight;
     return obj;
 }

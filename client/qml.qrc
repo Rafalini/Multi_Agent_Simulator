@@ -9,5 +9,7 @@
         <file>qml/StyledPopup.qml</file>
         <file>qml/AgentsListView.qml</file>
         <file>qml/AgentsPage.qml</file>
+        <file>qml/CityRepresentation.qml</file>
+        <file>qml/PointRepresentation.qml</file>
     </qresource>
 </RCC>

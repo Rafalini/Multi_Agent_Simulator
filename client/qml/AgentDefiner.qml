@@ -27,23 +27,23 @@ Popup {
         begining.currentIndex = -1;
         end.currentIndex = -1;
         for(var i = 0; i < citiesModel.count; i++) {
-            if(agent.begining === citiesModel.get(i).text) {
+            if(agent.begining === citiesModel.get(i).city) {
                 begining.currentIndex = i;
             }
-            if(agent.destination === citiesModel.get(i).text) {
+            if(agent.destination === citiesModel.get(i).city) {
                 end.currentIndex = i;
             }
         }
         if(end.currentIndex == -1) {
             citiesModel.append({
-                            text = agent.destination
+                            city = agent.destination
                            });
             end.currentIndex = citiesModel.count-1;
         }
 
         if(begining.currentIndex == -1) {
             citiesModel.append({
-                            text = agent.begining
+                            city = agent.begining
                            });
             begining.currentIndex = citiesModel.count-1;
         }
@@ -83,7 +83,8 @@ Popup {
                 let cities = map.getCities();
                 for(let i = 0; i < cities.length; i++) {
                     citiesModel.append({
-                                        text: cities[i].name
+                                        text: cities[i].name,
+                                        city: cities[i]
                                        });
                 }
             }
@@ -128,9 +129,9 @@ Popup {
             onClicked: {
                 if( !parent.validate() ) return;
                 if( editedAgent === 0 ) {
-                    agents.addAgent(begining.displayText, end.displayText, totalWeight.text.replace(',', '.'));
+                    agents.addAgent(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', '.'));
                 } else {
-                    editedAgent.update(begining.displayText, end.displayText, totalWeight.text.replace(',', '.'));
+                    editedAgent.update(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', '.'));
                 }
                 agentPopup.visible = false;
             }

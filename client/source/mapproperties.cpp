@@ -34,13 +34,21 @@ QJsonObject MapProperties::toJson() const {
 }
 
 void MapProperties::addCity(const QString& name, const double& x, const double& y) {
+    for(auto* city : cities) {
+        if(city->getName() == name) {
+            emit duplicateCityName(name);
+            return;
+        }
+    }
     City* city = new City(name, x, y);
     cities.push_back(city);
+    emit cityAdded(city);
 }
 
 void MapProperties::addPoint(const double& x, const double& y) {
     Point* point = new Point(x, y);
     points.push_back(point);
+    emit pointAdded(point);
 }
 
 void MapProperties::addSegment(const double& length, Point* begining, Point* end) {

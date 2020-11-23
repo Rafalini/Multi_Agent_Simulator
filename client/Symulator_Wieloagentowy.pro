@@ -28,12 +28,6 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-#DESTDIR = dest
-#OBJECTS_DIR = dest/obj
-#MOC_DIR = dest/.MOC_DIR
-#RCC_DIR = dest/.rcc
-#UI_DIR = dest/.ui
-
 HEADERS += \
     headers/agent.h \
     headers/agents.h \

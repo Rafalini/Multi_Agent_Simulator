@@ -10,7 +10,7 @@ Agents::~Agents() {
     }
 }
 
-void Agents::addAgent(QString start, QString destination, double weight) {
+void Agents::addAgent(City* start, City* destination, double weight) {
     agents.push_back(new Agent(start, destination, weight));
     emit agentAdded(agents.last());
 }

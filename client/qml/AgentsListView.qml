@@ -67,21 +67,34 @@ Item {
             }
 
             Component.onCompleted: {
-                beginingLabel.text = agentModel.get(index).agent.begining;
-                destinationLabel.text = agentModel.get(index).agent.destination;
+                beginingLabel.text = agentModel.get(index).agent.begining.name;
+                destinationLabel.text = agentModel.get(index).agent.destination.name;
                 weightLabel.text = agentModel.get(index).agent.weight;
             }
 
             Connections {
                 target: agentModel.get(index).agent
                 function onEdited() {
-                    beginingLabel.text = agentModel.get(index).agent.begining;
-                    destinationLabel.text = agentModel.get(index).agent.destination;
+                    beginingLabel.text = agentModel.get(index).agent.begining.name;
+                    destinationLabel.text = agentModel.get(index).agent.destination.name;
                     weightLabel.text = agentModel.get(index).agent.weight;
                 }
                 function onDeleted() {
                     target = null;
                     agentModel.remove(index);
+                }
+            }
+            Connections {
+                target: agentModel.get(index).agent.begining
+                function onNameChanged(newName) {
+                    beginingLabel.text = newName;
+                }
+            }
+
+            Connections {
+                target: agentModel.get(index).agent.destination
+                function onNameChanged(newName) {
+                    destinationLabel.text = newName;
                 }
             }
 

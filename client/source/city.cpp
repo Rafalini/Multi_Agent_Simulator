@@ -1,3 +1,4 @@
+#include "../headers/point.h"
 #include "../headers/city.h"
 #include <QJsonObject>
 #include <QJsonArray>
@@ -8,4 +9,14 @@ QJsonObject City::toJson() const {
     QJsonObject obj = Point::toJson();
     obj["name"] = name;
     return obj;
+}
+
+const QString& City::getName() const {
+    return name;
+}
+
+
+void City::setName(const QString& name) {
+    this->name = name;
+    emit nameChanged(name);
 }

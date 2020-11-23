@@ -10,8 +10,8 @@ QT_FORWARD_DECLARE_CLASS(LineSegment); //forward declaration
 class Point : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(double x READ getX WRITE setX FINAL);
-    Q_PROPERTY(double y READ getY WRITE setY FINAL);
+    Q_PROPERTY(double x READ getX WRITE setX NOTIFY xChanged FINAL);
+    Q_PROPERTY(double y READ getY WRITE setY NOTIFY yChanged FINAL);
 
 public:
     Point(const double& x, const double& y);
@@ -22,6 +22,9 @@ public:
     Q_INVOKABLE void addSegment(LineSegment* seg);
     Q_INVOKABLE void removeSegment(LineSegment* seg);
     virtual QJsonObject toJson() const;
+signals:
+    void xChanged();
+    void yChanged();
 
 protected:
     QVector<LineSegment*> segments;
