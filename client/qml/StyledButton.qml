@@ -5,11 +5,8 @@ Button {
     width: 200
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: parent.clicked()
+        onPressed: parent.activate()
     }
-    onDoubleClicked: {clicked(); clicked();}
-    Keys.onEnterPressed: clicked()
-    Keys.onReturnPressed: clicked()
+    function activate() {}
 }

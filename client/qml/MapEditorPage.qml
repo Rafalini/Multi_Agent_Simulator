@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Rectangle {
+Page {
     id: parentItem
     property var cities
     property var points
@@ -47,7 +47,6 @@ Rectangle {
     }
 
     Image {
-        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.height > parent.width ? parent.width : parent.height
         height: width
@@ -55,7 +54,6 @@ Rectangle {
     }
     Canvas {
         id:canvas
-        anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.height > parent.width ? parent.width : parent.height
         height: width
@@ -95,7 +93,7 @@ Rectangle {
                         height: newCityName.height
                         width: 80
                         text: "Dodaj"
-                        onClicked: parent.activate()
+                        function activate() { parent.activate() }
                     }
                     function activate() {
                         if(newCityName.text == "") {

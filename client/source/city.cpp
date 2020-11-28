@@ -17,6 +17,8 @@ const QString& City::getName() const {
 
 
 void City::setName(const QString& name) {
+    if(this->name == name)
+        return;
     this->name = name;
     emit nameChanged(name);
 }

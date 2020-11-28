@@ -11,7 +11,7 @@ QT_FORWARD_DECLARE_CLASS(LineSegment); //forward declaration
 class City : public Point
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ getName WRITE setName);
+    Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged);
 
 public:
     City(const QString& name, const double& x, const double& y);
@@ -21,6 +21,7 @@ public:
 
 signals:
     void nameChanged(QString);
+
 private:
     QString name;
 };

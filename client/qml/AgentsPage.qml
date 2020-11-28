@@ -1,12 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Item {
-
+Page {
     AgentsListView {
         id: agentsList
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
         height: parent.height - newAgentButton.height
 
         function editAgent(agent) {
@@ -21,7 +19,7 @@ Item {
         height: 50
         text: "Dodaj nowego Agenta"
         width: 200
-        onClicked: {
+        function activate() {
             agentDefiner.addNewAgent();
         }
         onDoubleClicked: ;

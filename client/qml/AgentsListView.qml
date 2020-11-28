@@ -1,10 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Item {
     id: listViewParent
     function editAgent(agent) {} //must be overwriten with acces to AgentsPage
-
+    height: listViewLabel.height + agentsListView.height
+    width: agentsListView.width
     Label {
         id: headLabel
         anchors.top: parent.top
@@ -14,23 +16,26 @@ Item {
         text: "Agenci:"
     }
 
-    Row {
+    RowLayout {
         id: listViewLabel
         anchors.left: headLabel.left
         anchors.top: headLabel.bottom
         height: 30
         Label {
-            height: 20
+            id: beginingHeaderLabel
+            height: parent.height
             width: 200
             text: "Miasto początkowe"
         }
         Label {
-            height: 20
+            id: destinationHeaderLabel
+            height: parent.height
             width: 200
             text: "Miasto końcowe"
         }
         Label {
-            height: 20
+            id: weightHeaderLabel
+            height: parent.height
             width: 200
             text: "Waga towaru do przewiezienia"
         }
@@ -48,91 +53,72 @@ Item {
 
     ListView {
         id: agentsListView
-        cacheBuffer: 200
-        width: 600
-        height: 600//parent.height - listViewLabel.height - listViewLabel.topMargin - anchors.topMargin
+        width: listViewLabel.width + 100//additional 100  width is for buttons
+        readonly property int itemHeight: 30
+        height: model.count * (spacing + itemHeight)
         anchors.top: listViewLabel.bottom
-        anchors.left: listViewLabel.left
         anchors.topMargin: 10
-        anchors.leftMargin: 10
         interactive: true
         spacing: 10
-        ScrollBar.vertical: agentsScrollBar
+        ScrollBar.vertical: ScrollBar {
+                id: agentsScrollBar
+                active: true
+                height: agentsListView.height
+                policy: ScrollBar.AlwaysOn
+                anchors.top: agentsListView.top
+                anchors.left: agentsListView.right
+            }
         delegate: ItemDelegate {
-            height: 20
+            height: agentsListView.itemHeight
             width: 600
             background: Rectangle {
                 anchors.fill: parent
                 color: root.lightblue
             }
 
-            Component.onCompleted: {
-                beginingLabel.text = agentModel.get(index).agent.begining.name;
-                destinationLabel.text = agentModel.get(index).agent.destination.name;
-                weightLabel.text = agentModel.get(index).agent.weight;
-            }
-
             Connections {
-                target: agentModel.get(index).agent
-                function onEdited() {
-                    beginingLabel.text = agentModel.get(index).agent.begining.name;
-                    destinationLabel.text = agentModel.get(index).agent.destination.name;
-                    weightLabel.text = agentModel.get(index).agent.weight;
-                }
+                target: agent
                 function onDeleted() {
                     target = null;
                     agentModel.remove(index);
                 }
             }
-            Connections {
-                target: agentModel.get(index).agent.begining
-                function onNameChanged(newName) {
-                    beginingLabel.text = newName;
-                }
-            }
-
-            Connections {
-                target: agentModel.get(index).agent.destination
-                function onNameChanged(newName) {
-                    destinationLabel.text = newName;
-                }
-            }
-
-            Row {
+            RowLayout {
                 width: parent.width
-                height: 30
+                height: parent.height
                 Label {
                     id: beginingLabel
-                    height: 20
-                    width: 200
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: beginingHeaderLabel.width
+                    text: agent.begining.name
                 }
                 Label {
                     id: destinationLabel
-                    height: 20
-                    width: 200
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: destinationHeaderLabel.width
+                    text: agent.destination.name
                 }
                 Label {
                     id: weightLabel
-                    height: 20
-                    width: 100
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: weightHeaderLabel.width
+                    text: agent.weight
                 }
                 StyledButton {
-                    height: 20
-                    width: 50
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: 50
                     text: "E"
-                    onClicked: {
-                        listViewParent.editAgent(agentModel.get(index).agent);
+                    function activate() {
+                        listViewParent.editAgent(agent);
                     }
-                    onDoubleClicked: ;
                 }
                 StyledButton {
-                    height: 20
-                    width: 50
+                    Layout.preferredHeight: parent.height
+                    Layout.preferredWidth: 50
                     text: "X"
-                    onClicked: {
-                        agents.removeAgent(agentModel.get(index).agent);
+                    function activate() {
+                        agents.removeAgent(agent);
                     }
-                    onDoubleClicked: ;
                 }
             }
         }
@@ -140,13 +126,5 @@ Item {
         model: ListModel {
             id: agentModel
         }
-    }
-    ScrollBar {
-        id: agentsScrollBar
-        active: true
-        height: agentsListView.height
-        policy: ScrollBar.AlwaysOn
-        anchors.top: agentsListView.top
-        anchors.left: agentsListView.right
     }
 }

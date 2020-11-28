@@ -77,10 +77,21 @@ Popup {
             return true;
         }
 
+
+        Connections {
+            target: map
+            function onCityAdded(city) {
+                citiesModel.append({
+                                    text: city.name,
+                                    city: city
+                                   });
+            }
+        }
+
         ListModel {
             id: citiesModel
             Component.onCompleted: {
-                let cities = map.getCities();
+                let cities = map.cities;
                 for(let i = 0; i < cities.length; i++) {
                     citiesModel.append({
                                         text: cities[i].name,
@@ -126,7 +137,7 @@ Popup {
 
         StyledButton {
             text: editedAgent !== 0 ? "Zapisz" : "Dodaj"
-            onClicked: {
+            function activate() {
                 if( !parent.validate() ) return;
                 if( editedAgent === 0 ) {
                     agents.addAgent(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', '.'));
@@ -135,7 +146,6 @@ Popup {
                 }
                 agentPopup.visible = false;
             }
-            onDoubleClicked: ;
         }
     }
 }

@@ -14,7 +14,7 @@ emsdk/emsdk_env.sh:
 	git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && git pull && ./emsdk install sdk-1.39.8-64bit && ./emsdk activate sdk-1.39.8-64bit
 
 build/index.html: emsdk/emsdk_env.sh build source/* headers/*
-	source emsdk/emsdk_env.sh && cd build && $(QMAKE) .. $(QMAKE_FLAGS) && make && cp ../resource/Symulator_Wieloagentowy.html index.html && cp ../resource/qtloader* ./ && mv Symulator_Wieloagentowy.html index.html
+	source emsdk/emsdk_env.sh && cd build && $(QMAKE) .. $(QMAKE_FLAGS) && make && cp ../resource/Symulator_Wieloagentowy.html index.html
 
 build:
 	mkdir build

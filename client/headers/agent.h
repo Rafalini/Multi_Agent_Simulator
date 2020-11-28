@@ -7,9 +7,9 @@
 class Agent : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(City* destination READ getDestination);
-    Q_PROPERTY(City* begining READ getBegining);
-    Q_PROPERTY(double weight READ getWeight);
+    Q_PROPERTY(City* destination READ getDestination NOTIFY updated);
+    Q_PROPERTY(City* begining READ getBegining NOTIFY updated);
+    Q_PROPERTY(double weight READ getWeight NOTIFY updated);
 
 public:
     explicit Agent(QObject *parent = nullptr);
@@ -22,8 +22,9 @@ public:
     double getWeight() const;
 
 signals:
-    void edited();
+    void updated();
     void deleted();
+    void wrongUpdateArguments(const QString&);
 
 private:
     City* beginingCity;

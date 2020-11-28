@@ -17,7 +17,8 @@ sudo apt-get install build-essential libgl1-mesa-dev git python
 
 następnie należy w katalogu client wykonać komendę make
 
-skrypt skompiluje oraz uruchomi server http słuchający na porcie 8888. W razie konieczności uruchomienia na innym porcie, należy podmienić w stosownym miejscu w skrypcie i od razu uruchomi sesję w przeglądarce firefox.
+skrypt skompiluje oraz uruchomi server http słuchający na porcie 8888 i od razu uruchomi sesję w przeglądarce firefox. W razie konieczności uruchomienia na innym porcie należy podmienić w stosownym miejscu w pliku Makefile.
 
-W celu odpalenia testów należy wykonać komendę make_tests, przetestuje ona klasy korzystając z kompilatora gcc
-W celu przetestowania za pomocą webassembly, należy użyć komendy make wasm_tests, która uruchomi stronę, pozwalającą obejrzeć poszczególne 
+W celu przetestowania za pomocą webassembly, należy użyć komendy 'make wasm_tests', która uruchomi stronę, pozwalającą obejrzeć testy jednostkowe poszczególnych klas. Test ten skorzysta z portu 8889.
+
+W celu wygodniejszego odpalenia wszystkich testów należy wykonać komendę make tests, przetestuje ona klasy korzystając z kompilatora gcc, wymaga jednak zaznaczenia podczas pobierania qt również wersji dla kompilatora gcc.

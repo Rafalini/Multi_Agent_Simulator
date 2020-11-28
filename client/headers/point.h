@@ -23,8 +23,8 @@ public:
     Q_INVOKABLE void removeSegment(LineSegment* seg);
     virtual QJsonObject toJson() const;
 signals:
-    void xChanged();
-    void yChanged();
+    void xChanged(const double&);
+    void yChanged(const double&);
 
 protected:
     QVector<LineSegment*> segments;

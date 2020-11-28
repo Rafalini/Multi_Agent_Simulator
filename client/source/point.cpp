@@ -10,6 +10,7 @@ Point::Point(const double& x, const double& y) {
 
 
 void Point::setX(const double& x) {
+    if(x == this->x) return;
     if(x<0) {
         this->x = 0;
     }else if(x > 1) {
@@ -17,8 +18,10 @@ void Point::setX(const double& x) {
     } else {
         this->x = x;
     }
+    emit xChanged(this->x);
 }
 void Point::setY(const double& y) {
+    if(y == this->y) return;
     if(y<0) {
         this->y = 0;
     }else if(y > 1) {
@@ -26,6 +29,7 @@ void Point::setY(const double& y) {
     } else {
         this->y = y;
     }
+    emit yChanged(this->y);
 }
 
 void Point::addSegment(LineSegment* seg) {
