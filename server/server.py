@@ -1,9 +1,10 @@
 import asyncio
 import websockets
 import json
-from Map import Map
-from Agent import Agent
-from City import City
+import build.map_module
+from src_py.Map import Map
+from src_py.Agent import Agent
+from src_py.City import City
 
 
 async def request_handler(websocket, path):
@@ -12,10 +13,6 @@ async def request_handler(websocket, path):
             request = await asyncio.wait_for(websocket.recv(), timeout = 3600)
             #print(f"request: {request}", flush=True)
             dict = json.loads(request)
-            #print(dict["agents"])
-            print("")
-            print("")
-
 #into data structures
             cities =[]
             agents =[]
@@ -30,7 +27,13 @@ async def request_handler(websocket, path):
             for x in map_cities:
                 cities.append(City(x["name"],x["x"],x["y"],x["segments"]))
 
-            print(map["points"])
+            print("wczytuje miasta i agentow do mapy...")
+
+            mapka = build.map_module.Agents_Map() # tworzenie i proba mapki cpp
+            for x in cities:
+                mapka.add_city(x.name, x.coordX, x.coordY)
+                
+            mapka.idiotic_respond()
 
             await (websocket.send("request received"))
         except Exception as e:
