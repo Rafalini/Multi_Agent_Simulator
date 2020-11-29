@@ -7,11 +7,11 @@
         <file>resource/MapOfPoland.png</file>
         <file>qml/StyledButton.qml</file>
         <file>qml/StyledPopup.qml</file>
-        <file>qml/AgentsListView.qml</file>
         <file>qml/AgentsPage.qml</file>
         <file>qml/CityRepresentation.qml</file>
         <file>qml/PointRepresentation.qml</file>
         <file>qml/SimulationParametersPage.qml</file>
         <file>qml/StyledTabButton.qml</file>
+        <file>qml/PathRepresentation.qml</file>
     </qresource>
 </RCC>

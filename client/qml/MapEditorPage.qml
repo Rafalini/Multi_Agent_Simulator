@@ -5,8 +5,10 @@ Page {
     id: parentItem
     property var cities
     property var points
+    property var paths
     property var cityComponent
     property var pointComponent
+    property var pathComponent
 
     Connections {
         target: map
@@ -44,6 +46,16 @@ Page {
             pointArray.push(newPointRepresentation);
         }
         points = pointArray;
+
+        pathComponent = Qt.createComponent("PathRepresentation.qml");
+        let pathArray = [];
+        let currentPaths = map.paths;
+        for(let l = 0; l < currentPaths.length; ++l) {
+            let path = currentPaths[l];
+            let newPathRepresentation = pathComponent.createObject(draggableArea, {path: path});
+            pathArray.push(newPathRepresentation);
+        }
+        paths = pathArray;
     }
 
     Image {

@@ -1,11 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 Popup {
     id: agentPopup
     anchors.centerIn: parent
-    width: 300
-    height: 500
     background: Rectangle {
         anchors.fill: parent
         color: "white"
@@ -52,12 +51,9 @@ Popup {
 
 
     property var editedAgent: 0;
-    contentItem: Column {
+    contentItem: GridLayout {
         id: column
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        spacing: 10
+        columns: 2
 
         function validate() {
             if(begining.currentIndex < 0) {
@@ -102,50 +98,61 @@ Popup {
         }
 
         Text {
-            text: qsTr("Wybierz miasto Początkowe")
+            text: qsTr("Miasto początkowe")
         }
 
         ComboBox {
             id: begining
-            width: 200
             displayText: model.get(currentIndex) ? model.get(currentIndex).text : qsTr("Wybierz miasto")
             textRole: "text"
+            Layout.fillWidth: true
             model: citiesModel
         }
 
 
         Text {
-            text: qsTr("Wybierz miasto docelowe")
+            text: qsTr("Miasto docelowe")
         }
 
         ComboBox {
             displayText: model.get(currentIndex) ? model.get(currentIndex).text : qsTr("Wybierz miasto")
+            Layout.fillWidth: true
             id: end
-            width: 200
             model: citiesModel
             textRole: "text"
         }
 
         Text {
-            text: qsTr("Podaj ilość towaru do przewiezienia w kilogramach")
+            text: qsTr("Ilość towaru do przewiezienia [kg]")
         }
 
         TextField {
             id: totalWeight
-            validator: DoubleValidator {bottom: 0; top: 100000}
+            Layout.preferredWidth: 300
+            validator: DoubleValidator {
+                    locale: "en_US"
+                    bottom: 0
+                }
+            Keys.onEnterPressed: parent.save()
+            Keys.onReturnPressed: parent.save()
+        }
+
+
+        function save() {
+            if( !validate() ) return;
+            if( editedAgent === 0 ) {
+                agents.addAgent(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', ''));
+            } else {
+                editedAgent.update(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', ''));
+            }
+            agentPopup.visible = false;
         }
 
         StyledButton {
+            Layout.columnSpan: 2
+            Layout.alignment: Qt.AlignCenter
             text: editedAgent !== 0 ? "Zapisz" : "Dodaj"
-            function activate() {
-                if( !parent.validate() ) return;
-                if( editedAgent === 0 ) {
-                    agents.addAgent(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', '.'));
-                } else {
-                    editedAgent.update(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', '.'));
-                }
-                agentPopup.visible = false;
-            }
+            function activate() { parent.save(); }
         }
     }
 }

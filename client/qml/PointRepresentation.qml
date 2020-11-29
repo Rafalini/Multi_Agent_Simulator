@@ -49,7 +49,6 @@ Item {
             drag.maximumY: parent.parent.parent.height
             drag.smoothed: false
             cursorShape: Qt.PointingHandCursor
-//            drag.onDragFinished: pointRepresentation.dragged()
 //            onClicked: contextMenu.open();
         }
     }

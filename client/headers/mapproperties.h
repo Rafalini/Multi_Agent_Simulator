@@ -9,7 +9,7 @@
 class MapProperties : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QVector<LineSegment*> segments MEMBER segments);
+    Q_PROPERTY(QVector<LineSegment*> paths MEMBER segments);
     Q_PROPERTY(QVector<City*> cities MEMBER cities);
     Q_PROPERTY(QVector<Point*> points MEMBER points);
 
