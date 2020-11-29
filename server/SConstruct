@@ -3,7 +3,7 @@ import platform, shutil
 e = Environment()
 
 if(platform.system() == "Linux"):
-   e.Append( CPPFLAGS = '-Wall -pedantic -pthread -Wno-long-long -I include' )
+   e.Append( CPPFLAGS = '-Wall -pedantic -pthread -Wno-long-long -I include -std=c++11' )
    e.Append( LINKFLAGS = '-Wall -pthread' )
    e.Append( CPPPATH = ['/usr/include/python3.7'] )
    e.Append( LIBPATH = ['/usr/lib/python3.7'] )
@@ -17,5 +17,5 @@ def build_link_to_lib( target, source, env):
    shutil.copy( str(source[0]), str(target[0]) )
    return
 
-dll = e.SharedLibrary(source = "src_cpp/Agents_Map.cpp", target = "build/map_module")
+dll = e.SharedLibrary(source = ["src_cpp/Agents_Map.cpp", "src_cpp/City.cpp", "src_cpp/Agent.cpp"], target = "build/map_module")
 e.Command(target, dll, build_link_to_lib )

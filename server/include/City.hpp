@@ -12,7 +12,7 @@ class City{
 
         public:
            City();
-           City(std::string city, double ox, double oy);
+           City(std::string _city, double _ox, double _oy);
            std::string get_name();
            double get_ox();
            double get_oy();

@@ -6,37 +6,40 @@
 
 #include "Agents_Map.hpp"
 #include "City.hpp"
+#include "Agent.hpp"
 #include <string>
 #include <boost/python.hpp>
 #include <iostream>
-//#include <pthread>
-
-void initMapka() {std::cout << "init mapki" << std::endl;}
+#include <vector>
 
 
 BOOST_PYTHON_MODULE(map_module)
     {
-        initMapka();
         boost::python::class_<Agents_Map>("Agents_Map", boost::python::init<>())
-            .def("idiotic_respond", &Agents_Map::idiotic_respond)
-            .def("add_city", &Agents_Map::add_city);
+            .def("add_city", &Agents_Map::add_city)
+            .def("add_agent", &Agents_Map::add_agent)
+            .def("run", &Agents_Map::run);
     }
 
 Agents_Map::Agents_Map(){}
 
 void Agents_Map::add_city(std::string name, double ox, double oy)
       {
-            //City *c = new City(name,ox,oy);
-            //cities.push_back();
-            std::cout << "dodaje miasto: "<<name<<" "<<ox<<" "<<oy<<std::endl;
+          cities.push_back(City(name,ox,oy));
+      }
+
+void Agents_Map::add_agent(std::string s_origin, std::string s_destin, int load)
+      {
+          auto origin =       std::find_if(cities.begin(), cities.end(), [&](City& obj){return obj.get_name() == s_origin;});
+          auto destination =  std::find_if(cities.begin(), cities.end(), [&](City& obj){return obj.get_name() == s_destin;});
+          if(origin != cities.end() && destination != cities.end())
+                std::cout << "ok " << origin->get_name() << " "<< destination->get_name() << std::endl;
+              //agents.push_back(Agent(*origin, *destination, load));
+          std::cout << "eluwa" << std::endl;
+
       }
 
 void Agents_Map::run()
       {
             std::cout << "running map..." << std::endl;
-      }
-
-void Agents_Map::idiotic_respond()
-      {
-            std::cout << "elunia" << std::endl;
       }
