@@ -10,3 +10,6 @@ server/build*
 server/bin*
 server/__pycache__*
 server/server
+*.so
+server/src_cpp/*.os
+server/.sconsign.dblite

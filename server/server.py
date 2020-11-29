@@ -2,9 +2,9 @@ import asyncio
 import websockets
 import json
 import build.map_module
-from src_py.Map import Map
-from src_py.Agent import Agent
-from src_py.City import City
+#from src_py.Map import Map
+#from src_py.Agent import Agent
+#from src_py.City import City
 
 
 async def request_handler(websocket, path):

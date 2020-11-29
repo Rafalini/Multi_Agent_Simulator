@@ -3,12 +3,14 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+
 #include "City.hpp"
 #include "Agent.hpp"
 
 class Agents_Map{
-        std::vector<City>  cities;
-        std::vector<Agent> agents;
+        std::vector<std::shared_ptr<City>>  cities;
+        std::vector<std::shared_ptr<Agent>> agents;
 
         public:
            Agents_Map();
