@@ -5,9 +5,9 @@ e = Environment()
 if(platform.system() == "Linux"):
    e.Append( CPPFLAGS = '-Wall -pedantic -pthread -Wno-long-long -I include -std=c++11' )
    e.Append( LINKFLAGS = '-Wall -pthread' )
-   e.Append( CPPPATH = ['/usr/include/python3.8'] )
-   e.Append( LIBPATH = ['/usr/lib/python3.8'] )
-   e.Append( LIBS = [ 'boost_python38' ] )
+   e.Append( CPPPATH = ['/usr/include/python3.7'] )
+   e.Append( LIBPATH = ['/usr/lib/python3.7'] )
+   e.Append( LIBS = [ 'boost_python37' ] )
    target = 'build/map_module.so'
 else:
    print(platform.system() + " not supported")
