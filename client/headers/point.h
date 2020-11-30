@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include <QVector>
-#include "linesegment.h"
+#include "path.h"
 
-QT_FORWARD_DECLARE_CLASS(LineSegment); //forward declaration
+QT_FORWARD_DECLARE_CLASS(Path); //forward declaration
 //Class representing a point on map, where roads can split or merge, the coordinates are within range (0,1)
 class Point : public QObject
 {
@@ -19,15 +19,17 @@ public:
     const double& getY() const;
     Q_INVOKABLE void setX(const double& x);
     Q_INVOKABLE void setY(const double& y);
-    Q_INVOKABLE void addSegment(LineSegment* seg);
-    Q_INVOKABLE void removeSegment(LineSegment* seg);
+    Q_INVOKABLE void addPath(Path* path);
+    Q_INVOKABLE void removePath(Path* path);
     virtual QJsonObject toJson() const;
+    virtual ~Point();
 signals:
     void xChanged(const double&);
     void yChanged(const double&);
+    void deleted();
 
 protected:
-    QVector<LineSegment*> segments;
+    QVector<Path*> paths;
     double x;
     double y;
 };

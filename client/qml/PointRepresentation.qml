@@ -5,6 +5,17 @@ Item {
     required property variant point
     property alias rec: rec
 
+    function clicked() {
+        parent.openPointContextMenu(pointRepresentation);
+    }
+
+    Connections {
+        target: point
+        function onDeleted() {
+            parent.deletePoint(pointRepresentation);
+        }
+    }
+
     Component.onCompleted: {
         initilize();
     }
@@ -31,16 +42,17 @@ Item {
     Drag.active: draggedRec.drag.active
     Drag.hotSpot.x: 0
     Drag.hotSpot.y: 0
-
+    property var color: "blue"
     Rectangle {
         id: rec
         anchors.verticalCenter: parent.top
         anchors.horizontalCenter: parent.left
-        color: "red"
+        color: parent.color
         width: 14
         height: 14
         MouseArea {
             id: draggedRec
+            acceptedButtons: Qt.RightButton | Qt.LeftButton
             anchors.fill: parent
             drag.target: parent.parent
             drag.minimumX: 0
@@ -49,7 +61,7 @@ Item {
             drag.maximumY: parent.parent.parent.height
             drag.smoothed: false
             cursorShape: Qt.PointingHandCursor
-//            onClicked: contextMenu.open();
+            onClicked: pointRepresentation.clicked();
         }
     }
 }

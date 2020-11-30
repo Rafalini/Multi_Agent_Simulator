@@ -23,6 +23,7 @@ signals:
     void agentAdded(Agent*);
     void agentChanged(Agent*);
     void agentDeleted(Agent*);
+    void wrongAddAgentArguments(QString);
 
 private:
     QVector<Agent*> agents;

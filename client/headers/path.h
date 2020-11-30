@@ -9,18 +9,26 @@
 QT_FORWARD_DECLARE_CLASS(Point); //forward declaration
 
 
-class LineSegment : public QObject
+class Path : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Point* begining MEMBER begining);
-    Q_PROPERTY(Point* end MEMBER end);
+    Q_PROPERTY(Point* begining MEMBER begining NOTIFY beginingChanged);
+    Q_PROPERTY(Point* end MEMBER end NOTIFY endChanged);
     Q_PROPERTY(double length MEMBER length );
 
 public:
-    LineSegment(int id, Point* beg, Point* en, double len);
+    Path(int id, Point* beg, Point* en, double len);
     QJsonObject toJson() const;
     int getId() const;
-    ~LineSegment();
+    virtual ~Path();
+    void removePoint(Point*);
+
+signals:
+    void endChanged();
+    void beginingChanged();
+    void deleted();
+    void removed(Path*);
+    void aboutToDelete();
 
 private:
     int id;

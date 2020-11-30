@@ -1,7 +1,7 @@
 import QtQuick 2.15
 
 Rectangle {
-    id: pathRepresenation
+    id: pathRepresentation
     required property variant path
     height: 1
     color: "black"
@@ -14,7 +14,13 @@ Rectangle {
         y = pointA.y*parent.height;
         x2 = pointB.x*parent.width;
         y2 = pointB.y*parent.height;
-        refreshWidth();
+    }
+
+    Connections {
+        target: path
+        function onAboutToDelete() {
+            parent.deletePath(pathRepresentation);
+        }
     }
 
     width:Math.sqrt(Math.pow(Math.abs(x-x2),2) + Math.pow(Math.abs(y-y2),2));
@@ -39,11 +45,9 @@ Rectangle {
         target: path.end
         function onXChanged() {
             x2 = path.end.x*parent.width;
-            refreshWidth();
         }
         function onYChanged() {
             y2 = path.end.y*parent.width;
-            refreshWidth();
         }
     }
 
