@@ -4,5 +4,5 @@ SUBDIRS += \
     AgentTests \
     AgentsTests \
     CityTests \
-    LineSegmentTests \
+    PathTests \
     PointTests

@@ -1,5 +1,5 @@
-#ifndef LINESEGMENT_H
-#define LINESEGMENT_H
+#ifndef PATH_H
+#define PATH_H
 
 #include <memory>
 #include <QVector>
@@ -37,4 +37,4 @@ private:
     double length;
 };
 
-#endif // LINESEGMENT_H
+#endif // PATH_H

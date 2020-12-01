@@ -1,10 +1,9 @@
 Do skompilowania części serwerowej jest potrzebne narzędzie Scons, można je zainstalować za pomocą:
 
-sudo apt-get install scons
+sudo apt-get install scons python python3-pip libboost-all-dev
 
-Oraz biblioteka Boost
-
-sudo apt-get install libboost-all-dev
+Oraz biblioteki do pythona:
+sudo pip3 install websockets
 
 Korzystamy z pythona w wersji 3.8, w razie konieczności użycia innej werji Pythona, należy zmienić stosowne linijki w plik SConstruct
 

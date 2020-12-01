@@ -20,7 +20,7 @@ build/index.html: emsdk/emsdk_env.sh build source/* headers/* qml/* Qt build/Mak
 	source emsdk/emsdk_env.sh && cd build && make && cp ../resource/Symulator_Wieloagentowy.html index.html
 	
 build/Makefile: Symulator_Wieloagentowy.pro build qml.qrc
-	cd build && $(QMAKE) .. $(QMAKE_FLAGS) && sed -i $(SED_ARGUMENT) Makefile && sed -i 's|LFLAGS        = |LFLAGS        = -s TOTAL_MEMORY=33554432 |' Makefile
+	ource emsdk/emsdk_env.sh && cd build && $(QMAKE) .. $(QMAKE_FLAGS) && sed -i $(SED_ARGUMENT) Makefile && sed -i 's|LFLAGS        = |LFLAGS        = -s TOTAL_MEMORY=33554432 |' Makefile
 
 run:
 	$(PYTHON) $(EMRUN) $(EMRUN_FLAGS) --port '8888' build/

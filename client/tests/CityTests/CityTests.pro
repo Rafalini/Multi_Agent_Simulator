@@ -9,8 +9,8 @@ TEMPLATE = app
 SOURCES +=  tst_citytests.cpp \
             ../../source/point.cpp \
             ../../source/city.cpp \
-            ../../source/linesegment.cpp
+            ../../source/path.cpp
 
 HEADERS += ../../headers/point.h \
             ../../headers/city.h \
-            ../../headers/linesegment.h
+            ../../headers/path.h
