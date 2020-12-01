@@ -6,10 +6,6 @@ PointRepresentation {
     required property var city
     point: city
     color: "red"
-    Component.onCompleted: {
-        cityName.text = city.name;
-        initilize();
-    }
 
     function objectDeleted() {
         parent.deleteCity(this);
@@ -21,6 +17,7 @@ PointRepresentation {
 
     Text{
         id: cityName
+        text: city ? city.name : ""
         anchors.left: rec.right
         anchors.verticalCenter: rec.verticalCenter
         anchors.leftMargin: 2
