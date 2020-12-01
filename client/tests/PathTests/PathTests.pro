@@ -6,10 +6,10 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES +=  tst_linesegmenttests.cpp \
+SOURCES +=  tst_pathtests.cpp \
             ../../source/point.cpp \
-            ../../source/linesegment.cpp
+            ../../source/path.cpp
 
 
 HEADERS += ../../headers/point.h \
-           ../../headers/linesegment.h
+           ../../headers/path.h

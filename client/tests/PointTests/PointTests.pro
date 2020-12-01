@@ -8,7 +8,7 @@ TEMPLATE = app
 
 SOURCES +=  tst_pointtests.cpp \
             ../../source/point.cpp \
-            ../../source/linesegment.cpp
+            ../../source/path.cpp
 
 HEADERS += ../../headers/point.h \
-            ../../headers/linesegment.h
+            ../../headers/path.h

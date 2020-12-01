@@ -1,4 +1,4 @@
-#include "../headers/linesegment.h"
+#include "../headers/path.h"
 #include "../headers/point.h"
 #include <QJsonObject>
 #include <QJsonArray>
@@ -32,23 +32,30 @@ void Point::setY(const double& y) {
     emit yChanged(this->y);
 }
 
-void Point::addSegment(LineSegment* seg) {
-    segments.push_back(seg);
+Point::~Point() {
+    for(auto path : paths ) {
+        path->removePoint(this);
+    }
+    emit deleted();
 }
 
-void Point::removeSegment(LineSegment* seg) {
-    segments.removeOne(seg);
+void Point::addPath(Path* path) {
+    paths.push_back(path);
+}
+
+void Point::removePath(Path* path) {
+    paths.removeOne(path);
 }
 
 QJsonObject Point::toJson() const {
     QJsonObject obj;
     obj["x"] = x;
     obj["y"] = y;
-    QJsonArray segmentsArray;
-    for(auto &segment : segments) {
-        segmentsArray.append(segment->getId());
+    QJsonArray pathsArray;
+    for(auto &path : paths) {
+        pathsArray.append(path->getId());
     }
-    obj["segments"] = segmentsArray;
+    obj["paths"] = pathsArray;
     return obj;
 }
 

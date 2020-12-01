@@ -5,6 +5,8 @@
 client/build*
 client/emsdk*
 build*/
+client/Qt
+client/qt-unified*
 client/tests/build*
 server/build*
 server/bin*

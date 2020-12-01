@@ -1,5 +1,7 @@
-#include "../headers/remoteconnector.h"
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include "../headers/remoteconnector.h"
 
 RemoteConnector::RemoteConnector(MapProperties* map, Agents* agents) : map(map), agents(agents), url(QStringLiteral("ws://127.0.0.1:1111")), connected(false)
 {

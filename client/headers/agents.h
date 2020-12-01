@@ -13,7 +13,7 @@ class Agents : public QObject
 
 public:
     explicit Agents(QObject *parent = nullptr);
-    QJsonObject toJson() const ;
+    QJsonArray toJson() const ;
     Q_INVOKABLE void addAgent(City* start, City* destination, double weight);
     Q_INVOKABLE Agent* getAgent(int agentId);
     Q_INVOKABLE void removeAgent(Agent* agent);
@@ -23,6 +23,7 @@ signals:
     void agentAdded(Agent*);
     void agentChanged(Agent*);
     void agentDeleted(Agent*);
+    void wrongAddAgentArguments(QString);
 
 private:
     QVector<Agent*> agents;

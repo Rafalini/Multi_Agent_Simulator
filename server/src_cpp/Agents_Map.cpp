@@ -25,10 +25,10 @@ void Agents_Map::add_agent(std::string s_origin, std::string s_destin, int load)
       {
           auto origin =       std::find_if(cities.begin(), cities.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_origin;});
           auto destination =  std::find_if(cities.begin(), cities.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_destin;});
-          if(origin != cities.end() && destination != cities.end())
-                std::cout << "ok " << origin->get()->get_name() << " "<< destination->get()->get_name() << std::endl;
-              //agents.push_back(Agent(*origin, *destination, load));
-          std::cout << "eluwa" << std::endl;
+          if(origin != cities.end() && destination != cities.end()) {
+                std::cout << "agent from " << origin->get()->get_name() << " to "<< destination->get()->get_name() << " added" << std::endl;
+          		agents.push_back(std::make_shared<Agent>(*origin, *destination, load));
+		  }
 
       }
 

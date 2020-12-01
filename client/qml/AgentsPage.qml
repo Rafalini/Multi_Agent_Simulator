@@ -23,10 +23,10 @@ Page {
                 text: "Miasto końcowe"
             }
             Label {
-                id: weightHeaderLabel
+                id: loadHeaderLabel
                 height: parent.height
                 width: 200
-                text: "Waga towaru do przewiezienia"
+                text: "Ładunek"
             }
         }
 
@@ -92,12 +92,12 @@ Page {
                         text: agent.destination.name
                     }
                     Label {
-                        id: weightLabel
+                        id: loadLabel
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment: Qt.AlignVCenter
                         Layout.preferredHeight: parent.height
-                        Layout.preferredWidth: weightHeaderLabel.width
-                        text: agent.weight
+                        Layout.preferredWidth: loadHeaderLabel.width
+                        text: agent.load
                     }
                     StyledButton {
                         Layout.preferredHeight: parent.height

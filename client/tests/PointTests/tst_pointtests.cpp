@@ -1,6 +1,6 @@
 #include <QtTest>
 #include "../../headers/point.h"
-#include "../../headers/linesegment.h"
+#include "../../headers/path.h"
 
 class PointTests : public QObject
 {
@@ -82,17 +82,17 @@ void PointTests::jsonTests() {
     double y = 0.17;
     Point point(x, y);
 
-    QVector<LineSegment*> segments;
+    QVector<Path*> paths;
 
     QJsonObject comparableJson;
     comparableJson["x"] = x;
     comparableJson["y"] = y;
-    QJsonArray seg;
-    for(auto *obj : segments) {
-         seg.append(obj->toJson());
-         point.addSegment(obj);
+    QJsonArray path;
+    for(auto *obj : paths) {
+         path.append(obj->toJson());
+         point.addPath(obj);
     }
-    comparableJson["segments"] = seg;
+    comparableJson["paths"] = path;
     QCOMPARE(comparableJson, point.toJson());
     //next test should check when list of segments is not null
 }

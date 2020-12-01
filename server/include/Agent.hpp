@@ -20,7 +20,9 @@ class Agent{
            Agent();
            Agent(std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load);
            Agent(std::string _origin, std::string _destination, int _load);
-
+           std::weak_ptr<City> getOrigin();
+           std::weak_ptr<City> getDestination();
+           int getLoad();
 };
 
 #endif
