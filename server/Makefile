@@ -1,12 +1,36 @@
+BUILDDIR = build
+TESTDIR = tests
+TARGETDIR = bin
+SRCDIR = src_cpp
+CFLAGS = -std=c++11 -g -Wall
+TESTFLAG = -lboost_unit_test_framework
+INC = -I include
+CC = g++
+
 server:
-	mkdir -p build
+	mkdir -p $(BUILDDIR)
 	scons
 
 run: server
 	python3 server.py
 
 clean:
-	rm -r -f build
+	rm -r -f $(BUILDDIR)
+	rm -r -f $(TARGETDIR)
 	rm -f .sconsign.dblite
 	rm -f */*.so
 	rm -f */*.os
+
+test:
+	mkdir -p $(TARGETDIR)
+	mkdir -p $(BUILDDIR)
+	$(CC) $(CFLAGS) $(INC) -c $(SRCDIR)/Agent.cpp -o $(BUILDDIR)/Agent.o
+	$(CC) $(CFLAGS) $(INC) -c $(TESTDIR)/Agent_test.cpp -o $(BUILDDIR)/Agent_test.o
+	$(CC) $(CFLAGS) $(INC) -c $(SRCDIR)/City.cpp -o $(BUILDDIR)/City.o
+	$(CC) $(CFLAGS) $(INC) -c $(TESTDIR)/City_test.cpp -o $(BUILDDIR)/City_test.o
+	$(CC) $(BUILDDIR)/Agent.o  $(BUILDDIR)/Agent_test.o -o $(TARGETDIR)/test_agent $(TESTFLAG)
+	$(CC) $(BUILDDIR)/City.o  $(BUILDDIR)/City_test.o -o $(TARGETDIR)/test_city $(TESTFLAG)
+
+runtests:
+	./bin/test_agent
+	./bin/test_city
