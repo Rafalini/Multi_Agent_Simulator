@@ -2,9 +2,6 @@ import asyncio
 import websockets
 import json
 import build.map_module
-#from src_py.Map import Map
-#from src_py.Agent import Agent
-#from src_py.City import City
 
 
 async def request_handler(websocket, path):
@@ -15,23 +12,25 @@ async def request_handler(websocket, path):
             cities =[]
             agents =[]
 
+            print(dict)
+
             map = dict["map"]
             map_agents = dict["agents"]
             map_cities = map["cities"]
 
-            for x in map_agents["agents"]:
-                agents.append(Agent(x["begining"],x["destination"],x["weight"]))
+            #for x in map_agents["agents"]:
+            #    agents.append(Agent(x["begining"],x["destination"],x["load"]))
 
-            for x in map_cities:
-                cities.append(City(x["name"],x["x"],x["y"],x["segments"]))
+            #for x in map_cities:
+            #    cities.append(City(x["name"],x["x"],x["y"],x["segments"]))
 
             print("wczytuje miasta i agentow do mapy...")
 
-            mapka = build.map_module.Agents_Map()
-            for x in cities:
-                mapka.add_city(x.name, x.coordX, x.coordY)
-            #for x in agents:
-            #    mapka.add_agent(x.beginingCity, x.destinationCity, x.load)
+            cpp_map = build.map_module.Agents_Map()
+            for x in map_cities:
+                cpp_map.add_city(x["name"], x["x"], x["y"])
+            for x in map_agents:
+                cpp_map.add_agent(x["begining"], x["destination"], x["load"])
 
             await (websocket.send("request received"))
         except Exception as e:

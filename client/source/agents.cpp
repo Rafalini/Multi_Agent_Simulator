@@ -32,12 +32,10 @@ void Agents::removeAgent(Agent* agent) {
     delete agent;
 }
 
-QJsonObject Agents::toJson() const {
+QJsonArray Agents::toJson() const {
     QJsonArray array;
     for(const auto& agent : agents) {
         array.append(agent->tojSON());
     }
-    QJsonObject obj;
-    obj["agents"] = array;
-    return obj;
+    return array;
 }
