@@ -66,8 +66,8 @@ MapProperties::~MapProperties() {
     for(auto& point : points) {
         delete point;
     }
-    for(auto& segment : paths) {
-        delete segment;
+    for(auto& path : paths) {
+        delete path;
     }
 }
 

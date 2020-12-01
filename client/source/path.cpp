@@ -21,13 +21,15 @@ void Path::removePoint(Point* point) {
     if(begining == point) {
         emit aboutToDelete();
         begining = nullptr;
+        if(end != nullptr)
+            end->removePath(this);
         emit removed(this);
-        end->removePath(this);
     } else if(end == point) {
         emit aboutToDelete();
+        if(begining != nullptr)
+            begining->removePath(this);
         end = nullptr;
         emit removed(this);
-        begining->removePath(this);
     }
 }
 

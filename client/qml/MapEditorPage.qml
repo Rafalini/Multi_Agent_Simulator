@@ -83,16 +83,16 @@ Page {
                 cityContextMenu.cityRepresentation = city;
             }
             function deletePath(pathRepresentation) {
-                parentItem.paths = Array.from(parentItem.paths).filter(r => r !== pathRepresentation);
                 pathRepresentation.destroy();
+                //                parentItem.paths = Array.from(parentItem.paths).filter(r => r !== pathRepresentation);
             }
             function deleteCity(cityRepresentation) {
-                parentItem.cities = Array.from(parentItem.cities).filter(r => r !== cityRepresentation);
                 cityRepresentation.destroy();
+                //                parentItem.cities = Array.from(parentItem.cities).filter(r => r !== cityRepresentation);
             }
             function deletePoint(pointRepresentation) {
-                parentItem.points = Array.from(parentItem.points).filter(r => r !== pointRepresentation);
                 pointRepresentation.destroy();
+                //                parentItem.points = Array.from(parentItem.points).filter(r => r !== pointRepresentation);
             }
         }
 
@@ -101,9 +101,11 @@ Page {
             property var pointRepresentation
 
             onPointRepresentationChanged: {
-                x = pointRepresentation.x;
-                y = pointRepresentation.y;
-                open();
+                if(pointRepresentation) {
+                    x = pointRepresentation.x;
+                    y = pointRepresentation.y;
+                    open();
+                }
             }
 
             MenuItem {
@@ -119,9 +121,11 @@ Page {
             id: cityContextMenu
             property var cityRepresentation
             onCityRepresentationChanged: {
-                x = cityRepresentation.x;
-                y = cityRepresentation.y;
-                open();
+                if(cityRepresentation) {
+                    x = cityRepresentation.x;
+                    y = cityRepresentation.y;
+                    open();
+                }
             }
 
             MenuItem {

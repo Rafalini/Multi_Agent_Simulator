@@ -9,10 +9,14 @@ Item {
         parent.openPointContextMenu(pointRepresentation);
     }
 
+    function objectDeleted() {
+        parent.deletePoint(this);
+    }
+
     Connections {
         target: point
         function onDeleted() {
-            parent.deletePoint(pointRepresentation);
+            objectDeleted();
         }
     }
 

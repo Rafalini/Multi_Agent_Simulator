@@ -11,16 +11,14 @@ PointRepresentation {
         initilize();
     }
 
-    Connections {
-        target: city
-        function onDeleted() {
-            parent.deleteCity(pointRepresentation);
-        }
+    function objectDeleted() {
+        parent.deleteCity(this);
     }
 
     function clicked() {
         parent.openCityContextMenu(cityRepresentation);
     }
+
     Text{
         id: cityName
         anchors.left: rec.right
