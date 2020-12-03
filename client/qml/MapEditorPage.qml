@@ -3,57 +3,6 @@ import QtQuick.Controls 2.15
 
 Page {
     id: parentItem
-    property list<CityRepresentation> cities
-    property list<PointRepresentation> points
-    property list<PathRepresentation> paths
-    property var cityComponent
-    property var pointComponent
-    property var pathComponent
-
-    Connections {
-        target: map
-        function onCityAdded(city) {
-            let newCityRepresentation = cityComponent.createObject(draggableArea, {city: city});
-            cities.push(newCityRepresentation);
-        }
-
-        function onDuplicateCityName(name) {
-            windowDialog.showError("Miasto nie dodane.\nPowód: Miasto o nazwie " + name + " już istnieje.");
-        }
-
-//        function onPointAdded(point) {
-//            let newPointRepresentation = pointComponent.createObject(draggableArea, {point: point});
-//            points.push(newPointRepresentation);
-//        }
-    }
-
-    Component.onCompleted: {
-        let cityArray = [];
-        let currentCities = map.cities;
-        cityComponent = Qt.createComponent("CityRepresentation.qml");
-        for(let i = 0; i < currentCities.length; ++i) {
-            let city = currentCities[i];
-            let newCityRepresentation = cityComponent.createObject(draggableArea, {city: city});
-            cities.push(newCityRepresentation);
-        }
-        //        pointComponent = Qt.createComponent("PointRepresentation.qml");
-        //        let pointArray = [];
-        //        let currentPoints = map.points;
-        //        for(let j = 0; j < currentPoints.length; ++j) {
-        //            let point = currentPoints[j];
-        //            let newPointRepresentation = pointComponent.createObject(draggableArea, {point: point});
-        //            points.push(newPointRepresentation);
-        //        }
-
-        pathComponent = Qt.createComponent("PathRepresentation.qml");
-        let pathArray = [];
-        let currentPaths = map.paths;
-        for(let l = 0; l < currentPaths.length; ++l) {
-            let path = currentPaths[l];
-            let newPathRepresentation = pathComponent.createObject(draggableArea, {path: path});
-            paths.push(newPathRepresentation);
-        }
-    }
 
     Image {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -76,6 +25,19 @@ Page {
                            contextMenu.y = mouse.y;
                            contextMenu.open();
                        }
+
+            Repeater {
+                id: pathRepeater
+                anchors.fill: parent
+                model: map.paths
+                delegate: PathRepresentation {
+                    path: modelData
+                    function clicked() {
+                        pathContextMenu.pathRepresentation = this;
+                    }
+                }
+            }
+
             Repeater {
                 id: pointRepeater
                 anchors.fill: parent
@@ -88,56 +50,31 @@ Page {
                 }
             }
 
-            function openCityContextMenu(city) {
-                cityContextMenu.cityRepresentation = city;
-            }
-            function openPathContextMenu(path) {
-                pathContextMenu.pathRepresentation = path;
+            Repeater {
+                id: cityRepeater
+                anchors.fill: parent
+                model: map.cities
+                delegate: PointRepresentation {
+                    cities: modelData
+                    function clicked() {
+                        cityContextMenu.cityRepresentation = this;
+                    }
+                }
             }
         }
 
+        Menu {
+            id: pathContextMenu
+        }
         Menu {
             id: pointContextMenu
-            property var pointRepresentation
-
-            onPointRepresentationChanged: {
-                if(pointRepresentation) {
-                    x = pointRepresentation.x;
-                    y = pointRepresentation.y;
-                    open();
-                }
-            }
-
-            MenuItem {
-                text: "Usuń punkt"
-                onTriggered: {
-                    map.removePoint(pointContextMenu.pointRepresentation.point);
-                }
-            }
         }
-
-
         Menu {
             id: cityContextMenu
-            property var cityRepresentation
-            onCityRepresentationChanged: {
-                if(cityRepresentation) {
-                    x = cityRepresentation.x;
-                    y = cityRepresentation.y;
-                    open();
-                }
-            }
-
-            MenuItem {
-                text: "Usuń miasto"
-                onTriggered: {
-                    map.removeCity(cityContextMenu.cityRepresentation.city);
-                }
-            }
         }
 
         Menu {
-            id: contextMenu
+            id: mapContextMenu
             Menu {
                 title: "Dodaj miasto"
                 MenuItem {

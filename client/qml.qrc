@@ -13,5 +13,8 @@
         <file>qml/SimulationParametersPage.qml</file>
         <file>qml/StyledTabButton.qml</file>
         <file>qml/PathRepresentation.qml</file>
+        <file>qml/PointContextMenu.qml</file>
+        <file>qml/CityContextMenu.qml</file>
+        <file>qml/PathContextMenu.qml</file>
     </qresource>
 </RCC>

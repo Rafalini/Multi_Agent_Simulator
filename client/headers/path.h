@@ -12,8 +12,8 @@ QT_FORWARD_DECLARE_CLASS(Point); //forward declaration
 class Path : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Point* begining MEMBER begining NOTIFY beginingChanged);
-    Q_PROPERTY(Point* end MEMBER end NOTIFY endChanged);
+    Q_PROPERTY(Point* begining READ getBegining WRITE setBegining NOTIFY beginingChanged);
+    Q_PROPERTY(Point* end READ getEnd WRITE setEnd NOTIFY endChanged);
     Q_PROPERTY(double length MEMBER length );
 
 public:
@@ -22,13 +22,14 @@ public:
     int getId() const;
     virtual ~Path();
     void removePoint(Point*);
+    void setBegining(Point*);
+    void setEnd(Point*);
+    Point* getBegining() const;
+    Point* getEnd() const;
 
 signals:
     void endChanged();
     void beginingChanged();
-    void deleted();
-    void removed(Path*);
-    void aboutToDelete();
 
 private:
     int id;

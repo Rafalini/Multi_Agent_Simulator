@@ -16,16 +16,28 @@ Path::~Path() {
         end->removePath(this);
 }
 
-void Path::removePoint(Point* point) {
-    if(begining == point) {
-        begining = nullptr;
-        if(end != nullptr)
-            end->removePath(this);
-    } else if(end == point) {
-            begining->removePath(this);
-        end = nullptr;
-    }
+Point *Path::getBegining() const
+{
+    return begining;
 }
+
+Point *Path::getEnd() const
+{
+    return end;
+}
+
+void Path::setBegining(Point* begining) {
+    if(begining == nullptr) return;
+    this->end = begining;
+    emit beginingChanged();
+}
+
+void Path::setEnd(Point*end) {
+    if(end == nullptr) return;
+    this->end = end;
+    emit endChanged();
+}
+
 
 QJsonObject Path::toJson() const {
     QJsonObject obj;

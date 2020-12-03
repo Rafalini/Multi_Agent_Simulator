@@ -2,8 +2,7 @@ import QtQuick 2.15
 
 Rectangle {
     id: pathRepresentation
-    required property variant path
-    z: 1
+    property variant path
     height: 1
     color: "black"
     property int x2: path && path.end ? path.end.x*parent.width : 0
@@ -11,16 +10,8 @@ Rectangle {
     x: path && path.begining ? path.begining.x*parent.width : 0
     y: path && path.begining ? path.begining.y*parent.height : 0
 
-    Connections {
-        target: path
-        function onAboutToDelete() {
-            parent.deletePath(pathRepresentation);
-        }
-    }
-
-    function clicked() {
-        parent.openPathContextMenu(pathRepresentation);
-    }
+    //signal for Repeater to open ContextMenu
+    function clicked() {}
 
     width:Math.sqrt(Math.pow(Math.abs(x-x2),2) + Math.pow(Math.abs(y-y2),2));
 

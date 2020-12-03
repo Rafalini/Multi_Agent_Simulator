@@ -7,16 +7,6 @@ Item {
 
     //signal for Repeater to open ContextMenu
     function clicked() {}
-//    function objectDeleted() {
-//        parent.deletePoint(this);
-//    }
-
-//    Connections {
-//        target: point
-//        function onDeleted() {
-//            objectDeleted();
-//        }
-//    }
 
     x: point ? point.x*parent.width : 0
     y: point ? point.y*parent.height : 0
