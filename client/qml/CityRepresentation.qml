@@ -4,6 +4,7 @@ import QtQuick 2.15
 PointRepresentation {
     id: cityRepresentation
     required property var city
+    z: 3
     point: city
     color: "red"
 

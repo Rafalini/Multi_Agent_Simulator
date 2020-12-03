@@ -14,22 +14,16 @@ Path::~Path() {
         begining->removePath(this);
     if(end != nullptr )
         end->removePath(this);
-    emit deleted();
 }
 
 void Path::removePoint(Point* point) {
     if(begining == point) {
-        emit aboutToDelete();
         begining = nullptr;
         if(end != nullptr)
             end->removePath(this);
-        emit removed(this);
     } else if(end == point) {
-        emit aboutToDelete();
-        if(begining != nullptr)
             begining->removePath(this);
         end = nullptr;
-        emit removed(this);
     }
 }
 

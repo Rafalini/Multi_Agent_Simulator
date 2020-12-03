@@ -2,23 +2,21 @@ import QtQuick 2.15
 
 Item {
     id: pointRepresentation
-    required property variant point
+    property variant point
     property alias rec: rec
 
-    function clicked() {
-        parent.openPointContextMenu(pointRepresentation);
-    }
+    //signal for Repeater to open ContextMenu
+    function clicked() {}
+//    function objectDeleted() {
+//        parent.deletePoint(this);
+//    }
 
-    function objectDeleted() {
-        parent.deletePoint(this);
-    }
-
-    Connections {
-        target: point
-        function onDeleted() {
-            objectDeleted();
-        }
-    }
+//    Connections {
+//        target: point
+//        function onDeleted() {
+//            objectDeleted();
+//        }
+//    }
 
     x: point ? point.x*parent.width : 0
     y: point ? point.y*parent.height : 0

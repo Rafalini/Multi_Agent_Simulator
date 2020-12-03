@@ -42,13 +42,13 @@ void MapProperties::addCity(const QString& name, const double& x, const double& 
     }
     City* city = new City(name, x, y);
     cities.push_back(city);
-    emit cityAdded(city);
+    emit citiesChanged();
 }
 
 void MapProperties::addPoint(const double& x, const double& y) {
     Point* point = new Point(x, y);
     points.push_back(point);
-    emit pointAdded(point);
+    emit pointsChanged();
 }
 
 void MapProperties::addPath(const double& length, Point* begining, Point* end) {
@@ -56,7 +56,8 @@ void MapProperties::addPath(const double& length, Point* begining, Point* end) {
     begining->addPath(path);
     end->addPath(path);
     paths.push_back(path);
-    connect(path, &Path::removed, [=](Path* path){delete path;});
+    emit pathsChanged();
+    connect(path, &Path::removed, [=](Path* path){paths.removeOne(path);emit pathsChanged(); delete path;});
 }
 
 MapProperties::~MapProperties() {
@@ -90,15 +91,18 @@ QVector<Path*> MapProperties::getPaths() const
 void MapProperties::removePoint(Point* point) {
     if( point == nullptr ) return;
     points.removeOne(point);
+    emit pointsChanged();
     delete point;
 }
 void MapProperties::removeCity(City* city) {
     if( city == nullptr ) return;
     cities.removeOne(city);
+    emit citiesChanged();
     delete city;
 }
 void MapProperties::removePath(Path* path) {
     if( path == nullptr ) return;
     paths.removeOne(path);
+    emit pathsChanged();
     delete path;
 }

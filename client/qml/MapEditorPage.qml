@@ -21,10 +21,10 @@ Page {
             windowDialog.showError("Miasto nie dodane.\nPowód: Miasto o nazwie " + name + " już istnieje.");
         }
 
-        function onPointAdded(point) {
-            let newPointRepresentation = pointComponent.createObject(draggableArea, {point: point});
-            points.push(newPointRepresentation);
-        }
+//        function onPointAdded(point) {
+//            let newPointRepresentation = pointComponent.createObject(draggableArea, {point: point});
+//            points.push(newPointRepresentation);
+//        }
     }
 
     Component.onCompleted: {
@@ -36,14 +36,14 @@ Page {
             let newCityRepresentation = cityComponent.createObject(draggableArea, {city: city});
             cities.push(newCityRepresentation);
         }
-        pointComponent = Qt.createComponent("PointRepresentation.qml");
-        let pointArray = [];
-        let currentPoints = map.points;
-        for(let j = 0; j < currentPoints.length; ++j) {
-            let point = currentPoints[j];
-            let newPointRepresentation = pointComponent.createObject(draggableArea, {point: point});
-            points.push(newPointRepresentation);
-        }
+        //        pointComponent = Qt.createComponent("PointRepresentation.qml");
+        //        let pointArray = [];
+        //        let currentPoints = map.points;
+        //        for(let j = 0; j < currentPoints.length; ++j) {
+        //            let point = currentPoints[j];
+        //            let newPointRepresentation = pointComponent.createObject(draggableArea, {point: point});
+        //            points.push(newPointRepresentation);
+        //        }
 
         pathComponent = Qt.createComponent("PathRepresentation.qml");
         let pathArray = [];
@@ -76,23 +76,23 @@ Page {
                            contextMenu.y = mouse.y;
                            contextMenu.open();
                        }
-            function openPointContextMenu(point) {
-                pointContextMenu.pointRepresentation = point;
+            Repeater {
+                id: pointRepeater
+                anchors.fill: parent
+                model: map.points
+                delegate: PointRepresentation {
+                    point: modelData
+                    function clicked() {
+                        pointContextMenu.pointRepresentation = this;
+                    }
+                }
             }
+
             function openCityContextMenu(city) {
                 cityContextMenu.cityRepresentation = city;
             }
-            function deletePath(pathRepresentation) {
-                pathRepresentation.destroy();
-                //                parentItem.paths = Array.from(parentItem.paths).filter(r => r !== pathRepresentation);
-            }
-            function deleteCity(cityRepresentation) {
-                cityRepresentation.destroy();
-                //                parentItem.cities = Array.from(parentItem.cities).filter(r => r !== cityRepresentation);
-            }
-            function deletePoint(pointRepresentation) {
-                pointRepresentation.destroy();
-                //                parentItem.points = Array.from(parentItem.points).filter(r => r !== pointRepresentation);
+            function openPathContextMenu(path) {
+                pathContextMenu.pathRepresentation = path;
             }
         }
 

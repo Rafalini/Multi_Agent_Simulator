@@ -9,9 +9,9 @@
 class MapProperties : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QVector<Path*> paths READ getPaths);
-    Q_PROPERTY(QVector<City*> cities READ getCities);
-    Q_PROPERTY(QVector<Point*> points READ getPoints);
+    Q_PROPERTY(QVector<Path*> paths READ getPaths NOTIFY pathsChanged);
+    Q_PROPERTY(QVector<City*> cities READ getCities NOTIFY citiesChanged);
+    Q_PROPERTY(QVector<Point*> points READ getPoints NOTIFY pointsChanged);
 
 public:
     MapProperties();
@@ -28,10 +28,10 @@ public:
     Q_INVOKABLE void removePath(Path* path);
 
 signals:
-    void cityAdded(City*);
     void duplicateCityName(QString);
-    void pointAdded(Point*);
-    void pathAdded(Path*);
+    void pathsChanged();
+    void citiesChanged();
+    void pointsChanged();
 
 private:
     QVector<City*> cities;
