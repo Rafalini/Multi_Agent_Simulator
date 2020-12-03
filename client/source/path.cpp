@@ -16,12 +16,12 @@ Path::~Path() {
         end->removePath(this);
 }
 
-Point *Path::getBegining() const
+Point* Path::getBegining() const
 {
     return begining;
 }
 
-Point *Path::getEnd() const
+Point* Path::getEnd() const
 {
     return end;
 }
@@ -32,7 +32,7 @@ void Path::setBegining(Point* begining) {
     emit beginingChanged();
 }
 
-void Path::setEnd(Point*end) {
+void Path::setEnd(Point* end) {
     if(end == nullptr) return;
     this->end = end;
     emit endChanged();

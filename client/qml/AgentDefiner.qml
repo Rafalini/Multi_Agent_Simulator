@@ -25,30 +25,16 @@ Popup {
         load.text = agent.load.toString();
         begining.currentIndex = -1;
         end.currentIndex = -1;
-        for(var i = 0; i < citiesModel.count; i++) {
-            if(agent.begining === citiesModel.get(i).city) {
+        for(var i = 0; i < begining.model.length; i++) {
+            if(agent.begining === begining.model[i]) {
                 begining.currentIndex = i;
             }
-            if(agent.destination === citiesModel.get(i).city) {
+            if(agent.destination === end.model[i]) {
                 end.currentIndex = i;
             }
         }
-        if(end.currentIndex == -1) {
-            citiesModel.append({
-                            city = agent.destination
-                           });
-            end.currentIndex = citiesModel.count-1;
-        }
-
-        if(begining.currentIndex == -1) {
-            citiesModel.append({
-                            city = agent.begining
-                           });
-            begining.currentIndex = citiesModel.count-1;
-        }
         this.visible = true;
     }
-
 
     property var editedAgent: 0;
     contentItem: GridLayout {
@@ -78,40 +64,19 @@ Popup {
             return true;
         }
 
-
-        Connections {
-            target: map
-            function onCityAdded(city) {
-                citiesModel.append({
-                                    text: city.name,
-                                    city: city
-                                   });
-            }
-        }
-
-        ListModel {
-            id: citiesModel
-            Component.onCompleted: {
-                let cities = map.cities;
-                for(let i = 0; i < cities.length; i++) {
-                    citiesModel.append({
-                                        text: cities[i].name,
-                                        city: cities[i]
-                                       });
-                }
-            }
-        }
-
         Text {
             text: qsTr("Miasto początkowe")
         }
 
         ComboBox {
             id: begining
-            displayText: model.get(currentIndex) ? model.get(currentIndex).text : qsTr("Wybierz miasto")
-            textRole: "text"
+            displayText: currentIndex > -1 ? model[currentIndex].name : qsTr("Wybierz miasto")
             Layout.fillWidth: true
-            model: citiesModel
+            model: map.cities
+            delegate: ItemDelegate {
+                text: modelData.name
+                width: begining.width
+            }
         }
 
 
@@ -120,11 +85,14 @@ Popup {
         }
 
         ComboBox {
-            displayText: model.get(currentIndex) ? model.get(currentIndex).text : qsTr("Wybierz miasto")
+            displayText: currentIndex > -1 ? model[currentIndex].name : qsTr("Wybierz miasto")
             Layout.fillWidth: true
             id: end
-            model: citiesModel
-            textRole: "text"
+            model: map.cities
+            delegate: ItemDelegate {
+                text: modelData.name
+                width: end.width
+            }
         }
 
         Text {
@@ -142,13 +110,14 @@ Popup {
             Keys.onReturnPressed: parent.save()
         }
 
-
         function save() {
             if( !validate() ) return;
+
             if( editedAgent === 0 ) {
-                agents.addAgent(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, load.text.replace(',', ''));
+                let begName =
+                agents.addAgent(begining.model[begining.currentIndex], end.model[end.currentIndex], load.text.replace(',', ''));
             } else {
-                editedAgent.update(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, load.text.replace(',', ''));
+                editedAgent.update(begining.model[begining.currentIndex], end.model[end.currentIndex], load.text.replace(',', ''));
             }
             agentPopup.visible = false;
         }

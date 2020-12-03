@@ -21,9 +21,8 @@ public:
     Q_INVOKABLE void setY(const double& y);
     Q_INVOKABLE void addPath(Path* path);
     void removePath(Path* path);
-    const QVector<Path*>& getPaths() const;
+    QVector<Path*> getPaths() const;
     virtual QJsonObject toJson() const;
-    virtual ~Point();
 signals:
     void xChanged(const double&);
     void yChanged(const double&);

@@ -13,9 +13,9 @@ Menu {
         }
     }
     MenuItem {
-        text: "Usuń punkt"
+        text: "Usuń drogę"
         onTriggered: {
-            map.removePath(pathRepresentation.pathRepresentation.path);
+            map.removePath(pathRepresentation.path);
         }
     }
 }

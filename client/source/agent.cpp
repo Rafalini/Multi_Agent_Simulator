@@ -5,6 +5,10 @@ Agent::Agent(QObject *parent) : QObject(parent) {}
 
 Agent::Agent(City* begining, City* destination, const double &weight) : beginingCity(begining), destinationCity(destination), load(weight) {}
 
+Agent::~Agent() {
+    emit deleted();
+}
+
 void Agent::update(City* begining, City* destination, const double &load) {
     if(load <= 0) {
         emit wrongUpdateArguments("Waga nie może być mniejsza od 0");
@@ -62,10 +66,6 @@ void Agent::setLoad(const double& load) {
     }
     this->load = load;
     emit loadUpdated();
-}
-
-Agent::~Agent() {
-    emit deleted();
 }
 
 City* Agent::getBegining() const

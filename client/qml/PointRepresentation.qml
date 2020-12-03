@@ -8,10 +8,12 @@ Item {
     //signal for Repeater to open ContextMenu
     function clicked() {}
 
-    x: point ? point.x*parent.width : 0
-    y: point ? point.y*parent.height : 0
-    onXChanged: if(point) point.x = x/parent.width;
-    onYChanged: if(point) point.y = y/parent.height;
+    x: point.x*parent.width
+    y: point.y*parent.height
+
+    //update in model only if change caused by drag, not parent size
+    onXChanged: if(draggedRec.drag.active) point.x = x/parent.width;
+    onYChanged: if(draggedRec.drag.active) point.y = y/parent.height;
 
     Drag.active: draggedRec.drag.active
     Drag.hotSpot.x: 0

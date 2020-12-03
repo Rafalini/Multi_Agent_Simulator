@@ -21,7 +21,6 @@ public:
     QJsonObject toJson() const;
     int getId() const;
     virtual ~Path();
-    void removePoint(Point*);
     void setBegining(Point*);
     void setEnd(Point*);
     Point* getBegining() const;

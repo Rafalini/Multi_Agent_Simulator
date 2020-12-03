@@ -20,7 +20,7 @@ void Point::setX(const double& x) {
     emit xChanged(this->x);
 }
 
-const QVector<Path*>& Point::getPaths() const {
+QVector<Path*> Point::getPaths() const {
     return paths;
 }
 

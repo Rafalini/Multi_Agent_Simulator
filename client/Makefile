@@ -8,7 +8,7 @@ SED_ARGUMENT = "s|"$(PWD)"/Qt/5.15.1/wasm_32/qml/Qt/WebSockets/libdeclarative_qm
 GCC_QMAKE = $(PWD)/Qt/5.15.1/gcc_64/bin/qmake
 QMAKE = $(PWD)/Qt/5.15.1/wasm_32/bin/qmake
 EMRUN = $(PWD)/emsdk/upstream/emscripten/emrun.py
-
+QT_INSTALLER = qt-unified-linux-x64-4.0.1-online.run
 
 all: emsdk/emsdk_env.sh build/index.html
 	$(PYTHON) $(EMRUN) $(EMRUN_FLAGS) --port '8888' build/
@@ -25,12 +25,12 @@ build/Makefile: Symulator_Wieloagentowy.pro build qml.qrc
 run:
 	$(PYTHON) $(EMRUN) $(EMRUN_FLAGS) --port '8888' build/
 
-Qt: qt-unified-linux-x64-4.0.0-online.run
-	./qt-unified-linux-x64-4.0.0-online.run install qt.qt5.5151.wasm_32 --root $(PWD)/Qt --auto-answer telemetry-question=Yes,AssociateCommonFiletypes=Yes --accept-licenses --accept-obligations --email 300198@pw.edu.pl --pw fYBaX2CvzxaSZkewmpWg --confirm-command --nd --nf
+Qt: $(QT_INSTALLER)
+	./$(QT_INSTALLER) install qt.qt5.5151.wasm_32 --root $(PWD)/Qt --auto-answer telemetry-question=Yes,AssociateCommonFiletypes=Yes --accept-licenses --accept-obligations --email 300198@pw.edu.pl --pw fYBaX2CvzxaSZkewmpWg --confirm-command #--nd --nf
 
-qt-unified-linux-x64-4.0.0-online.run:
-	wget https://d13lb3tujbc8s0.cloudfront.net/onlineinstallers/qt-unified-linux-x64-4.0.0-online.run
-	chmod +x qt-unified-linux-x64-4.0.0-online.run
+$(QT_INSTALLER):
+	wget https://d13lb3tujbc8s0.cloudfront.net/onlineinstallers/$(QT_INSTALLER)
+	chmod +x $(QT_INSTALLER)
 
 build:
 	mkdir build

@@ -53,6 +53,7 @@ Page {
             ScrollBar.vertical: ScrollBar {
                     id: agentsScrollBar
                     active: true
+                    interactive: true
                     height: agentsListView.height
                     visible: agentsListView.scrollNeeded
                     policy: ScrollBar.AlwaysOn

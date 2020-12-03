@@ -4,117 +4,153 @@ import QtQuick.Controls 2.15
 Page {
     id: parentItem
 
-    Image {
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.height > parent.width ? parent.width : parent.height
-        height: width
-        source: "../resource/MapOfPoland.png"
-    }
-    Canvas {
-        id:canvas
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.height > parent.width ? parent.width : parent.height
-        height: width
+    ScrollView {
+        id: scrollView
+        anchors.fill: parent
+        clip: true
+        ScrollBar.vertical: verticalScrollbar
+        ScrollBar.horizontal: horizontalScrollbar
+        Canvas {
+            id:canvas
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: height
+            height: parent.height
 
-        MouseArea {
-            id: draggableArea
-            anchors.fill: parent
-            acceptedButtons: Qt.RightButton | Qt.LeftButton
-            onClicked: (mouse) => {
-                           contextMenu.x = mouse.x;
-                           contextMenu.y = mouse.y;
-                           contextMenu.open();
-                       }
-
-            Repeater {
-                id: pathRepeater
+            Image {
                 anchors.fill: parent
-                model: map.paths
-                delegate: PathRepresentation {
-                    path: modelData
-                    function clicked() {
-                        pathContextMenu.pathRepresentation = this;
-                    }
-                }
+                source: "../resource/MapOfPoland.png"
             }
-
-            Repeater {
-                id: pointRepeater
+            MouseArea {
+                id: draggableArea
                 anchors.fill: parent
-                model: map.points
-                delegate: PointRepresentation {
-                    point: modelData
-                    function clicked() {
-                        pointContextMenu.pointRepresentation = this;
-                    }
+                acceptedButtons: Qt.RightButton | Qt.LeftButton
+                onClicked: (mouse) => {
+                               mapContextMenu.x = mouse.x;
+                               mapContextMenu.y = mouse.y;
+                               mapContextMenu.open();
+                           }
+                onWheel: (wheel) => {
+                             if(wheel.modifiers & Qt.ControlModifier) {
+                                 canvas.height *= wheel.angleDelta.y < 0 || wheel.angleDelta.x < 0 ? 0.9 : 1.1;
+                             } else if (wheel.modifiers & Qt.ShiftModifier ) {
+                                if(wheel.angleDelta.y < 0 || wheel.angleDelta.x < 0 )
+                                    horizontalScrollbar.increase();
+                                else
+                                    horizontalScrollbar.decrease();
+                             } else {
+                                 if(wheel.angleDelta.y < 0 || wheel.angleDelta.x < 0 )
+                                     verticalScrollbar.increase();
+                                 else
+                                     verticalScrollbar.decrease();
+                             }
                 }
-            }
 
-            Repeater {
-                id: cityRepeater
-                anchors.fill: parent
-                model: map.cities
-                delegate: PointRepresentation {
-                    cities: modelData
-                    function clicked() {
-                        cityContextMenu.cityRepresentation = this;
-                    }
-                }
-            }
-        }
-
-        Menu {
-            id: pathContextMenu
-        }
-        Menu {
-            id: pointContextMenu
-        }
-        Menu {
-            id: cityContextMenu
-        }
-
-        Menu {
-            id: mapContextMenu
-            Menu {
-                title: "Dodaj miasto"
-                MenuItem {
-                    onTriggered: activate();
-                    TextInput {
-                        leftPadding: 4
-                        onVisibleChanged: if(visible) forceActiveFocus();
-                        verticalAlignment: Text.AlignVCenter
-                        width: parent.width-80
-                        height: parent.height
-                        id: newCityName
-                    }
-                    StyledButton {
-                        anchors.left: newCityName.right
-                        height: newCityName.height
-                        width: 80
-                        text: "Dodaj"
-                        function activate() { parent.activate() }
-                    }
-                    function activate() {
-                        if(newCityName.text == "") {
-                            windowDialog.showError("Nazwa miasta nie może być pusta!");
-                            return;
+                Repeater {
+                    id: pathRepeater
+                    anchors.fill: parent
+                    model: map.paths
+                    delegate: PathRepresentation {
+                        path: modelData
+                        function clicked() {
+                            pathContextMenu.pathRepresentation = this;
                         }
-                        map.addCity(newCityName.text, contextMenu.x/draggableArea.width, contextMenu.y/draggableArea.height);
-                        newCityName.text = "";
-                        contextMenu.close();
+                    }
+                }
+
+                Repeater {
+                    id: pointRepeater
+                    anchors.fill: parent
+                    model: map.points
+                    delegate: PointRepresentation {
+                        point: modelData
+                        function clicked() {
+                            pointContextMenu.pointRepresentation = this;
+                        }
+                    }
+                }
+
+                Repeater {
+                    id: cityRepeater
+                    anchors.fill: parent
+                    model: map.cities
+                    delegate: CityRepresentation {
+                        city: modelData
+                        function clicked() {
+                            cityContextMenu.cityRepresentation = this;
+                        }
                     }
                 }
             }
-            MenuSeparator{}
-            MenuItem {
-                text: "Dodaj punkt"
-                onTriggered: {
-                    map.addPoint(contextMenu.x/draggableArea.width, contextMenu.y/draggableArea.height);
+
+            PathContextMenu {
+                id: pathContextMenu
+            }
+            PointContextMenu {
+                id: pointContextMenu
+            }
+            CityContextMenu {
+                id: cityContextMenu
+            }
+
+            Menu {
+                id: mapContextMenu
+                Menu {
+                    title: "Dodaj miasto"
+                    MenuItem {
+                        onTriggered: activate();
+                        TextInput {
+                            leftPadding: 4
+                            onVisibleChanged: if(visible) forceActiveFocus();
+                            verticalAlignment: Text.AlignVCenter
+                            width: parent.width-80
+                            height: parent.height
+                            id: newCityName
+                        }
+                        StyledButton {
+                            anchors.left: newCityName.right
+                            height: newCityName.height
+                            width: 80
+                            text: "Dodaj"
+                            function activate() { parent.activate() }
+                        }
+                        function activate() {
+                            if(newCityName.text == "") {
+                                windowDialog.showError("Nazwa miasta nie może być pusta!");
+                                return;
+                            }
+                            map.addCity(newCityName.text, mapContextMenu.x/draggableArea.width, mapContextMenu.y/draggableArea.height);
+                            newCityName.text = "";
+                            mapContextMenu.close();
+                        }
+                    }
+                }
+                MenuSeparator{}
+                MenuItem {
+                    text: "Dodaj punkt"
+                    onTriggered: {
+                        map.addPoint(mapContextMenu.x/draggableArea.width, mapContextMenu.y/draggableArea.height);
+                    }
                 }
             }
+
+            onPaint: {}
         }
-
-        onPaint: {}
-
     }
+
+    ScrollBar {
+        id: verticalScrollbar
+        visible: true
+        anchors.right: scrollView.right
+        width: 100
+        height: scrollView.height
+        anchors.top: scrollView.top
+    }
+    ScrollBar {
+        id: horizontalScrollbar
+        visible: true
+        anchors.right: scrollView.right
+        width: 20
+        anchors.bottom: scrollView.bottom
+    }
+
 }

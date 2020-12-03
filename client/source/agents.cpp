@@ -19,8 +19,14 @@ void Agents::addAgent(City* begining, City* destination, double load) {
         emit wrongAddAgentArguments("Ładunek musi być więc od 0");
         return;
     }
-    agents.push_back(new Agent(begining, destination, load));
-    emit agentAdded(agents.last());
+    Agent* newAgent = new Agent(begining, destination, load);
+    agents.push_back(newAgent);
+    emit agentAdded(newAgent);
+}
+
+
+QVector<Agent*> Agents::getAgents() const {
+    return agents;
 }
 
 Agent* Agents::getAgent(int agentId) {
