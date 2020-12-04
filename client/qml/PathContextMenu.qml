@@ -5,13 +5,13 @@ Menu {
     id: pathContextMenu
     property var pathRepresentation
 
-    onPathRepresentationChanged: {
-        if(pathRepresentation) {
-            x = pathRepresentation.x;
-            y = pathRepresentation.y;
-            open();
-        }
+    function show(pathRepresentation, x_offset, y_offset) {
+        this.pathRepresentation = pathRepresentation;
+        x = pathRepresentation.x + x_offset;
+        y = pathRepresentation.y + y_offset;
+        open();
     }
+
     MenuItem {
         text: "Usuń drogę"
         onTriggered: {

@@ -4,6 +4,7 @@ Item {
     id: pointRepresentation
     property variant point
     property alias rec: rec
+    property bool isDragLocked
 
     //signal for Repeater to open ContextMenu
     function clicked() {}

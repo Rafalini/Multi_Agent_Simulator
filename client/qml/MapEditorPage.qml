@@ -16,6 +16,10 @@ Page {
             width: height
             height: parent.height
 
+            function finishDrawingPathAt(pointRepresentation) {
+                console.debug("here");
+            }
+
             Image {
                 anchors.fill: parent
                 source: "../resource/MapOfPoland.png"
@@ -25,9 +29,13 @@ Page {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton | Qt.LeftButton
                 onClicked: (mouse) => {
-                               mapContextMenu.x = mouse.x;
-                               mapContextMenu.y = mouse.y;
-                               mapContextMenu.open();
+                               if(mouse.button === Qt.RightButton) {
+                                   mapContextMenu.x = mouse.x;
+                                   mapContextMenu.y = mouse.y;
+                                   mapContextMenu.open();
+                               } else {
+                                   mapContextMenu.close();
+                               }
                            }
                 onWheel: (wheel) => {
                              if(wheel.modifiers & Qt.ControlModifier) {
@@ -51,8 +59,8 @@ Page {
                     model: map.paths
                     delegate: PathRepresentation {
                         path: modelData
-                        function clicked() {
-                            pathContextMenu.pathRepresentation = this;
+                        function clicked(x_offset, y_offset) {
+                            pathContextMenu.show(this, x_offset, y_offset);
                         }
                     }
                 }
@@ -63,8 +71,12 @@ Page {
                     model: map.points
                     delegate: PointRepresentation {
                         point: modelData
+                        isDragLocked: draggableArea.dragLocked
                         function clicked() {
-                            pointContextMenu.pointRepresentation = this;
+                            if(isDragLocked) {
+                                canvas.finishDrawingPathAt(this);
+                            } else
+                                pointContextMenu.show(this);
                         }
                     }
                 }
@@ -75,11 +87,23 @@ Page {
                     model: map.cities
                     delegate: CityRepresentation {
                         city: modelData
+                        isDragLocked: draggableArea.dragLocked
                         function clicked() {
-                            cityContextMenu.cityRepresentation = this;
+                            if(isDragLocked) {
+                                canvas.finishDrawingPathAt(this);
+                            } else
+                                cityContextMenu.show(this);
                         }
                     }
                 }
+            }
+            property bool dragLocked: false;
+
+            function newPathFrom(pointRepresentation) {
+                console.debug("new path :)");
+                let startX = pointRepresentation.x;
+                let startY = pointRepresentation.y;
+                dragLocked = true;
             }
 
             PathContextMenu {

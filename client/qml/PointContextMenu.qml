@@ -5,17 +5,24 @@ Menu {
     id: pointContextMenu
     property var pointRepresentation
 
-    onPointRepresentationChanged: {
-        if(pointRepresentation) {
-            x = pointRepresentation.x;
-            y = pointRepresentation.y;
-            open();
-        }
+
+    function show(pointRepresentation) {
+        this.pointRepresentation = pointRepresentation;
+        x = pointRepresentation.x;
+        y = pointRepresentation.y;
+        open();
     }
+
     MenuItem {
         text: "Usuń punkt"
         onTriggered: {
             map.removePoint(pointContextMenu.pointRepresentation.point);
+        }
+    }
+    MenuItem {
+        text: "Dodaj drogę"
+        onTriggered: {
+            pointContextMenu.parent.newPathFrom(pointRepresentation);
         }
     }
 }
