@@ -22,7 +22,13 @@ Menu {
     MenuItem {
         text: "Dodaj drogę"
         onTriggered: {
-            pointContextMenu.parent.newPathFrom(pointRepresentation);
+            mapFrame.newPathFrom(pointRepresentation);
+        }
+    }
+    MenuItem {
+        text: "Zmień w miasto"
+        onTriggered: {
+            cityPopup.promotePointToCity(pointRepresentation);
         }
     }
 }

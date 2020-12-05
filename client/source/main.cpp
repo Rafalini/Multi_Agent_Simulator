@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
+#include <QQuickStyle>
 
 #include "../headers/remoteconnector.h"
 #include "../headers/city.h"
@@ -23,9 +24,11 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-    qRegisterMetaType<Agent*>("Agent");
-    qRegisterMetaType<Agents*>("Agents");
-    qRegisterMetaType<City*>("City");
+    qRegisterMetaType<Agent*>("Agent*");
+    qRegisterMetaType<Agents*>("Agents*");
+    qRegisterMetaType<City*>("City*");
+    qRegisterMetaType<Point*>("Point*");
+    qRegisterMetaType<Path*>("Path*");
     qRegisterMetaType<QVector<City*>>();
 
     MapProperties map;
@@ -34,12 +37,12 @@ int main(int argc, char *argv[])
     map.addCity("Szczecin", 0.1, 0.12);
     map.addPoint(0.1, 0.5);
     map.addPoint(0.5, 0.7);
-    map.addPath(100, map.getCities()[0], map.getPoints()[0]);
-    map.addPath(75, map.getCities()[0], map.getPoints()[1]);
-    map.addPath(80, map.getCities()[1], map.getPoints()[0]);
-    map.addPath(50, map.getCities()[1], map.getPoints()[1]);
-    map.addPath(50, map.getCities()[2], map.getPoints()[0]);
-    map.addPath(50, map.getCities()[2], map.getCities()[1]);
+    map.addPath(map.getCities()[0], map.getPoints()[0]);
+    map.addPath(map.getCities()[0], map.getPoints()[1]);
+    map.addPath(map.getCities()[1], map.getPoints()[0]);
+    map.addPath(map.getCities()[1], map.getPoints()[1]);
+    map.addPath(map.getCities()[2], map.getPoints()[0]);
+    map.addPath(map.getCities()[2], map.getCities()[1]);
 
     Agents agents;
 
@@ -48,6 +51,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("remoteConnector", &remote);
     engine.rootContext()->setContextProperty("map", &map);
     engine.rootContext()->setContextProperty("agents", &agents);
+
+    QQuickStyle::setStyle("Material");
 
     engine.load(url);
     return app.exec();

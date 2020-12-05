@@ -29,7 +29,7 @@ void RemoteConnector::sendMessage(QString message) {
         if(numberOfBytesSent == 0 && !connected) {
             messageQueue.enqueue(message);
             webSocket.open(url);
-            throw std::runtime_error("Websocket error");
+//            throw std::runtime_error("Websocket error");
         }
     }
 }

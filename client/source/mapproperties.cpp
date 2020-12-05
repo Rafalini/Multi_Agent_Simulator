@@ -51,8 +51,54 @@ void MapProperties::addPoint(const double& x, const double& y) {
     emit pointsChanged();
 }
 
-void MapProperties::addPath(const double& length, Point* begining, Point* end) {
-    Path* path = new Path(nextPathId++, begining, end, length);
+void MapProperties::splitPath(Path * old_path, double x, double y) {
+    paths.removeOne(old_path);
+    Point* begining = old_path->getBegining();
+    begining->removePath(old_path);
+    Point* end = old_path->getEnd();
+    end->removePath(old_path);
+    delete old_path;
+
+    Point* point = new Point(x, y);
+    Path* firstPath = new Path(nextPathId++, begining, point);
+    Path* secondPath = new Path(nextPathId++, point, end);
+    paths.push_back(firstPath);
+    paths.push_back(secondPath);
+    points.push_back(point);
+    emit pathsChanged();
+    emit pointsChanged();
+}
+
+void MapProperties::promotePointToCity(Point* point, QString name) {
+    City* city = new City(name, point->getX(), point->getY());
+    cities.push_back(city);
+    points.removeOne(point);
+    for(auto path : point->getPaths()) {
+        if(path->getBegining() == point) {
+            path->setBegining(city);
+        }
+        if(path->getEnd() == point) {
+            path->setEnd(city);
+        }
+    }
+    emit pointsChanged();
+    emit citiesChanged();
+    delete point;
+}
+
+void MapProperties::addPath(Point* begining, Point* end) {
+    if(begining == end) {
+        emit pathEndOnBegining();
+        return;
+    }
+    Path* path = new Path(nextPathId++, begining, end);
+    for(auto old_path : paths) {
+        if(*path == *old_path) {
+            emit pathAlreadyExist();
+            delete path;
+            return;
+        }
+    }
     begining->addPath(path);
     end->addPath(path);
     paths.push_back(path);
@@ -60,14 +106,20 @@ void MapProperties::addPath(const double& length, Point* begining, Point* end) {
 }
 
 MapProperties::~MapProperties() {
-    for(auto& city : cities) {
-        delete city;
+    while(!cities.isEmpty()) {
+       City* city = cities.takeLast();
+       emit citiesChanged();
+       delete city;
     }
-    for(auto& point : points) {
-        delete point;
+    while(!points.isEmpty()) {
+       Point* point = points.takeLast();
+       emit pointsChanged();
+       delete point;
     }
-    for(auto& path : paths) {
-        delete path;
+    while(!paths.isEmpty()) {
+       Path* path = paths.takeLast();
+       emit pathsChanged();
+       delete path;
     }
 }
 

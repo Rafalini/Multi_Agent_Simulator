@@ -16,5 +16,6 @@
         <file>qml/PointContextMenu.qml</file>
         <file>qml/CityContextMenu.qml</file>
         <file>qml/PathContextMenu.qml</file>
+        <file>qml/SimplePathRepresentation.qml</file>
     </qresource>
 </RCC>

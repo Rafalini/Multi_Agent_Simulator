@@ -4,7 +4,7 @@ Item {
     id: pointRepresentation
     property variant point
     property alias rec: rec
-    property bool isDragLocked
+    property bool isDrawMode
 
     //signal for Repeater to open ContextMenu
     function clicked() {}
@@ -27,11 +27,12 @@ Item {
         color: parent.color
         width: 14
         height: 14
+        radius: 5
         MouseArea {
             id: draggedRec
             acceptedButtons: Qt.RightButton | Qt.LeftButton
             anchors.fill: parent
-            drag.target: pointRepresentation
+            drag.target: isDrawMode ? null : pointRepresentation
             drag.minimumX: 0
             drag.maximumX: pointRepresentation.parent.width
             drag.minimumY: 0

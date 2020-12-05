@@ -1,5 +1,4 @@
-QT += websockets quick widgets
-Qt -= declarative
+QT += websockets quick widgets quickcontrols2
 
 CONFIG += c++11
 

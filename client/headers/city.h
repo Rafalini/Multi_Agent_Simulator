@@ -7,7 +7,6 @@
 
 QT_FORWARD_DECLARE_CLASS(Path); //forward declaration
 
-
 class City : public Point
 {
     Q_OBJECT

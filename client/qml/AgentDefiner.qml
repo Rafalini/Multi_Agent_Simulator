@@ -5,12 +5,6 @@ import QtQuick.Layouts 1.15
 Popup {
     id: agentPopup
     anchors.centerIn: parent
-    background: Rectangle {
-        anchors.fill: parent
-        color: "white"
-        border.color: "black"
-        border.width: 2
-    }
 
     function addNewAgent() {
         begining.currentIndex = -1;
