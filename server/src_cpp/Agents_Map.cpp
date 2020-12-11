@@ -37,6 +37,13 @@ void Agents_Map::run()
             std::cout << "running map..." << std::endl;
       }
 
+std::string Agents_Map::get_agent_route(int id)
+      {
+        std::string output = "output string id: ";
+        output += id;
+        return output;
+      }
+
 
 BOOST_PYTHON_MODULE(map_module)
     {
@@ -44,5 +51,6 @@ BOOST_PYTHON_MODULE(map_module)
         boost::python::class_<Agents_Map>("Agents_Map", boost::python::init<>())
             .def("add_city", &Agents_Map::add_city)
             .def("add_agent", &Agents_Map::add_agent)
-            .def("run", &Agents_Map::run);
+            .def("run", &Agents_Map::run)
+            .def("get_agent_route", &Agents_Map::get_agent_route);
     }
