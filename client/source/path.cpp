@@ -1,6 +1,6 @@
-#include "../headers/path.h"
 #include <QJsonObject>
 #include <QJsonArray>
+#include "path.h"
 
 Path::Path(int id, Point* beg, Point* en) : id(id), begining(beg), end(en) {}
 

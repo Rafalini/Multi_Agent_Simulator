@@ -1,7 +1,7 @@
-#include "../headers/path.h"
-#include "../headers/point.h"
 #include <QJsonObject>
 #include <QJsonArray>
+#include "path.h"
+#include "point.h"
 
 Point::Point(const double& x, const double& y) {
     setX(x);

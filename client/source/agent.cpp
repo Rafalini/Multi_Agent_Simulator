@@ -1,4 +1,4 @@
-#include "../headers/agent.h"
+#include "agent.h"
 #include <QJsonObject>
 
 Agent::Agent(QObject *parent) : QObject(parent) {}

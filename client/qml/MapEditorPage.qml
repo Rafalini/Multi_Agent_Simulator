@@ -98,7 +98,7 @@ Page {
                             if(isDrawMode)
                                 mapFrame.finishDrawingPathAt(point);
                             else if(!pointContextMenu.visible)
-                                 pointContextMenu.show(this);
+                                pointContextMenu.show(this);
                             else
                                 pointContextMenu.dismiss();
                         }
@@ -116,7 +116,7 @@ Page {
                             if(isDrawMode)
                                 mapFrame.finishDrawingPathAt(city);
                             else if(!cityContextMenu.visible)
-                                 cityContextMenu.show(this);
+                                cityContextMenu.show(this);
                             else
                                 cityContextMenu.dismiss();
                         }

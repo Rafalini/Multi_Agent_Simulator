@@ -1,4 +1,4 @@
-#include "../headers/agents.h"
+#include "agents.h"
 #include <QJsonArray>
 #include <QJsonObject>
 

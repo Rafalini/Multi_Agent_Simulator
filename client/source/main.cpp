@@ -3,12 +3,12 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
-#include "../headers/remoteconnector.h"
-#include "../headers/city.h"
-#include "../headers/point.h"
-#include "../headers/path.h"
-#include "../headers/mapproperties.h"
-#include "../headers/agents.h"
+#include "remoteconnector.h"
+#include "city.h"
+#include "point.h"
+#include "path.h"
+#include "mapproperties.h"
+#include "agents.h"
 
 int main(int argc, char *argv[])
 {

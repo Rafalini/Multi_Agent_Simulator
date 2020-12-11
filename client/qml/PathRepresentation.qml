@@ -10,17 +10,16 @@ SimplePathRepresentation {
     y: path && path.begining ? path.begining.y*parent.height : 0
 
     //signal for Repeater to open ContextMenu
-    function clicked(mouse) {}
+    function clicked(x_offset, y_offset) {}
     MouseArea {
         enabled: !isDrawMode
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: (mouse) => {
-                       let theta = rotation.angle * Math.PI / 180;
+                       let theta = pathRepresentation.rotation.angle * Math.PI / 180;
                        let x_offset = mouse.x * Math.cos(theta);
                        let y_offset = mouse.x * Math.sin(theta);
                        pathRepresentation.clicked(x_offset, y_offset);
-                       mouse.accepted = true;
                    }
     }
 }

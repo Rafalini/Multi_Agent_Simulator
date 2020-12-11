@@ -1,10 +1,10 @@
-#include "../headers/mapproperties.h"
-#include "../headers/point.h"
-#include "../headers/city.h"
-#include "../headers/path.h"
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include "mapproperties.h"
+#include "point.h"
+#include "city.h"
+#include "path.h"
 
 MapProperties::MapProperties() { }
 
@@ -32,6 +32,22 @@ QJsonObject MapProperties::toJson() const {
     obj["paths"] = pathsArray;
     return obj;
 }
+
+void MapProperties::fill() {
+    if(cities.size() > 0) return;
+    addCity("Kraków", 0.55, 0.85);
+    addCity("Warszawa", 0.65, 0.4);
+    addCity("Szczecin", 0.1, 0.12);
+    addPoint(0.1, 0.5);
+    addPoint(0.5, 0.7);
+    addPath(getCities()[0], getPoints()[0]);
+    addPath(getCities()[0], getPoints()[1]);
+    addPath(getCities()[1], getPoints()[0]);
+    addPath(getCities()[1], getPoints()[1]);
+    addPath(getCities()[2], getPoints()[0]);
+    addPath(getCities()[2], getCities()[1]);
+}
+
 
 void MapProperties::addCity(const QString& name, const double& x, const double& y) {
     for(auto* city : cities) {
