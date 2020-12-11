@@ -39,22 +39,18 @@ Page {
 
             SimplePathRepresentation {
                 id: drawingPath
-                visible: parent.drawing
-                x: mapFrame.drawing ? mapFrame.startPoint ? mapFrame.startPoint.x*mapFrame.width : 0 : 0
-                y: mapFrame.drawing ? mapFrame.startPoint ? mapFrame.startPoint.y*mapFrame.height : 0 : 0
-                x2: mapFrame.drawing ? draggableArea.mouseX : 0
-                y2: mapFrame.drawing ? draggableArea.mouseY : 0
+                visible: x !== -1 && y && -1 && x2 !== -1 && y2 !== -1
+                x: mapFrame.startPoint ? mapFrame.drawing ? mapFrame.startPoint.x*mapFrame.width : -1 : -1
+                y: mapFrame.startPoint ? mapFrame.drawing ? mapFrame.startPoint.y*mapFrame.height : -1 : -1
+                x2: mapFrame.drawing ? draggableArea.mouseX : -1
+                y2: mapFrame.drawing ? draggableArea.mouseY : -1
             }
 
             MouseArea {
                 id: draggableArea
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton | Qt.LeftButton
-                onClicked: (mouse) => {
-                               if(!mapContextMenu.visible)
-                                    mapContextMenu.popup();
-                               else mapContextMenu.dismiss();
-                           }
+                onClicked: mapContextMenu.visible ? mapContextMenu.dismiss() : mapContextMenu.popup()
                 onWheel: (wheel) => {
                              if(wheel.modifiers & Qt.ControlModifier) {
                                  mapFrame.height *= wheel.angleDelta.y < 0 || wheel.angleDelta.x < 0 ? 0.9 : 1.1;
@@ -169,6 +165,7 @@ Page {
                         Label {
                             text: qsTr("Nazwa miasta: ")
                             Layout.preferredHeight: 60
+                            verticalAlignment: Text.AlignVCenter
                         }
                         TextInput {
                             onVisibleChanged: if(visible) forceActiveFocus();
@@ -178,6 +175,7 @@ Page {
                             Keys.onEnterPressed: parent.activate();
                             Layout.minimumWidth: 200
                             Layout.preferredHeight: 60
+                            selectByMouse: true
                         }
                         StyledButton {
                             Layout.columnSpan: 2

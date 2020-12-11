@@ -106,9 +106,7 @@ Popup {
 
         function save() {
             if( !validate() ) return;
-
             if( editedAgent === 0 ) {
-                let begName =
                 agents.addAgent(begining.model[begining.currentIndex], end.model[end.currentIndex], load.text.replace(',', ''));
             } else {
                 editedAgent.update(begining.model[begining.currentIndex], end.model[end.currentIndex], load.text.replace(',', ''));

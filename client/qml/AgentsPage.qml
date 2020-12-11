@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 
 Page {
     id: page
+    property int labelWidth: 300
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         Layout.preferredHeight: parent.height
@@ -11,26 +12,16 @@ Page {
         RowLayout {
             id: listViewLabel
             Layout.fillWidth: true
-            Label {
-                id: beginingHeaderLabel
-                Layout.minimumWidth: 300
-                Layout.alignment: Qt.AlignVCenter
-                horizontalAlignment: Qt.AlignHCenter
-                text: "Miasto początkowe"
-            }
-            Label {
-                id: destinationHeaderLabel
-                Layout.minimumWidth: 300
-                Layout.alignment: Qt.AlignVCenter
-                horizontalAlignment: Qt.AlignHCenter
-                text: "Miasto końcowe"
-            }
-            Label {
-                id: loadHeaderLabel
-                Layout.minimumWidth: 300
-                Layout.alignment: Qt.AlignVCenter
-                horizontalAlignment: Qt.AlignHCenter
-                text: "Ładunek"
+
+            Repeater {
+                model: ["Miasto początkowe","Miasto końcowe", "Ładunek"]
+                Label {
+                    id: beginingHeaderLabel
+                    Layout.minimumWidth: page.labelWidth
+                    Layout.alignment: Qt.AlignVCenter
+                    horizontalAlignment: Qt.AlignHCenter
+                    text: modelData
+                }
             }
         }
 
@@ -59,26 +50,17 @@ Page {
                 height: row.height
                 RowLayout {
                     id: row
-                    Label {
-                        id: beginingLabel
-                        Layout.alignment: Qt.AlignVCenter
-                        horizontalAlignment: Qt.AlignHCenter
-                        Layout.preferredWidth: beginingHeaderLabel.width
-                        text: begining.name
-                    }
-                    Label {
-                        id: destinationLabel
-                        Layout.alignment: Qt.AlignVCenter
-                        horizontalAlignment: Qt.AlignHCenter
-                        Layout.preferredWidth: destinationHeaderLabel.width
-                        text: destination.name
-                    }
-                    Label {
-                        id: loadLabel
-                        Layout.alignment: Qt.AlignVCenter
-                        horizontalAlignment: Qt.AlignHCenter
-                        Layout.preferredWidth: loadHeaderLabel.width
-                        text: load
+                    Repeater {
+                        model: [begining.name, destination.name, load]
+
+                        Label {
+                            id: beginingLabel
+                            Layout.alignment: Qt.AlignVCenter
+                            horizontalAlignment: Qt.AlignHCenter
+                            Layout.preferredWidth: page.labelWidth
+                            text: modelData
+                        }
+
                     }
                     StyledButton {
                         Layout.fillHeight: true
