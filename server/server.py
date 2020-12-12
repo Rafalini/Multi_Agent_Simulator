@@ -2,9 +2,6 @@ import asyncio
 import websockets
 import json
 import build.map_module
-#from src_py.Map import Map
-from src_py.Agent import Agent
-from src_py.City import City
 
 
 async def request_handler(websocket, path):
@@ -19,30 +16,21 @@ async def request_handler(websocket, path):
             map_agents = dict["agents"]
             map_cities = map["cities"]
 
-            id=0
-            for x in map_agents["agents"]:
-                agents.append(Agent(id,x["begining"],x["destination"],x["weight"]))
-                id+=1
+            cpp_map = build.map_module.Agents_Map()
+            print("wczytuje miasta i agentow do mapy...")
 
             for x in map_cities:
-                cities.append(City(x["name"],x["x"],x["y"],x["segments"]))
-
-            mapka = build.map_module.Agents_Map()
-
-            for x in cities:
-                mapka.add_city(x.name, x.coordX, x.coordY)
-
-            for x in agents:
-                mapka.add_agent(x.id, x.beginingCity, x.destinationCity, x.load)
+                cpp_map.add_city(x["name"], x["x"], x["y"])
+            for x in map_agents:
+                cpp_map.add_agent(x["begining"], x["destination"], x["load"])
 
             print("wczytano miasta i agentow do mapy")
 
-            mapka.run()
+            cpp_map.run()
 
             output_json =""
             for x in agents:
-                x.update_route(mapka.get_agent_route(x.id))
-                output_json += json.dumps(x.__dict__)
+                output_json += json.dumps(cpp_map.get_agent_route(x.id).__dict__)
 
             print(output_json)
 

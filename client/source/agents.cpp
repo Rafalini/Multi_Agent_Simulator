@@ -10,8 +10,16 @@ Agents::~Agents() {
     }
 }
 
-void Agents::addAgent(City* start, City* destination, double weight) {
-    agents.push_back(new Agent(start, destination, weight));
+void Agents::addAgent(City* begining, City* destination, double load) {
+    if(destination == begining) {
+        emit wrongAddAgentArguments("Miasto docelowe i początkowe muszą być różne");
+        return;
+    }
+    if(load <= 0) {
+        emit wrongAddAgentArguments("Ładunek musi być więc od 0");
+        return;
+    }
+    agents.push_back(new Agent(begining, destination, load));
     emit agentAdded(agents.last());
 }
 
@@ -24,12 +32,10 @@ void Agents::removeAgent(Agent* agent) {
     delete agent;
 }
 
-QJsonObject Agents::toJson() const {
+QJsonArray Agents::toJson() const {
     QJsonArray array;
     for(const auto& agent : agents) {
         array.append(agent->tojSON());
     }
-    QJsonObject obj;
-    obj["agents"] = array;
-    return obj;
+    return array;
 }

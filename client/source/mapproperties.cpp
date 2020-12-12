@@ -1,7 +1,7 @@
 #include "../headers/mapproperties.h"
 #include "../headers/point.h"
 #include "../headers/city.h"
-#include "../headers/linesegment.h"
+#include "../headers/path.h"
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -24,12 +24,12 @@ QJsonObject MapProperties::toJson() const {
     }
     obj["points"] = pointsArray;
 
-    QJsonArray segmentsArray;
-    for(auto &segment : segments) {
-        QJsonObject jsonCity = segment->toJson();
-        segmentsArray.append(jsonCity);
+    QJsonArray pathsArray;
+    for(auto &path : paths) {
+        QJsonObject jsonCity = path->toJson();
+        pathsArray.append(jsonCity);
     }
-    obj["segments"] = segmentsArray;
+    obj["paths"] = pathsArray;
     return obj;
 }
 
@@ -51,11 +51,12 @@ void MapProperties::addPoint(const double& x, const double& y) {
     emit pointAdded(point);
 }
 
-void MapProperties::addSegment(const double& length, Point* begining, Point* end) {
-    LineSegment* segment = new LineSegment(nextSegmentId++, begining, end, length);
-    begining->addSegment(segment);
-    end->addSegment(segment);
-    segments.push_back(segment);
+void MapProperties::addPath(const double& length, Point* begining, Point* end) {
+    Path* path = new Path(nextPathId++, begining, end, length);
+    begining->addPath(path);
+    end->addPath(path);
+    paths.push_back(path);
+    connect(path, &Path::removed, [=](Path* path){delete path;});
 }
 
 MapProperties::~MapProperties() {
@@ -65,8 +66,8 @@ MapProperties::~MapProperties() {
     for(auto& point : points) {
         delete point;
     }
-    for(auto& segment : segments) {
-        delete segment;
+    for(auto& path : paths) {
+        delete path;
     }
 }
 
@@ -80,7 +81,24 @@ QVector<Point*> MapProperties::getPoints() const
     return points;
 }
 
-QVector<LineSegment*> MapProperties::getSegments() const
+QVector<Path*> MapProperties::getPaths() const
 {
-    return segments;
+    return paths;
+}
+
+
+void MapProperties::removePoint(Point* point) {
+    if( point == nullptr ) return;
+    points.removeOne(point);
+    delete point;
+}
+void MapProperties::removeCity(City* city) {
+    if( city == nullptr ) return;
+    cities.removeOne(city);
+    delete city;
+}
+void MapProperties::removePath(Path* path) {
+    if( path == nullptr ) return;
+    paths.removeOne(path);
+    delete path;
 }

@@ -15,14 +15,14 @@ Popup {
     function addNewAgent() {
         begining.currentIndex = -1;
         end.currentIndex = -1;
-        totalWeight.text = "";
+        load.text = "";
         editedAgent = 0;
         this.visible = true;
     }
 
     function editAgent(agent) {
         editedAgent = agent;
-        totalWeight.text = agent.weight.toString();
+        load.text = agent.load.toString();
         begining.currentIndex = -1;
         end.currentIndex = -1;
         for(var i = 0; i < citiesModel.count; i++) {
@@ -66,8 +66,13 @@ Popup {
                 return false;
             }
 
-            if(totalWeight.text === "") {
-                windowDialog.showError("Nie podany wagi towaru");
+            if(end.currentIndex == begining.currentIndex) {
+                windowDialog.showError("Miasto początkowe musi być różne od miasta końcowego");
+                return false;
+            }
+
+            if(load.text === "") {
+                windowDialog.showError("Nie podany ładunku");
                 return false;
             }
             return true;
@@ -123,11 +128,11 @@ Popup {
         }
 
         Text {
-            text: qsTr("Ilość towaru do przewiezienia [kg]")
+            text: qsTr("Ładunek [kg]")
         }
 
         TextField {
-            id: totalWeight
+            id: load
             Layout.preferredWidth: 300
             validator: DoubleValidator {
                     locale: "en_US"
@@ -141,9 +146,9 @@ Popup {
         function save() {
             if( !validate() ) return;
             if( editedAgent === 0 ) {
-                agents.addAgent(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', ''));
+                agents.addAgent(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, load.text.replace(',', ''));
             } else {
-                editedAgent.update(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, totalWeight.text.replace(',', ''));
+                editedAgent.update(citiesModel.get(begining.currentIndex).city, citiesModel.get(end.currentIndex).city, load.text.replace(',', ''));
             }
             agentPopup.visible = false;
         }

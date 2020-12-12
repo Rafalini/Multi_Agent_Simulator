@@ -10,10 +10,10 @@ SOURCES +=  tst_agenttest.cpp \
             ../../source/agent.cpp \
             ../../source/city.cpp \
             ../../source/point.cpp \
-            ../../source/linesegment.cpp
+            ../../source/path.cpp
 
 
 HEADERS += ../../headers/agent.h \
             ../../headers/city.h \
             ../../headers/point.h \
-            ../../headers/linesegment.h
+            ../../headers/path.h

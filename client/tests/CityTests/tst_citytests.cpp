@@ -1,7 +1,7 @@
 #include <QtTest>
 #include "../../headers/point.h"
 #include "../../headers/city.h"
-#include "../../headers/linesegment.h"
+#include "../../headers/path.h"
 
 // add necessary includes here
 

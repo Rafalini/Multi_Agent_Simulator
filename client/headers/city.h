@@ -5,7 +5,7 @@
 #include "point.h"
 
 
-QT_FORWARD_DECLARE_CLASS(LineSegment); //forward declaration
+QT_FORWARD_DECLARE_CLASS(Path); //forward declaration
 
 
 class City : public Point

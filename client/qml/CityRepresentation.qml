@@ -2,14 +2,22 @@ import QtQuick 2.15
 
 
 PointRepresentation {
+    id: cityRepresentation
     required property var city
     point: city
-    Component.onCompleted: {
-        cityName.text = city.name;
-        initilize();
+    color: "red"
+
+    function objectDeleted() {
+        parent.deleteCity(this);
     }
+
+    function clicked() {
+        parent.openCityContextMenu(cityRepresentation);
+    }
+
     Text{
         id: cityName
+        text: city ? city.name : ""
         anchors.left: rec.right
         anchors.verticalCenter: rec.verticalCenter
         anchors.leftMargin: 2

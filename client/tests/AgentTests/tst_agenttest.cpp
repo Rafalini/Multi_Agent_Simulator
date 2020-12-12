@@ -2,7 +2,7 @@
 #include "../../headers/agent.h"
 #include "../../headers/point.h"
 #include "../../headers/city.h"
-#include "../../headers/linesegment.h"
+#include "../../headers/path.h"
 
 // add necessary includes here
 
@@ -32,17 +32,17 @@ AgentTest::~AgentTest()
 void AgentTest::agentTest() {
     QString beg = "Kraków";
     QString des = "Warszawa";
-    double weight = 2.15;
+    double load = 2.15;
     City begining(beg, 0, 0);
     City destination(des, 0, 0);
-    Agent *agent = new Agent(&begining, &destination, weight);
+    Agent *agent = new Agent(&begining, &destination, load);
 
-    QSignalSpy spyEdited(agent, SIGNAL(edited()));
+    //QSignalSpy spyEdited(agent, SIGNAL(edited()));
     QSignalSpy spyDeleted(agent, SIGNAL(deleted()));
 
     QCOMPARE(agent->getBegining(), &begining);
     QCOMPARE(agent->getDestination(), &destination);
-    QCOMPARE(agent->getWeight(), weight);
+    QCOMPARE(agent->getLoad(), load);
 
     QString newBeg = "Katowice";
     QString newDes = "Wrocław";
@@ -50,16 +50,16 @@ void AgentTest::agentTest() {
     City newDestination(newBeg, 0, 0);
     double newWeight = 1000.75;
 
-    QCOMPARE(spyEdited.count(), 0);
+   // QCOMPARE(spyEdited.count(), 0);
     agent->update(&newBegining, &newDestination, newWeight);
-    QCOMPARE(spyEdited.count(), 1);
+    //QCOMPARE(spyEdited.count(), 1);
     QCOMPARE(agent->getBegining(), &newBegining);
     QCOMPARE(agent->getDestination(), &newDestination);
-    QCOMPARE(agent->getWeight(), newWeight);
+    QCOMPARE(agent->getLoad(), newWeight);
     QCOMPARE(spyDeleted.count(), 0);
     delete agent;
     QCOMPARE(spyDeleted.count(), 1);
-    QCOMPARE(spyEdited.count(), 1);
+    //QCOMPARE(spyEdited.count(), 1);
 }
 
 void AgentTest::jsonTest() {
@@ -71,7 +71,7 @@ void AgentTest::jsonTest() {
     QJsonObject comparableJson;
     comparableJson["begining"] = begining.getName();
     comparableJson["destination"] = destination.getName();
-    comparableJson["weight"] = weight;
+    comparableJson["load"] = weight;
     Agent agent(&begining, &destination, weight);
     QCOMPARE(agent.tojSON(), comparableJson);
 }
