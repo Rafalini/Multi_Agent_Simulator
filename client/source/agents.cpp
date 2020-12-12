@@ -62,6 +62,7 @@ void Agents::addAgent(City* begining, City* destination, double load) {
     connect(newAgent, &Agent::beginingUpdated, this, lambda);
     connect(newAgent, &Agent::destinationUpdated, this, lambda);
     connect(newAgent, &Agent::loadUpdated, this, lambda);
+    connect(newAgent, &Agent::cityDeleted, [this, newAgent]() {removeAgent(newAgent);});
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     agents.push_back(newAgent);
     endInsertRows();

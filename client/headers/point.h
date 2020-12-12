@@ -15,6 +15,7 @@ class Point : public QObject
 
 public:
     Point(const double& x, const double& y);
+    virtual ~Point() {emit deleted();}
     const double& getX() const;
     const double& getY() const;
     Q_INVOKABLE void setX(const double& x);
@@ -26,6 +27,7 @@ public:
 signals:
     void xChanged(const double&);
     void yChanged(const double&);
+    void deleted();
 
 protected:
     QVector<Path*> paths;

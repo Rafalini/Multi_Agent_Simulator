@@ -31,6 +31,7 @@ signals:
     void loadUpdated();
     void deleted();
     void wrongUpdateArguments(const QString&);
+    void cityDeleted();
 
 private:
     City* beginingCity;
