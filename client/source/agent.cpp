@@ -1,9 +1,16 @@
-#include "../headers/agent.h"
+#include "agent.h"
 #include <QJsonObject>
 
 Agent::Agent(QObject *parent) : QObject(parent) {}
 
-Agent::Agent(City* begining, City* destination, const double &weight) : beginingCity(begining), destinationCity(destination), load(weight) {}
+Agent::Agent(City* begining, City* destination, const double &weight) : beginingCity(begining), destinationCity(destination), load(weight) {
+    connect(destinationCity, &City::deleted, this, &Agent::cityDeleted);
+    connect(beginingCity, &City::deleted, this, &Agent::cityDeleted);
+}
+
+Agent::~Agent() {
+    emit deleted();
+}
 
 void Agent::update(City* begining, City* destination, const double &load) {
     if(load <= 0) {
@@ -42,7 +49,9 @@ void Agent::setBegining(City* beg) {
         emit wrongUpdateArguments("Miasto nie może być puste");
         return;
     }
+    disconnect(beginingCity, &City::deleted, this, &Agent::cityDeleted);
     this->beginingCity = beg;
+    connect(beginingCity, &City::deleted, this, &Agent::cityDeleted);
     emit beginingUpdated();
 
 }
@@ -51,7 +60,9 @@ void Agent::setDestination(City* dest) {
         emit wrongUpdateArguments("Miasto nie może być puste");
         return;
     }
+    disconnect(destinationCity, &City::deleted, this, &Agent::cityDeleted);
     this->destinationCity = dest;
+    connect(destinationCity, &City::deleted, this, &Agent::cityDeleted);
     emit destinationUpdated();
 }
 
@@ -62,10 +73,6 @@ void Agent::setLoad(const double& load) {
     }
     this->load = load;
     emit loadUpdated();
-}
-
-Agent::~Agent() {
-    emit deleted();
 }
 
 City* Agent::getBegining() const

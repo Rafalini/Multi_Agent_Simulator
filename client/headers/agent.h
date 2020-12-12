@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "city.h"
+#include "point.h"
 
 class Agent : public QObject
 {
@@ -15,14 +16,14 @@ public:
     explicit Agent(QObject *parent = nullptr);
     QJsonObject tojSON() const;
     Agent(City* begining, City* destination, const double &load);
-    virtual ~Agent();
     City* getBegining() const;
     City* getDestination() const;
     double getLoad() const;
     void setBegining(City* beg);
     void setDestination(City* dest);
     void setLoad(const double& load);
-    Q_INVOKABLE void update(City* start, City* dest, const double &load);
+    Q_INVOKABLE void update(City* beg, City* dest, const double &load);
+    virtual ~Agent();
 
 signals:
     void destinationUpdated();
@@ -30,6 +31,7 @@ signals:
     void loadUpdated();
     void deleted();
     void wrongUpdateArguments(const QString&);
+    void cityDeleted();
 
 private:
     City* beginingCity;

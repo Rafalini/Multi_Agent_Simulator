@@ -1,5 +1,5 @@
-#include "../headers/point.h"
-#include "../headers/city.h"
+#include "point.h"
+#include "city.h"
 #include <QJsonObject>
 #include <QJsonArray>
 

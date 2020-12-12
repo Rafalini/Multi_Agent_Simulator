@@ -4,111 +4,74 @@ import QtQuick.Layouts 1.15
 
 Page {
     id: page
+    property int labelWidth: 300
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
-        clip: true
+        Layout.preferredHeight: parent.height
+        Layout.fillHeight: true
         RowLayout {
             id: listViewLabel
-            Layout.preferredHeight: 30
-            Label {
-                id: beginingHeaderLabel
-                height: parent.height
-                width: 200
-                text: "Miasto początkowe"
-            }
-            Label {
-                id: destinationHeaderLabel
-                height: parent.height
-                width: 200
-                text: "Miasto końcowe"
-            }
-            Label {
-                id: loadHeaderLabel
-                height: parent.height
-                width: 200
-                text: "Ładunek"
-            }
-        }
+            Layout.fillWidth: true
 
-        Connections {
-            target: agents
-            function onAgentAdded(new_agent) {
-                agentModel.append({
-                                      agent: new_agent
-                                  });
-                agentsListView.positionViewAtEnd();
+            Repeater {
+                model: ["Miasto początkowe","Miasto końcowe", "Ładunek"]
+                Label {
+                    id: beginingHeaderLabel
+                    Layout.minimumWidth: page.labelWidth
+                    Layout.alignment: Qt.AlignVCenter
+                    horizontalAlignment: Qt.AlignHCenter
+                    text: modelData
+                }
             }
         }
 
         ListView {
             id: agentsListView
-            Layout.preferredWidth: listViewLabel.width + agentsScrollBar.width + 100//additional 100  width is for buttons
-            readonly property int itemHeight: 30
-            readonly property bool scrollNeeded: height < model.count * (spacing + itemHeight)
-            Layout.preferredHeight: model.count * (spacing + itemHeight)
+            model: agents
             Layout.maximumHeight: page.height - listViewLabel.height - newAgentButton.height
             interactive: true
-            clip: true
+            Layout.preferredHeight: contentHeight
+            Layout.fillHeight: true
             spacing: 10
             ScrollBar.vertical: ScrollBar {
-                    id: agentsScrollBar
-                    active: true
-                    height: agentsListView.height
-                    visible: agentsListView.scrollNeeded
-                    policy: ScrollBar.AlwaysOn
-                }
+                id: agentsScrollBar
+                active: true
+                interactive: true
+                height: agentsListView.height
+                visible: agentsListView.height < agentsListView.contentHeight
+                policy: ScrollBar.AlwaysOn
+            }
             delegate: ItemDelegate {
-                height: agentsListView.itemHeight
-                width: agentsListView.width
-                background: Rectangle {
-                    anchors.fill: parent
-                    color: root.lightblue
-                }
-
-                Connections {
-                    target: agent
-                    function onDeleted() {
-                        target = null;
-                        agentModel.remove(index);
-                    }
-                }
+                required property var begining
+                required property var destination
+                required property var load
+                required property var agent
+                width: row.width
+                height: row.height
                 RowLayout {
-                    width: parent.width
-                    height: parent.height
-                    Label {
-                        id: beginingLabel
-                        horizontalAlignment: Qt.AlignHCenter
-                        verticalAlignment: Qt.AlignVCenter
-                        Layout.preferredHeight: parent.height
-                        Layout.preferredWidth: beginingHeaderLabel.width
-                        text: agent.begining.name
-                    }
-                    Label {
-                        id: destinationLabel
-                        horizontalAlignment: Qt.AlignHCenter
-                        verticalAlignment: Qt.AlignVCenter
-                        Layout.preferredHeight: parent.height
-                        Layout.preferredWidth: destinationHeaderLabel.width
-                        text: agent.destination.name
-                    }
-                    Label {
-                        id: loadLabel
-                        horizontalAlignment: Qt.AlignHCenter
-                        verticalAlignment: Qt.AlignVCenter
-                        Layout.preferredHeight: parent.height
-                        Layout.preferredWidth: loadHeaderLabel.width
-                        text: agent.load
+                    id: row
+                    Repeater {
+                        model: [begining.name, destination.name, load]
+
+                        Label {
+                            id: beginingLabel
+                            Layout.alignment: Qt.AlignVCenter
+                            horizontalAlignment: Qt.AlignHCenter
+                            Layout.preferredWidth: page.labelWidth
+                            text: modelData
+                        }
+
                     }
                     StyledButton {
-                        Layout.preferredHeight: parent.height
+                        Layout.fillHeight: true
                         Layout.preferredWidth: 50
                         text: "E"
                         function activate() {
-                           agentDefiner.editAgent(agent);
+                            agentDefiner.editAgent(agent);
                         }
                     }
                     StyledButton {
-                        Layout.preferredHeight: parent.height
+                        Layout.fillHeight: true
                         Layout.preferredWidth: 50
                         text: "X"
                         function activate() {
@@ -116,10 +79,6 @@ Page {
                         }
                     }
                 }
-            }
-
-            model: ListModel {
-                id: agentModel
             }
         }
 

@@ -15,14 +15,15 @@ class Point : public QObject
 
 public:
     Point(const double& x, const double& y);
+    virtual ~Point() {emit deleted();}
     const double& getX() const;
     const double& getY() const;
     Q_INVOKABLE void setX(const double& x);
     Q_INVOKABLE void setY(const double& y);
     Q_INVOKABLE void addPath(Path* path);
-    Q_INVOKABLE void removePath(Path* path);
+    void removePath(Path* path);
+    QVector<Path*> getPaths() const;
     virtual QJsonObject toJson() const;
-    virtual ~Point();
 signals:
     void xChanged(const double&);
     void yChanged(const double&);

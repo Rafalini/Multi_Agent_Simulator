@@ -1,4 +1,4 @@
-QT += websockets quick quickcontrols2 widgets
+QT += websockets quick widgets quickcontrols2
 
 CONFIG += c++11
 
@@ -21,6 +21,7 @@ RESOURCES += qml.qrc
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
+INCLUDEPATH += headers
 
 HEADERS += \
     headers/agent.h \
