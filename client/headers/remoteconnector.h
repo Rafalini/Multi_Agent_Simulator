@@ -1,7 +1,7 @@
 #ifndef REMOTECONNECTOR_H
 #define REMOTECONNECTOR_H
 #include <QObject>
-#include <QWebSocket>
+#include <QWebSocket> //"qwebsocket.h"
 #include <QQueue>
 #include "mapproperties.h"
 #include "agents.h"

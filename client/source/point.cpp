@@ -1,13 +1,12 @@
-#include "../headers/path.h"
-#include "../headers/point.h"
 #include <QJsonObject>
 #include <QJsonArray>
+#include "path.h"
+#include "point.h"
 
 Point::Point(const double& x, const double& y) {
     setX(x);
     setY(y);
 }
-
 
 void Point::setX(const double& x) {
     if(x == this->x) return;
@@ -20,6 +19,11 @@ void Point::setX(const double& x) {
     }
     emit xChanged(this->x);
 }
+
+QVector<Path*> Point::getPaths() const {
+    return paths;
+}
+
 void Point::setY(const double& y) {
     if(y == this->y) return;
     if(y<0) {
@@ -30,13 +34,6 @@ void Point::setY(const double& y) {
         this->y = y;
     }
     emit yChanged(this->y);
-}
-
-Point::~Point() {
-    for(auto path : paths ) {
-        path->removePoint(this);
-    }
-    emit deleted();
 }
 
 void Point::addPath(Path* path) {
@@ -58,7 +55,6 @@ QJsonObject Point::toJson() const {
     obj["paths"] = pathsArray;
     return obj;
 }
-
 
 const double& Point::getX() const
 {

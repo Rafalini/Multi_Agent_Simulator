@@ -1,183 +1,263 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
+import QtQuick.Layouts 1.15
 
 Page {
     id: parentItem
-    property list<CityRepresentation> cities
-    property list<PointRepresentation> points
-    property list<PathRepresentation> paths
-    property var cityComponent
-    property var pointComponent
-    property var pathComponent
+    title: "Edytuj mapę"
+
+    ScrollView {
+        id: scrollView
+        anchors.fill: parent
+        clip: true
+        ScrollBar.vertical: verticalScrollbar
+        ScrollBar.horizontal: horizontalScrollbar
+        Rectangle {
+            id: mapFrame
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: height
+            height: parent.height > parent.width? parent.width : parent.height
+            Image {
+                anchors.fill: parent
+                source: "../resource/MapOfPoland.png"
+            }
+
+            function finishDrawingPathAt(endPoint) {
+                map.addPath(startPoint, endPoint);
+                drawing = false;
+                startPoint = null;
+            }
+
+            property bool drawing: false
+            property var startPoint: null
+
+            function newPathFrom(pointRepresentation) {
+                startPoint = pointRepresentation.point;
+                drawing = true;
+            }
+
+            SimplePathRepresentation {
+                id: drawingPath
+                visible: x !== -1 && y && -1 && x2 !== -1 && y2 !== -1
+                x: mapFrame.startPoint ? mapFrame.drawing ? mapFrame.startPoint.x*mapFrame.width : -1 : -1
+                y: mapFrame.startPoint ? mapFrame.drawing ? mapFrame.startPoint.y*mapFrame.height : -1 : -1
+                x2: mapFrame.drawing ? draggableArea.mouseX : -1
+                y2: mapFrame.drawing ? draggableArea.mouseY : -1
+            }
+
+            MouseArea {
+                id: draggableArea
+                anchors.fill: parent
+                acceptedButtons: Qt.RightButton | Qt.LeftButton
+                onClicked: mapContextMenu.visible ? mapContextMenu.dismiss() : mapContextMenu.popup()
+                onWheel: (wheel) => {
+                             if(wheel.modifiers & Qt.ControlModifier) {
+                                 mapFrame.height *= wheel.angleDelta.y < 0 || wheel.angleDelta.x < 0 ? 0.9 : 1.1;
+                             } else if (wheel.modifiers & Qt.ShiftModifier ) {
+                                 if(wheel.angleDelta.y < 0 || wheel.angleDelta.x < 0 )
+                                 horizontalScrollbar.increase();
+                                 else
+                                 horizontalScrollbar.decrease();
+                             } else {
+                                 if(wheel.angleDelta.y < 0 || wheel.angleDelta.x < 0 )
+                                 verticalScrollbar.increase();
+                                 else
+                                 verticalScrollbar.decrease();
+                             }
+                         }
+                hoverEnabled: mapFrame.drawing
+                Repeater {
+                    id: pathRepeater
+                    anchors.fill: parent
+                    model: map.paths
+                    delegate: PathRepresentation {
+                        path: modelData
+                        isDrawMode: mapFrame.drawing
+                        function clicked(x_offset, y_offset) {
+                            if(!pathContextMenu.visible)
+                                pathContextMenu.show(this, x_offset, y_offset);
+                            else
+                                pathContextMenu.dismiss();
+                        }
+                    }
+                }
+
+                Repeater {
+                    id: pointRepeater
+                    anchors.fill: parent
+                    model: map.points
+                    delegate: PointRepresentation {
+                        point: modelData
+                        isDrawMode: mapFrame.drawing
+                        function clicked() {
+                            if(isDrawMode)
+                                mapFrame.finishDrawingPathAt(point);
+                            else if(!pointContextMenu.visible)
+                                pointContextMenu.show(this);
+                            else
+                                pointContextMenu.dismiss();
+                        }
+                    }
+                }
+
+                Repeater {
+                    id: cityRepeater
+                    anchors.fill: parent
+                    model: map.cities
+                    delegate: CityRepresentation {
+                        city: modelData
+                        isDrawMode: mapFrame.drawing
+                        function clicked() {
+                            if(isDrawMode)
+                                mapFrame.finishDrawingPathAt(city);
+                            else if(!cityContextMenu.visible)
+                                cityContextMenu.show(this);
+                            else
+                                cityContextMenu.dismiss();
+                        }
+                    }
+                }
+
+                PathContextMenu {
+                    id: pathContextMenu
+                }
+                PointContextMenu {
+                    id: pointContextMenu
+                }
+                CityContextMenu {
+                    id: cityContextMenu
+                }
+
+                Popup {
+                    id: cityPopup
+                    property var cityRepresentation_
+                    property var pointRepresentation_
+                    function editCity(cityRepresentation) {
+                        cityRepresentation_ = cityRepresentation.city;
+                        pointRepresentation_ = 0;
+                        x = cityRepresentation.x;
+                        y = cityRepresentation.y;
+                        newCityName.text = cityRepresentation_.name;
+                        open();
+                    }
+
+                    function addCity(x, y) {
+                        cityRepresentation_ = 0;
+                        pointRepresentation_ = 0;
+                        this.x = x;
+                        this.y = y;
+                        newCityName.text = "";
+                        open();
+                    }
+
+                    function promotePointToCity(pointRepresentation) {
+                        cityRepresentation_ = 0;
+                        pointRepresentation_ = pointRepresentation;
+                        x = pointRepresentation_.x;
+                        y = pointRepresentation_.y;
+                        newCityName.text = "";
+                        open();
+                    }
+
+                    contentItem: GridLayout {
+                        columns: 2
+                        Label {
+                            text: qsTr("Nazwa miasta: ")
+                            Layout.preferredHeight: 60
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        TextInput {
+                            onVisibleChanged: if(visible) forceActiveFocus();
+                            verticalAlignment: Text.AlignVCenter
+                            id: newCityName
+                            Keys.onReturnPressed: parent.activate();
+                            Keys.onEnterPressed: parent.activate();
+                            Layout.minimumWidth: 200
+                            Layout.preferredHeight: 60
+                            selectByMouse: true
+                        }
+                        StyledButton {
+                            Layout.columnSpan: 2
+                            Layout.alignment: Qt.AlignHCenter
+                            Layout.preferredHeight: 50
+                            Layout.preferredWidth: 100
+                            text: "Zapisz"
+                            function activate() { parent.activate() }
+                        }
+                        function activate() {
+                            if(newCityName.text == "") {
+                                windowDialog.showError("Nazwa miasta nie może być pusta!");
+                                return;
+                            }
+                            if(cityPopup.cityRepresentation_) {
+                                cityPopup.cityRepresentation_.name = newCityName.text;
+                            } else if(cityPopup.pointRepresentation_) {
+                                map.promotePointToCity(cityPopup.pointRepresentation_.point, newCityName.text);
+                            } else {
+                                map.addCity(newCityName.text, cityPopup.x/draggableArea.width, cityPopup.y/draggableArea.height);
+                            }
+                            newCityName.text = "";
+                            cityPopup.close();
+                        }
+                    }
+                }
+
+                Menu {
+                    id: mapContextMenu
+                    MenuItem {
+                        text: "Dodaj miasto"
+                        onTriggered: cityPopup.addCity(mapContextMenu.x, mapContextMenu.y)
+                    }
+                    MenuItem {
+                        text: "Dodaj punkt"
+                        onTriggered: map.addPoint(mapContextMenu.x/draggableArea.width, mapContextMenu.y/draggableArea.height)
+                    }
+                }
+            }
+        }
+    }
 
     Connections {
         target: map
-        function onCityAdded(city) {
-            let newCityRepresentation = cityComponent.createObject(draggableArea, {city: city});
-            cities.push(newCityRepresentation);
+        function onPathAlreadyExist() {
+            mapErrorPopup.showError("Taka ścieżka już istnieje!");
         }
 
-        function onDuplicateCityName(name) {
-            windowDialog.showError("Miasto nie dodane.\nPowód: Miasto o nazwie " + name + " już istnieje.");
-        }
-
-        function onPointAdded(point) {
-            let newPointRepresentation = pointComponent.createObject(draggableArea, {point: point});
-            points.push(newPointRepresentation);
+        function onPathEndOnBegining() {
+            mapErrorPopup.showError("Ścieżka nie może zaczynać się i kończyć w tym samym miejscu!");
         }
     }
 
-    Component.onCompleted: {
-        let cityArray = [];
-        let currentCities = map.cities;
-        cityComponent = Qt.createComponent("CityRepresentation.qml");
-        for(let i = 0; i < currentCities.length; ++i) {
-            let city = currentCities[i];
-            let newCityRepresentation = cityComponent.createObject(draggableArea, {city: city});
-            cities.push(newCityRepresentation);
-        }
-        pointComponent = Qt.createComponent("PointRepresentation.qml");
-        let pointArray = [];
-        let currentPoints = map.points;
-        for(let j = 0; j < currentPoints.length; ++j) {
-            let point = currentPoints[j];
-            let newPointRepresentation = pointComponent.createObject(draggableArea, {point: point});
-            points.push(newPointRepresentation);
+    Popup {
+        id: mapErrorPopup
+        anchors.centerIn: parent
+        function showError(errorString) {
+            errorText.text = errorString;
+            open();
         }
 
-        pathComponent = Qt.createComponent("PathRepresentation.qml");
-        let pathArray = [];
-        let currentPaths = map.paths;
-        for(let l = 0; l < currentPaths.length; ++l) {
-            let path = currentPaths[l];
-            let newPathRepresentation = pathComponent.createObject(draggableArea, {path: path});
-            paths.push(newPathRepresentation);
-        }
+        contentItem: Text {
+                id: errorText
+                text: qsTr("Nazwa miasta: ")
+            }
     }
 
-    Image {
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.height > parent.width ? parent.width : parent.height
-        height: width
-        source: "../resource/MapOfPoland.png"
+
+    ScrollBar {
+        id: verticalScrollbar
+        visible: true
+        anchors.right: scrollView.right
+        width: 100
+        height: scrollView.height
+        anchors.top: scrollView.top
     }
-    Canvas {
-        id:canvas
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.height > parent.width ? parent.width : parent.height
-        height: width
-
-        MouseArea {
-            id: draggableArea
-            anchors.fill: parent
-            acceptedButtons: Qt.RightButton | Qt.LeftButton
-            onClicked: (mouse) => {
-                           contextMenu.x = mouse.x;
-                           contextMenu.y = mouse.y;
-                           contextMenu.open();
-                       }
-            function openPointContextMenu(point) {
-                pointContextMenu.pointRepresentation = point;
-            }
-            function openCityContextMenu(city) {
-                cityContextMenu.cityRepresentation = city;
-            }
-            function deletePath(pathRepresentation) {
-                pathRepresentation.destroy();
-                //                parentItem.paths = Array.from(parentItem.paths).filter(r => r !== pathRepresentation);
-            }
-            function deleteCity(cityRepresentation) {
-                cityRepresentation.destroy();
-                //                parentItem.cities = Array.from(parentItem.cities).filter(r => r !== cityRepresentation);
-            }
-            function deletePoint(pointRepresentation) {
-                pointRepresentation.destroy();
-                //                parentItem.points = Array.from(parentItem.points).filter(r => r !== pointRepresentation);
-            }
-        }
-
-        Menu {
-            id: pointContextMenu
-            property var pointRepresentation
-
-            onPointRepresentationChanged: {
-                if(pointRepresentation) {
-                    x = pointRepresentation.x;
-                    y = pointRepresentation.y;
-                    open();
-                }
-            }
-
-            MenuItem {
-                text: "Usuń punkt"
-                onTriggered: {
-                    map.removePoint(pointContextMenu.pointRepresentation.point);
-                }
-            }
-        }
-
-
-        Menu {
-            id: cityContextMenu
-            property var cityRepresentation
-            onCityRepresentationChanged: {
-                if(cityRepresentation) {
-                    x = cityRepresentation.x;
-                    y = cityRepresentation.y;
-                    open();
-                }
-            }
-
-            MenuItem {
-                text: "Usuń miasto"
-                onTriggered: {
-                    map.removeCity(cityContextMenu.cityRepresentation.city);
-                }
-            }
-        }
-
-        Menu {
-            id: contextMenu
-            Menu {
-                title: "Dodaj miasto"
-                MenuItem {
-                    onTriggered: activate();
-                    TextInput {
-                        leftPadding: 4
-                        onVisibleChanged: if(visible) forceActiveFocus();
-                        verticalAlignment: Text.AlignVCenter
-                        width: parent.width-80
-                        height: parent.height
-                        id: newCityName
-                    }
-                    StyledButton {
-                        anchors.left: newCityName.right
-                        height: newCityName.height
-                        width: 80
-                        text: "Dodaj"
-                        function activate() { parent.activate() }
-                    }
-                    function activate() {
-                        if(newCityName.text == "") {
-                            windowDialog.showError("Nazwa miasta nie może być pusta!");
-                            return;
-                        }
-                        map.addCity(newCityName.text, contextMenu.x/draggableArea.width, contextMenu.y/draggableArea.height);
-                        newCityName.text = "";
-                        contextMenu.close();
-                    }
-                }
-            }
-            MenuSeparator{}
-            MenuItem {
-                text: "Dodaj punkt"
-                onTriggered: {
-                    map.addPoint(contextMenu.x/draggableArea.width, contextMenu.y/draggableArea.height);
-                }
-            }
-        }
-
-        onPaint: {}
-
+    ScrollBar {
+        id: horizontalScrollbar
+        visible: true
+        anchors.right: scrollView.right
+        width: 20
+        anchors.bottom: scrollView.bottom
     }
+
 }

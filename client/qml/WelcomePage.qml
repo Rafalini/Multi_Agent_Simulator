@@ -3,9 +3,7 @@ import QtQuick.Controls 2.15
 
 Page {
     Text{
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: "Witaj w Symulatorze Wieloagentowym"
+       anchors.centerIn: parent
+       text: "Witaj w Symulatorze Wieloagentowym"
     }
-
 }

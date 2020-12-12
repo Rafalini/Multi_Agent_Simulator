@@ -3,17 +3,9 @@ import QtQuick 2.15
 
 PointRepresentation {
     id: cityRepresentation
-    required property var city
+    property var city
     point: city
     color: "red"
-
-    function objectDeleted() {
-        parent.deleteCity(this);
-    }
-
-    function clicked() {
-        parent.openCityContextMenu(cityRepresentation);
-    }
 
     Text{
         id: cityName

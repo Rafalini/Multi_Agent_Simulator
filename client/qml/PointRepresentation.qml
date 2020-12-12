@@ -2,28 +2,19 @@ import QtQuick 2.15
 
 Item {
     id: pointRepresentation
-    required property variant point
+    property variant point
     property alias rec: rec
+    property bool isDrawMode
 
-    function clicked() {
-        parent.openPointContextMenu(pointRepresentation);
-    }
+    //signal for Repeater to open ContextMenu
+    function clicked() {}
 
-    function objectDeleted() {
-        parent.deletePoint(this);
-    }
+    x: point.x*parent.width
+    y: point.y*parent.height
 
-    Connections {
-        target: point
-        function onDeleted() {
-            objectDeleted();
-        }
-    }
-
-    x: point ? point.x*parent.width : 0
-    y: point ? point.y*parent.height : 0
-    onXChanged: if(point) point.x = x/parent.width;
-    onYChanged: if(point) point.y = y/parent.height;
+    //update in model only if change caused by drag, not parent size
+    onXChanged: if(draggedRec.drag.active) point.x = x/parent.width;
+    onYChanged: if(draggedRec.drag.active) point.y = y/parent.height;
 
     Drag.active: draggedRec.drag.active
     Drag.hotSpot.x: 0
@@ -36,11 +27,12 @@ Item {
         color: parent.color
         width: 14
         height: 14
+        radius: 5
         MouseArea {
             id: draggedRec
             acceptedButtons: Qt.RightButton | Qt.LeftButton
             anchors.fill: parent
-            drag.target: pointRepresentation
+            drag.target: isDrawMode ? null : pointRepresentation
             drag.minimumX: 0
             drag.maximumX: pointRepresentation.parent.width
             drag.minimumY: 0
