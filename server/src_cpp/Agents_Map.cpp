@@ -21,27 +21,31 @@ void Agents_Map::add_city(std::string name, double ox, double oy)
           cities.push_back(std::make_shared<City>(name,ox,oy));
       }
 
-void Agents_Map::add_agent(std::string s_origin, std::string s_destin, int load)
+void Agents_Map::add_agent(int id, std::string s_origin, std::string s_destin, int load)
       {
           auto origin =       std::find_if(cities.begin(), cities.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_origin;});
           auto destination =  std::find_if(cities.begin(), cities.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_destin;});
           if(origin != cities.end() && destination != cities.end())
-                std::cout << "ok " << origin->get()->get_name() << " "<< destination->get()->get_name() << std::endl;
-              //agents.push_back(Agent(*origin, *destination, load));
-          std::cout << "eluwa" << std::endl;
-
+                agents.push_back(std::make_shared<Agent>(id, *origin, *destination, load));
       }
 
 void Agents_Map::run()
       {
-            std::cout << "running map..." << std::endl;
+            std::cout << "running map..." << std::endl;\
+            std::cout << "cities: " << cities.size() << std::endl;
+            std::cout << "agents: " << agents.size() << std::endl;
       }
 
 std::string Agents_Map::get_agent_route(int id)
       {
-        std::string output = "output string id: ";
-        output += id;
-        return output;
+        for(auto agent : agents)
+          if(agent->getID() == id)
+          {
+            std::string route = "jade przez A, do B, do C z predkoscia swiatla "+std::to_string(id);
+            //print route
+            return route;
+          }
+        return nullptr;
       }
 
 

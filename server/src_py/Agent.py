@@ -12,6 +12,5 @@ class Agent:
         print(self.destinationCity)
         print(self.load)
 
-
     def update_route(self,input):
-        route = input
+        self.route = input

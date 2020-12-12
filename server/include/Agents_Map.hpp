@@ -15,7 +15,7 @@ class Agents_Map{
         public:
            Agents_Map();
            void add_city(std::string name, double ox, double oy);
-           void add_agent(std::string origin, std::string destination, int load);
+           void add_agent(int id, std::string origin, std::string destination, int load);
            void run();
            std::string get_agent_route(int id);
            //friend std::ostream& operator<< (std::ostream& os, Server_Core& s);

@@ -28,20 +28,20 @@ async def request_handler(websocket, path):
                 cities.append(City(x["name"],x["x"],x["y"],x["segments"]))
 
             mapka = build.map_module.Agents_Map()
+
             for x in cities:
                 mapka.add_city(x.name, x.coordX, x.coordY)
 
-            print("wczytuje miasta i agentow do mapy...")
+            for x in agents:
+                mapka.add_agent(x.id, x.beginingCity, x.destinationCity, x.load)
 
-            #for x in agents:
-            #    mapka.add_agent(x.beginingCity, x.destinationCity, x.load)
+            print("wczytano miasta i agentow do mapy")
 
-            #mapka.run()
+            mapka.run()
 
             output_json =""
             for x in agents:
                 x.update_route(mapka.get_agent_route(x.id))
-                print(mapka.get_agent_route(x.id))
                 output_json += json.dumps(x.__dict__)
 
             print(output_json)
