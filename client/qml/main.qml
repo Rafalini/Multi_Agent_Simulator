@@ -7,8 +7,8 @@ import QtQuick.Controls.Material 2.15
 ApplicationWindow {
     visible: true
     id: root
-    height: Screen.height
-    width: Screen.width
+    height: Screen.height/2
+    width: Screen.width/2
 
     Material.theme: Material.Light
     Material.accent: Material.Orange
@@ -64,8 +64,7 @@ ApplicationWindow {
             }
         }
     }
-
-    StyledPopup {
-        id: windowDialog
-    }
+//    StyledPopup {
+//        id: windowDialog
+//    }
 }

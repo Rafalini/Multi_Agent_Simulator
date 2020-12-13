@@ -35,6 +35,7 @@ QJsonObject MapProperties::toJson() const {
 
 void MapProperties::fill() {
     if(cities.size() > 0) return;
+
     addCity("Kraków", 0.55, 0.85);
     addCity("Warszawa", 0.65, 0.4);
     addCity("Szczecin", 0.1, 0.12);

@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.15
 
 Page {
     id: page
-    property int labelWidth: 300
+    property int labelWidth: 150
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         Layout.preferredHeight: parent.height
@@ -17,7 +17,7 @@ Page {
                 model: ["Miasto początkowe","Miasto końcowe", "Ładunek"]
                 Label {
                     id: beginingHeaderLabel
-                    Layout.minimumWidth: page.labelWidth
+                    Layout.preferredWidth: page.labelWidth
                     Layout.alignment: Qt.AlignVCenter
                     horizontalAlignment: Qt.AlignHCenter
                     text: modelData

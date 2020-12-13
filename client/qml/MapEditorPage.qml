@@ -7,6 +7,18 @@ Page {
     id: parentItem
     title: "Edytuj mapę"
 
+    Connections {
+        target: remoteConnector
+        function onAnswerReceived() {
+            tabBar.currentIndex = 2;
+            tabBar.enabled = false;
+            draggableArea.enabled = false;
+        }
+        function onAnswerParsed() {
+            agentRepeater.visible = true;
+        }
+    }
+
     ScrollView {
         id: scrollView
         anchors.fill: parent
@@ -73,6 +85,7 @@ Page {
                     model: map.paths
                     delegate: PathRepresentation {
                         path: modelData
+                        isInAnimationMode: !draggableArea.enabled
                         isDrawMode: mapFrame.drawing
                         function clicked(x_offset, y_offset) {
                             if(!pathContextMenu.visible)
@@ -89,6 +102,7 @@ Page {
                     model: map.points
                     delegate: PointRepresentation {
                         point: modelData
+                        isInAnimationMode: !draggableArea.enabled
                         isDrawMode: mapFrame.drawing
                         function clicked() {
                             if(isDrawMode)
@@ -108,6 +122,7 @@ Page {
                     delegate: CityRepresentation {
                         city: modelData
                         isDrawMode: mapFrame.drawing
+                        isInAnimationMode: !draggableArea.enabled
                         function clicked() {
                             if(isDrawMode)
                                 mapFrame.finishDrawingPathAt(city);
@@ -115,6 +130,29 @@ Page {
                                 cityContextMenu.show(this);
                             else
                                 cityContextMenu.dismiss();
+                        }
+                    }
+                }
+
+                Repeater {
+                    id: agentRepeater
+                    visible: false
+                    anchors.fill: parent
+                    model: agents
+                    property int finishedAnimations: 0;
+                    onFinishedAnimationsChanged: {
+                        if(finishedAnimations === agents.rowCount()) {
+                            tabBar.enabled = true;
+                            draggableArea.enabled = true;
+                            visible = false;
+                            finishedAnimations = 0;
+                        }
+                    }
+                    delegate: AgentRepresentation {
+                        agent_: agent
+                        isAnimationRunning: !draggableArea.enabled
+                        function animationFinished() {
+                            agentRepeater.finishedAnimations++;
                         }
                     }
                 }
@@ -238,9 +276,9 @@ Page {
         }
 
         contentItem: Text {
-                id: errorText
-                text: qsTr("Nazwa miasta: ")
-            }
+            id: errorText
+            text: qsTr("Nazwa miasta: ")
+        }
     }
 
 

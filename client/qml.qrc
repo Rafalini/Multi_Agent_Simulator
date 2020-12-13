@@ -17,5 +17,6 @@
         <file>qml/CityContextMenu.qml</file>
         <file>qml/PathContextMenu.qml</file>
         <file>qml/SimplePathRepresentation.qml</file>
+        <file>qml/AgentRepresentation.qml</file>
     </qresource>
 </RCC>

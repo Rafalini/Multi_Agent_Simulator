@@ -32,19 +32,15 @@ int main(int argc, char *argv[])
     qRegisterMetaType<QVector<City*>>();
 
     MapProperties map;
-    map.addCity("Kraków", 0.55, 0.85);
-    map.addCity("Warszawa", 0.65, 0.4);
-    map.addCity("Szczecin", 0.1, 0.12);
-    map.addPoint(0.1, 0.5);
-    map.addPoint(0.5, 0.7);
-    map.addPath(map.getCities()[0], map.getPoints()[0]);
-    map.addPath(map.getCities()[0], map.getPoints()[1]);
-    map.addPath(map.getCities()[1], map.getPoints()[0]);
-    map.addPath(map.getCities()[1], map.getPoints()[1]);
-    map.addPath(map.getCities()[2], map.getPoints()[0]);
-    map.addPath(map.getCities()[2], map.getCities()[1]);
+    map.fill();
 
+    //fill default agents
     Agents agents;
+    agents.addAgent(map.getCities()[0], map.getCities()[1], 20);
+    agents.addAgent(map.getCities()[2], map.getCities()[1], 22);
+    agents.addAgent(map.getCities()[1], map.getCities()[2], 230);
+    agents.addAgent(map.getCities()[2], map.getCities()[0], 2450);
+    agents.addAgent(map.getCities()[1], map.getCities()[0], 265470);
 
     RemoteConnector remote(&map, &agents);
 
