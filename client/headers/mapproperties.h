@@ -43,6 +43,7 @@ private:
     QVector<Point*> points;
     QVector<Path*> paths;
     int nextPathId = 0;
+    int nextPointId = 0;
 };
 
 #endif // MAPPROPERTIES_H

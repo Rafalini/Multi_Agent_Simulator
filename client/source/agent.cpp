@@ -16,6 +16,11 @@ QJsonArray Agent::getHistory() const
 {
     return history;
 }
+void Agent::setHistory(const QJsonArray &history)
+{
+    this->history = history;
+    emit historyUpdated();
+}
 
 void Agent::update(City* begining, City* destination, const double &load) {
     if(load <= 0) {
@@ -69,13 +74,6 @@ void Agent::setDestination(City* dest) {
     this->destinationCity = dest;
     connect(destinationCity, &City::deleted, this, &Agent::cityDeleted);
     emit destinationUpdated();
-}
-
-void Agent::setHistory(const QJsonArray &history)
-{
-//    if(this->history == history) return;
-    this->history = history;
-    emit historyUpdated();
 }
 
 void Agent::setLoad(const double& load) {

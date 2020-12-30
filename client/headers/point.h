@@ -14,7 +14,7 @@ class Point : public QObject
     Q_PROPERTY(double y READ getY WRITE setY NOTIFY yChanged FINAL);
 
 public:
-    Point(const double& x, const double& y);
+    Point(const double& x, const double& y, const int& id);
     virtual ~Point() {emit deleted();}
     const double& getX() const;
     const double& getY() const;
@@ -24,6 +24,8 @@ public:
     void removePath(Path* path);
     QVector<Path*> getPaths() const;
     virtual QJsonObject toJson() const;
+    int getId() const;
+
 signals:
     void xChanged(const double&);
     void yChanged(const double&);
@@ -33,6 +35,7 @@ protected:
     QVector<Path*> paths;
     double x;
     double y;
+    int id;
 };
 
 #endif // POINT_H

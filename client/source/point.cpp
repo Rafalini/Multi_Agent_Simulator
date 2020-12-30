@@ -3,7 +3,7 @@
 #include "path.h"
 #include "point.h"
 
-Point::Point(const double& x, const double& y) {
+Point::Point(const double& x, const double& y, const int& id) : id(id) {
     setX(x);
     setY(y);
 }
@@ -48,12 +48,17 @@ QJsonObject Point::toJson() const {
     QJsonObject obj;
     obj["x"] = x;
     obj["y"] = y;
-    QJsonArray pathsArray;
-    for(auto &path : paths) {
-        pathsArray.append(path->getId());
-    }
-    obj["paths"] = pathsArray;
+//    QJsonArray pathsArray;
+//    for(auto &path : paths) {
+//        pathsArray.append(path->getId());
+//    }
+//    obj["paths"] = pathsArray;
     return obj;
+}
+
+int Point::getId() const
+{
+    return id;
 }
 
 const double& Point::getX() const

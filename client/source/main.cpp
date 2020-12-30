@@ -24,13 +24,6 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-    qRegisterMetaType<Agent*>("Agent*");
-    qRegisterMetaType<Agents*>("Agents*");
-    qRegisterMetaType<City*>("City*");
-    qRegisterMetaType<Point*>("Point*");
-    qRegisterMetaType<Path*>("Path*");
-    qRegisterMetaType<QVector<City*>>();
-
     MapProperties map;
     map.fill();
 

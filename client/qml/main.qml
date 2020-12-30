@@ -37,6 +37,7 @@ ApplicationWindow {
                 }
             }
         }
+
         StackLayout  {
             id: view
             clip: true
@@ -45,7 +46,6 @@ ApplicationWindow {
             Layout.minimumHeight: 20
             Layout.minimumWidth: 20
             currentIndex: tabBar.currentIndex
-
 
             WelcomePage {
                 id: welcomePage
@@ -64,7 +64,22 @@ ApplicationWindow {
             }
         }
     }
-//    StyledPopup {
-//        id: windowDialog
-//    }
+    Popup {
+        id: windowDialog
+        width: 200
+        height: 200
+        anchors.centerIn: parent
+        contentItem: Text {
+                id: popupText
+                text: ""
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.fill: parent
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        }
+        function showError(text) {
+            popupText.text = text;
+            open();
+        }
+    }
 }
