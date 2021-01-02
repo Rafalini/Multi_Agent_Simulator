@@ -5,7 +5,7 @@ Page {
 
     StyledButton {
         text: "Wyślij"
-        anchors.topMargin: 30
+        anchors.centerIn: parent
         function activate() {
             remoteConnector.submit();
         }

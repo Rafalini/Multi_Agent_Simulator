@@ -6,7 +6,6 @@
         <file>qml/WelcomePage.qml</file>
         <file>resource/MapOfPoland.png</file>
         <file>qml/StyledButton.qml</file>
-        <file>qml/StyledPopup.qml</file>
         <file>qml/AgentsPage.qml</file>
         <file>qml/CityRepresentation.qml</file>
         <file>qml/PointRepresentation.qml</file>
@@ -17,5 +16,6 @@
         <file>qml/CityContextMenu.qml</file>
         <file>qml/PathContextMenu.qml</file>
         <file>qml/SimplePathRepresentation.qml</file>
+        <file>qml/AgentRepresentation.qml</file>
     </qresource>
 </RCC>

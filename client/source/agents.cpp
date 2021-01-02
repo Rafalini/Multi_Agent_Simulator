@@ -10,6 +10,10 @@ Agents::~Agents() {
     }
 }
 
+void Agents::addAgentHistory(int index, const QJsonArray& history) {
+    agents[index]->setHistory(history);
+}
+
 int Agents::rowCount(const QModelIndex & parent) const {
     Q_UNUSED(parent);
     return agents.size();

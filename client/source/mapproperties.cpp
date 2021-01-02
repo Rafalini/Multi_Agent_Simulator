@@ -35,6 +35,7 @@ QJsonObject MapProperties::toJson() const {
 
 void MapProperties::fill() {
     if(cities.size() > 0) return;
+
     addCity("Kraków", 0.55, 0.85);
     addCity("Warszawa", 0.65, 0.4);
     addCity("Szczecin", 0.1, 0.12);
@@ -56,26 +57,27 @@ void MapProperties::addCity(const QString& name, const double& x, const double& 
             return;
         }
     }
-    City* city = new City(name, x, y);
+    City* city = new City(name, x, y, nextPointId++);
     cities.push_back(city);
     emit citiesChanged();
 }
 
 void MapProperties::addPoint(const double& x, const double& y) {
-    Point* point = new Point(x, y);
+    Point* point = new Point(x, y, nextPointId++);
     points.push_back(point);
     emit pointsChanged();
 }
 
 void MapProperties::splitPath(Path * old_path, double x, double y) {
     paths.removeOne(old_path);
+    emit pathsChanged();
     Point* begining = old_path->getBegining();
     begining->removePath(old_path);
     Point* end = old_path->getEnd();
     end->removePath(old_path);
     delete old_path;
 
-    Point* point = new Point(x, y);
+    Point* point = new Point(x, y, nextPointId++);
     Path* firstPath = new Path(nextPathId++, begining, point);
     Path* secondPath = new Path(nextPathId++, point, end);
     paths.push_back(firstPath);
@@ -86,7 +88,7 @@ void MapProperties::splitPath(Path * old_path, double x, double y) {
 }
 
 void MapProperties::promotePointToCity(Point* point, QString name) {
-    City* city = new City(name, point->getX(), point->getY());
+    City* city = new City(name, point->getX(), point->getY(), point->getId());
     cities.push_back(city);
     points.removeOne(point);
     for(auto path : point->getPaths()) {
@@ -122,6 +124,11 @@ void MapProperties::addPath(Point* begining, Point* end) {
 }
 
 MapProperties::~MapProperties() {
+    while(!paths.isEmpty()) {
+       Path* path = paths.takeLast();
+       emit pathsChanged();
+       delete path;
+    }
     while(!cities.isEmpty()) {
        City* city = cities.takeLast();
        emit citiesChanged();
@@ -131,11 +138,6 @@ MapProperties::~MapProperties() {
        Point* point = points.takeLast();
        emit pointsChanged();
        delete point;
-    }
-    while(!paths.isEmpty()) {
-       Path* path = paths.takeLast();
-       emit pathsChanged();
-       delete path;
     }
 }
 

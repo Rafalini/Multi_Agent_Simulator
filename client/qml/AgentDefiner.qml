@@ -52,7 +52,7 @@ Popup {
             }
 
             if(load.text === "") {
-                windowDialog.showError("Nie podany ładunku");
+                windowDialog.showError("Nie podano ładunku");
                 return false;
             }
             return true;
@@ -66,7 +66,7 @@ Popup {
             id: begining
             displayText: currentIndex > -1 ? model[currentIndex].name : qsTr("Wybierz miasto")
             Layout.fillWidth: true
-            model: map.cities
+            model: map ? map.cities : 0
             delegate: ItemDelegate {
                 text: modelData.name
                 width: begining.width
@@ -82,7 +82,7 @@ Popup {
             displayText: currentIndex > -1 ? model[currentIndex].name : qsTr("Wybierz miasto")
             Layout.fillWidth: true
             id: end
-            model: map.cities
+            model: map ? map.cities : 0
             delegate: ItemDelegate {
                 text: modelData.name
                 width: end.width

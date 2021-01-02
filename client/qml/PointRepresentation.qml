@@ -5,6 +5,7 @@ Item {
     property variant point
     property alias rec: rec
     property bool isDrawMode
+    property bool isInAnimationMode
 
     //signal for Repeater to open ContextMenu
     function clicked() {}
@@ -30,6 +31,7 @@ Item {
         radius: 5
         MouseArea {
             id: draggedRec
+            enabled: !pointRepresentation.isInAnimationMode
             acceptedButtons: Qt.RightButton | Qt.LeftButton
             anchors.fill: parent
             drag.target: isDrawMode ? null : pointRepresentation
@@ -38,7 +40,7 @@ Item {
             drag.minimumY: 0
             drag.maximumY: pointRepresentation.parent.height
             drag.smoothed: false
-            cursorShape: Qt.PointingHandCursor
+            cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
             onClicked: pointRepresentation.clicked();
         }
     }

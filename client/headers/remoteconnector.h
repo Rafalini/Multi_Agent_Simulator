@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QWebSocket> //"qwebsocket.h"
 #include <QQueue>
+#include <QJsonObject>
 #include "mapproperties.h"
 #include "agents.h"
 
@@ -15,7 +16,9 @@ public:
     Q_INVOKABLE void submit();
 
 signals:
-    void answerReceived(QString);
+    void answerReceived();
+    void addAgentRepresentation(QJsonObject);
+    void answerParsed();
 
 private Q_SLOTS:
     void onConnected();

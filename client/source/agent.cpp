@@ -12,6 +12,16 @@ Agent::~Agent() {
     emit deleted();
 }
 
+QJsonArray Agent::getHistory() const
+{
+    return history;
+}
+void Agent::setHistory(const QJsonArray &history)
+{
+    this->history = history;
+    emit historyUpdated();
+}
+
 void Agent::update(City* begining, City* destination, const double &load) {
     if(load <= 0) {
         emit wrongUpdateArguments("Waga nie może być mniejsza od 0");

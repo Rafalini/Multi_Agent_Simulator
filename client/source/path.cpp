@@ -50,9 +50,8 @@ void Path::setEnd(Point* end) {
 QJsonObject Path::toJson() const {
     QJsonObject obj;
     obj["id"] = id;
-    obj["x1"] = begining->getX();
-    obj["y1"] = begining->getY();
-    obj["x2"] = end->getX();
-    obj["y2"] = end->getY();
+    obj["begining"] = begining->getId();
+    obj["end"] = end->getId();
+    obj["type"] = 0;
     return obj;
 }

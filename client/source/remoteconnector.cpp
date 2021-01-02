@@ -29,7 +29,6 @@ void RemoteConnector::sendMessage(QString message) {
         if(numberOfBytesSent == 0 && !connected) {
             messageQueue.enqueue(message);
             webSocket.open(url);
-//            throw std::runtime_error("Websocket error");
         }
     }
 }
@@ -44,8 +43,13 @@ void RemoteConnector::onConnected() {
 }
 
 void RemoteConnector::onTextMessageReceived(QString message) {
-    qDebug() << "received a message: " << message;
-    emit answerReceived(message);
+    QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
+    QJsonArray arr = doc.array();
+    emit answerReceived();
+    for(int i = 0; i < arr.size(); ++i) {
+        agents->addAgentHistory(i, arr[i].toArray());
+    }
+    emit answerParsed();
 }
 
 void RemoteConnector::onDisconnected() {
