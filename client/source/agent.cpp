@@ -12,12 +12,11 @@ Agent::~Agent() {
     emit deleted();
 }
 
-QJsonArray Agent::getHistory() const
-{
+QJsonArray Agent::getHistory() const {
     return history;
 }
-void Agent::setHistory(const QJsonArray &history)
-{
+
+void Agent::setHistory(const QJsonArray &history) {
     this->history = history;
     emit historyUpdated();
 }
@@ -85,18 +84,15 @@ void Agent::setLoad(const double& load) {
     emit loadUpdated();
 }
 
-City* Agent::getBegining() const
-{
+City* Agent::getBegining() const {
     return beginingCity;
 }
 
-City* Agent::getDestination() const
-{
+City* Agent::getDestination() const {
     return destinationCity;
 }
 
-double Agent::getLoad() const
-{
+double Agent::getLoad() const {
     return load;
 }
 
