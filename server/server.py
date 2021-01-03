@@ -15,14 +15,20 @@ async def request_handler(websocket, path):
             map = dict["map"]
             map_agents = dict["agents"]
             map_cities = map["cities"]
+            map_points = map["points"]
+            map_paths = map["paths"]
 
             cpp_map = build.map_module.Agents_Map()
             print("wczytuje miasta i agentow do mapy...")
 
             for x in map_cities:
-                cpp_map.add_city(x["name"], x["x"], x["y"])
+                cpp_map.add_map_point(x["id"],x["name"], x["x"], x["y"])
             for x in map_agents:
                 cpp_map.add_agent(x["begining"], x["destination"], x["load"])
+            for x in map_points:
+                cpp_map.add_map_point(x["id"],"point_"+str(x["id"]), x["x"], x["y"])
+            for x in map_paths:
+                cpp_map.add_path(x["begin"],x["end"],x["type"])
 
             print("wczytano miasta i agentow do mapy")
 
@@ -32,7 +38,7 @@ async def request_handler(websocket, path):
             for x in agents:
                 output_json += json.dumps(cpp_map.get_agent_route(x.id).__dict__)
 
-            print(output_json)
+            print(dict)
 
             await (websocket.send(output_json))
         except Exception as e:
