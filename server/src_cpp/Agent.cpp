@@ -39,7 +39,8 @@ void Agent::insert_neighbors(	std::vector<std::pair<double,graph_node>> &points,
 		}
 }
 
-void Agent::insert_first_neighbors(std::vector<std::pair<double,graph_node>> &points, std::shared_ptr<City> &origin, std::shared_ptr<City> &target)
+void Agent::insert_first_neighbors(std::vector<std::pair<double,graph_node>> &points, std::shared_ptr<City> &origin,
+																	 std::shared_ptr<City> &target, std::map<int,int> &history)
 {
 	std::vector<neighbor> neighbors = origin->get_neighbors();
 	for(long unsigned int i=0; i<neighbors.size(); ++i){
@@ -48,19 +49,20 @@ void Agent::insert_first_neighbors(std::vector<std::pair<double,graph_node>> &po
 				double metric = origin->get_distance_to(*neighbor)+		//cost to neighbor
 												target->get_distance_to(*neighbor);		//direction cost
 			  points.push_back(std::make_pair(metric, graph_node(neighbor, origin)));
+				history.insert(std::make_pair(neighbor->get_id(),origin->get_id()));
 	}
 }
 
 void Agent::path_finder(std::shared_ptr<City> position, std::shared_ptr<City> target)
 {
 		std::vector<std::pair<double,graph_node>> points; //queue of nodes to be visited
-		std::map<int,int> pairs;				//city, previous_city
+		std::map<int,int> history;				//city, previous_city
 		graph_node current;
 
 		std::shared_ptr<City> curr_city;
 		std::shared_ptr<City> previous;
 
-		insert_first_neighbors(points, position, target); //first set of neighbours
+		insert_first_neighbors(points, position, target, history); //first set of neighbours
 
 		while(!points.empty()){
 
@@ -77,7 +79,7 @@ void Agent::path_finder(std::shared_ptr<City> position, std::shared_ptr<City> ta
 				if(curr_city->get_id() == target->get_id()) //target found
 						break;
 
-				insert_neighbors(points, points.begin()->first, current, target,pairs);
+				insert_neighbors(points, points.begin()->first, current, target, history);
 		}
 //generate path
 		path.clear();
@@ -85,8 +87,8 @@ void Agent::path_finder(std::shared_ptr<City> position, std::shared_ptr<City> ta
 		path.push_back(curr_id);
 		while(curr_id != position->get_id()) //backward search
 		{
-				path.push_back( pairs[curr_id] ); //previous city
-				curr_id = pairs[curr_id];
+				path.push_back( history[curr_id] ); //previous city
+				curr_id = history[curr_id];
 		}
 }
 

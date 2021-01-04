@@ -46,7 +46,7 @@ class Agent{
 public:
 //public for tests
         void path_finder(std::shared_ptr<City> origin, std::shared_ptr<City> destination);
-        void insert_first_neighbors(std::vector<std::pair<double,graph_node>> &points, std::shared_ptr<City> &origin, std::shared_ptr<City> &destination);
+        void insert_first_neighbors(std::vector<std::pair<double,graph_node>> &points, std::shared_ptr<City> &origin, std::shared_ptr<City> &target, std::map<int,int> &history);
         void insert_neighbors(std::vector<std::pair<double,graph_node>> &points, double cost,	graph_node &node,	std::shared_ptr<City> &target, std::map<int,int>&history);
         void agent_transport();
         void agent_load();

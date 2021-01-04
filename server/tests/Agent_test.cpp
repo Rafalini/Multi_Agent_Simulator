@@ -44,8 +44,9 @@ BOOST_AUTO_TEST_CASE(pathTest1_nodeInserts)
 		 c4->add_neighbor(c1,0);
 
 		 std::vector<std::pair<double,graph_node>> map;
+		 std::map<int,int> history;
 		 Agent a;
-		 a.insert_first_neighbors(map, c1, c1);
+		 a.insert_first_neighbors(map, c1, c1, history);
 //two neighbors
 	   BOOST_CHECK_EQUAL(map.size(),2);
 		std::shared_ptr<City> c11 = map[0].second.city.lock();
@@ -55,7 +56,8 @@ BOOST_AUTO_TEST_CASE(pathTest1_nodeInserts)
 		BOOST_CHECK_EQUAL(c12->get_id(),3);
 
 		map.clear();
-		a.insert_first_neighbors(map, c4, c4);
+		history.clear();
+		a.insert_first_neighbors(map, c4, c4, history);
 		c11 = map[0].second.city.lock();
 		c12 = map[1].second.city.lock();
 
@@ -82,7 +84,7 @@ BOOST_AUTO_TEST_CASE(pathTest2_nodeInserts2)
 		std::vector<std::pair<double,graph_node>> map; //queue of unique points to be visited,
 		std::map<int,int> history;
 		Agent a;
-		a.insert_first_neighbors(map, c1, c3);
+		a.insert_first_neighbors(map, c1, c3, history);
 		BOOST_CHECK_EQUAL(map.size(),2);
 	  a.insert_neighbors(map, 0.0, map[0].second, c3, history);
 		BOOST_CHECK_EQUAL(map.size(),3);
