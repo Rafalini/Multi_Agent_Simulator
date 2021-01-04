@@ -48,7 +48,6 @@ BOOST_AUTO_TEST_CASE(pathTest1_nodeInserts)
 		 a.insert_first_neighbors(map, c1, c1);
 //two neighbors
 	   BOOST_CHECK_EQUAL(map.size(),2);
-//order
 		std::shared_ptr<City> c11 = map[0].second.city.lock();
 		std::shared_ptr<City> c12 = map[1].second.city.lock();
 
@@ -62,36 +61,33 @@ BOOST_AUTO_TEST_CASE(pathTest1_nodeInserts)
 
 		BOOST_CHECK_EQUAL(c11->get_id(),2);
 		BOOST_CHECK_EQUAL(c12->get_id(),0);
-
-		sort(map.begin(), map.end(),
-		[](const std::pair<double,graph_node>&a, const std::pair<double,graph_node>&b)
-		{	return a.first > b.first; });
-
-		c11 = map[0].second.city.lock();
-		c12 = map[1].second.city.lock();
-		BOOST_CHECK_EQUAL(c11->get_id(),0);
-		BOOST_CHECK_EQUAL(c12->get_id(),2);
-
 }
 
-BOOST_AUTO_TEST_CASE(pathTest2_nodeInserts)
+BOOST_AUTO_TEST_CASE(pathTest2_nodeInserts2)
 {
-		 std::shared_ptr<City> c1 = std::make_shared<City>(0,"Warszawa", 0, 0);
-		 std::shared_ptr<City> c2 = std::make_shared<City>(1,"Krakow", 1, 0);
-		 std::shared_ptr<City> c3 = std::make_shared<City>(2,"Warszawa2", 0, 1);
-		 std::shared_ptr<City> c4 = std::make_shared<City>(3,"Krakow2", 1, 1);
+		std::shared_ptr<City> c1 = std::make_shared<City>(0,"Warszawa", 0, 0);
+		std::shared_ptr<City> c2 = std::make_shared<City>(1,"Krakow", 1, 0);
+		std::shared_ptr<City> c3 = std::make_shared<City>(2,"Warszawa2", 0, 1);
+		std::shared_ptr<City> c4 = std::make_shared<City>(3,"Krakow2", 1, 1);
 
-		 c1->add_neighbor(c2,0);  //  c1  ---  c2
-		 c1->add_neighbor(c4,0);  //  |	   		|
-		 c2->add_neighbor(c1,0);  //	|	 	  	|
-		 c2->add_neighbor(c3,0);  //  c4 --- c3
-		 c3->add_neighbor(c2,0);
-		 c3->add_neighbor(c4,0);
-		 c4->add_neighbor(c3,0);
-		 c4->add_neighbor(c1,0);
+		c1->add_neighbor(c2,0);  //  c1  ---  c2
+		c1->add_neighbor(c4,0);  //  |	   		|
+		c2->add_neighbor(c1,0);  //	 | 	    	|
+		c2->add_neighbor(c3,0);  //  c4 --- c3
+		c3->add_neighbor(c2,0);
+		c3->add_neighbor(c4,0);
+		c4->add_neighbor(c3,0);
+		c4->add_neighbor(c1,0);
 
-		 std::vector<std::pair<double,graph_node>> map;
-		 Agent a;
-		 a.insert_first_neighbors(map, c1, c3);
-	   //BOOST_CHECK_EQUAL(map.size(),2);
+		std::vector<std::pair<double,graph_node>> map; //queue of unique points to be visited,
+		std::map<int,int> history;
+		Agent a;
+		a.insert_first_neighbors(map, c1, c3);
+		BOOST_CHECK_EQUAL(map.size(),2);
+	  a.insert_neighbors(map, 0.0, map[0].second, c3, history);
+		BOOST_CHECK_EQUAL(map.size(),3);
+		a.insert_neighbors(map, 0.0, map[1].second, c3, history);
+		BOOST_CHECK_EQUAL(map.size(),3);
+		a.insert_neighbors(map, 0.0, map[2].second, c3, history);
+		BOOST_CHECK_EQUAL(map.size(),3);
 }

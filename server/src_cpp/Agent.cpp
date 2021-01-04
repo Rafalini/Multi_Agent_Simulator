@@ -18,7 +18,7 @@ int Agent::getLoad() {return total_load_to_transport;}
 int Agent::get_id() {return agent_id;}
 
 void Agent::insert_neighbors(	std::vector<std::pair<double,graph_node>> &points, double cost,	graph_node &node,
-															std::shared_ptr<City> &target, std::map<int,int>history)
+															std::shared_ptr<City> &target, std::map<int,int> &history)
 {
 		std::shared_ptr<City> origin = node.city.lock();
 		std::shared_ptr<City> previous = node.previous.lock();
@@ -27,13 +27,14 @@ void Agent::insert_neighbors(	std::vector<std::pair<double,graph_node>> &points,
 		for(int i=0; i<(int)neighbors.size(); ++i){
 					std::shared_ptr<City> neighbor = neighbors[i].neighbor;
 
-					if(neighbor->get_id() != previous->get_id() && history.find(neighbor->get_id())!=history.end())	{//dont add previously visited node
+					if(neighbor->get_id() != previous->get_id() && history.find(neighbor->get_id())==history.end())	{//dont add previously visited node
 
 								double metric = origin->get_distance_to(*neighbor)+		//cost to neighbor
 																target->get_distance_to(*neighbor)+		//direction cost
 																cost;								//previous cost
 
 								points.push_back(std::make_pair(metric, graph_node(neighbor, origin)));
+								history.insert(std::make_pair(neighbor->get_id(),origin->get_id()));
 					}
 		}
 }
@@ -52,7 +53,7 @@ void Agent::insert_first_neighbors(std::vector<std::pair<double,graph_node>> &po
 
 void Agent::path_finder(std::shared_ptr<City> position, std::shared_ptr<City> target)
 {
-		std::vector<std::pair<double,graph_node>> points;
+		std::vector<std::pair<double,graph_node>> points; //queue of nodes to be visited
 		std::map<int,int> pairs;				//city, previous_city
 		graph_node current;
 
@@ -72,7 +73,6 @@ void Agent::path_finder(std::shared_ptr<City> position, std::shared_ptr<City> ta
 				previous = current.previous.lock();
 
 				points.erase(points.begin());
-				pairs.insert(std::make_pair(curr_city->get_id(),previous->get_id()));
 
 				if(curr_city->get_id() == target->get_id()) //target found
 						break;
