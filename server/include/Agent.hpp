@@ -43,22 +43,23 @@ class Agent{
         float A_B_progress;
         std::weak_ptr<City> positionB;
         std::vector<int> path; //ids of nodes
-
+public:
+//public for tests
         void path_finder(std::shared_ptr<City> origin, std::shared_ptr<City> destination);
-        void insert_neighbors(std::map<double,graph_node> &map,std::shared_ptr<City> &origin, std::shared_ptr<City> &destination);
-        void insert_neighbors(std::map<double,graph_node> &map, double cost,	graph_node node,	std::shared_ptr<City> &target, std::map<int,int>history);
+        void insert_first_neighbors(std::vector<std::pair<double,graph_node>> &points, std::shared_ptr<City> &origin, std::shared_ptr<City> &destination);
+        void insert_neighbors(std::vector<std::pair<double,graph_node>> &points, double cost,	graph_node &node,	std::shared_ptr<City> &target, std::map<int,int>history);
         void agent_transport();
         void agent_load();
         void agent_unload();
         void agent_return();
+        Agent(); //for tests
 
-    public:
-           Agent();
+//public methods
            Agent(std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, data_table _table);
            std::weak_ptr<City> getOrigin();
            std::weak_ptr<City> getDestination();
            int getLoad();
-           int getID();
+           int get_id();
            void agent_go();
 };
 

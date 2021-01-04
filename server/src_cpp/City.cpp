@@ -9,6 +9,8 @@ double City::get_ox(){return ox;}
 double City::get_oy(){return oy;}
 int City::get_id(){return id;}
 
+std::vector<neighbor>  City::get_neighbors(){return neighbors;}
+
 void City::add_neighbor(std::shared_ptr<City> city, int conn)
   {
     neighbors.push_back(neighbor());

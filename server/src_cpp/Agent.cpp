@@ -3,16 +3,21 @@
 #include <iostream>
 #include <memory>
 #include <map>
+#include <algorithm>
+#include <iostream>
+#include <bits/stdc++.h>
 
+
+Agent::Agent(){}
 Agent::Agent(std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, data_table _table)
 																 : limits(_table), origin(_origin), destination(_destination), total_load_to_transport(_load){}
 
 std::weak_ptr<City> Agent::getOrigin() {return origin;}
 std::weak_ptr<City> Agent::getDestination() {return destination;}
 int Agent::getLoad() {return total_load_to_transport;}
-int Agent::getID() {return agent_id;}
+int Agent::get_id() {return agent_id;}
 
-void Agent::insert_neighbors(	std::map<double,graph_node> &points, double cost,	graph_node node,
+void Agent::insert_neighbors(	std::vector<std::pair<double,graph_node>> &points, double cost,	graph_node &node,
 															std::shared_ptr<City> &target, std::map<int,int>history)
 {
 		std::shared_ptr<City> origin = node.city.lock();
@@ -28,36 +33,39 @@ void Agent::insert_neighbors(	std::map<double,graph_node> &points, double cost,	
 																target->get_distance_to(*neighbor)+		//direction cost
 																cost;								//previous cost
 
-								points.insert(std::make_pair(metric, graph_node(neighbor, origin)));
+								points.push_back(std::make_pair(metric, graph_node(neighbor, origin)));
 					}
 		}
 }
 
-void insert_neighbors(std::map<double,graph_node> &points, std::shared_ptr<City> &origin, std::shared_ptr<City> &target)
+void Agent::insert_first_neighbors(std::vector<std::pair<double,graph_node>> &points, std::shared_ptr<City> &origin, std::shared_ptr<City> &target)
 {
 	std::vector<neighbor> neighbors = origin->get_neighbors();
-
-	for(int i=0; i<(int)neighbors.size(); ++i){
+	for(long unsigned int i=0; i<neighbors.size(); ++i){
 				std::shared_ptr<City> neighbor = neighbors[i].neighbor;
+
 				double metric = origin->get_distance_to(*neighbor)+		//cost to neighbor
 												target->get_distance_to(*neighbor);		//direction cost
-			  points.insert(std::make_pair(metric, graph_node(neighbor, origin)));
+			  points.push_back(std::make_pair(metric, graph_node(neighbor, origin)));
 	}
 }
 
-
 void Agent::path_finder(std::shared_ptr<City> position, std::shared_ptr<City> target)
 {
-		std::map<double, graph_node> points;
+		std::vector<std::pair<double,graph_node>> points;
 		std::map<int,int> pairs;				//city, previous_city
 		graph_node current;
 
 		std::shared_ptr<City> curr_city;
 		std::shared_ptr<City> previous;
 
-		insert_neighbors(points, position, target); //first set of neighbours
+		insert_first_neighbors(points, position, target); //first set of neighbours
 
 		while(!points.empty()){
+
+				sort(points.begin(), points.end(),
+				[](const std::pair<double,graph_node>&a, const std::pair<double,graph_node>&b)
+				{	return a.first > b.first; });
 
 				current = points.begin()->second;
 				curr_city = current.city.lock();

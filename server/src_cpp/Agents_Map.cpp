@@ -63,7 +63,7 @@ void Agents_Map::run()
 std::string Agents_Map::get_agent_route(int id)
       {
         for(auto agent : agents)
-          if(agent->getID() == id)
+          if(agent->get_id() == id)
           {
             std::string route = "jade przez A, do B, do C z predkoscia swiatla "+std::to_string(id);
             //print route
