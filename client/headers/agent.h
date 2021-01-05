@@ -41,8 +41,10 @@ signals:
 private:
     City* beginingCity;
     City* destinationCity;
+    int id;
     double load;
     QJsonArray history;
+    static int next_id;
 };
 
 #endif // AGENT_H

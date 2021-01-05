@@ -1,9 +1,11 @@
 #include "agent.h"
 #include <QJsonObject>
 
+int Agent::next_id = 0;
+
 Agent::Agent(QObject *parent) : QObject(parent) {}
 
-Agent::Agent(City* begining, City* destination, const double &weight) : beginingCity(begining), destinationCity(destination), load(weight) {
+Agent::Agent(City* begining, City* destination, const double &weight) : beginingCity(begining), destinationCity(destination),  id(next_id++), load(weight) {
     connect(destinationCity, &City::deleted, this, &Agent::cityDeleted);
     connect(beginingCity, &City::deleted, this, &Agent::cityDeleted);
 }
@@ -101,5 +103,6 @@ QJsonObject Agent::tojSON() const {
     obj["begining"] = beginingCity->getName();
     obj["destination"] = destinationCity->getName();
     obj["load"] = load;
+    obj["id"] = id;
     return obj;
 }
