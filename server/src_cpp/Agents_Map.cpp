@@ -23,6 +23,7 @@ Agents_Map::Agents_Map()
         table.step          = 0.00001;
         table.load_speed    = 1;
         table.unload_speed  = 1;
+        table.load_limit    = 20;
       }
 
 void Agents_Map::add_map_point(int id, std::string name, double ox, double oy)
@@ -62,16 +63,12 @@ void Agents_Map::run()
 
 std::string Agents_Map::get_agent_route(int id)
       {
-        for(auto agent : agents)
-          if(agent->get_id() == id)
-          {
-            std::string route = "jade przez A, do B, do C z predkoscia swiatla "+std::to_string(id);
-            //print route
-            return route;
-          }
-        return nullptr;
+        std::string route;
+        for(long unsigned int j=0; j<agents.size(); j++)
+          if(agents[j]->get_id() == id)
+            return agents[j]->get_history();
+        return route;
       }
-
 
 BOOST_PYTHON_MODULE(map_module)
     {
