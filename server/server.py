@@ -39,8 +39,9 @@ async def request_handler(websocket, path):
             output_json =""
             iter = 0
             for x in map_agents:
-                output_json += json.loads(cpp_map.get_agent_route(iter).__dict__)
-                #print(cpp_map.get_agent_route(iter)) #dziala
+                #output_json += json.loads(cpp_map.get_agent_route(iter).__dict__)
+                output_json += cpp_map.get_agent_route(iter)
+                #print(cpp_map.get_agent_route(iter)) #
                 iter += 1
 
             print(output_json)
