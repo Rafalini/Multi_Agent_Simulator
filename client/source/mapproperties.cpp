@@ -158,18 +158,14 @@ void MapProperties::splitPath(Path * old_path, double x, double y) {
     emit pointsChanged();
 }
 
-
-City* MapProperties::getCityById(int id) {
-    for(auto city : cities) {
-        if(city->getId() == id)
-            return city;
-    }
-    return nullptr;
-}
 Point* MapProperties::getPointById(int id) {
-    for(auto point : points) {
+    for(auto &point : points) {
         if(point->getId() == id)
             return point;
+    }
+    for(auto &city : cities) {
+        if(city->getId() == id)
+            return city;
     }
     return nullptr;
 }

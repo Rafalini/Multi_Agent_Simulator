@@ -16,7 +16,8 @@ Item {
 
     Text {
         id: rec
-        text: '🚚';
+//        text: '🚚';
+        text: "\uD83D\uDE9A"
         visible: parent.visible
     }
     Connections {
@@ -40,15 +41,9 @@ Item {
         animationDuration = current["duration"] * 10;
         if(current["state"] === "moving") {
             agentText.text = "";
-            if(current["locationtype"] === "city") {
-                let city = map.getCityById(current["locationid"]);
-                xAnimation.to = city.x*parent.width;
-                yAnimation.to = city.y*parent.height;
-            } else {
-                let point = map.getPointById(current["locationid"]);
-                xAnimation.to = point.x*parent.width;
-                yAnimation.to = point.y*parent.height;
-            }
+            let point = map.getPointById(current["locationid"]);
+            xAnimation.to = point.x*parent.width;
+            yAnimation.to = point.y*parent.height;
         } else if(current["state"] === "loading"){
             agentText.text = "Trwa załadunek...";
             xAnimation.to = x+1;
