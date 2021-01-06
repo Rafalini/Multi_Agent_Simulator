@@ -137,7 +137,7 @@ void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> ta
 			information = std::string("{\"state\": ")+
 										std::string("\"moving\", ")+
 										std::string("\"locationtype\":")+
-										"\""+location+"\""+
+										"\""+location+"\","+
 										std::string("\"locationid\": \"")+ std::to_string(path[path.size()-1])+std::string("\",")+
 										std::string("\"duration\": \"")+ std::to_string((int)(speed*distance))+std::string("\"}");
 			history.push_back(information);
@@ -195,8 +195,10 @@ void Agent::agent_go()
 
 std::string Agent::get_history()
 {
-	std::string output;
+	std::string output = "[";
 	for(long unsigned int i=0; i<history.size(); i++)
 				output += history[i]+", ";
-	return output.substr(0, output.size()-1);
+	output = output.substr(0, output.size()-2);
+	output += "]";
+	return output;
 }
