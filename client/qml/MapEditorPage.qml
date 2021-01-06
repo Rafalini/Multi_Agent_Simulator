@@ -259,4 +259,33 @@ Page {
             text: qsTr("Nazwa miasta: ")
         }
     }
+
+    Popup {
+        id: pathTypeEditPopup
+        anchors.centerIn: parent
+        property var path: 0
+        function show(path) {
+            this.path = path;
+            pathTypeEditPopupComboBox.currentIndex = path.type;
+            open();
+        }
+        contentItem: Column {
+            ComboBox {
+                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                id: pathTypeEditPopupComboBox
+                model: ['Krajowa', 'Droga ekspresowa', 'Autostrada']
+            }
+            StyledButton {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Zapisz"
+                function activate() {
+                    if(pathTypeEditPopupComboBox.currentIndex !== -1) {
+                        pathTypeEditPopup.path.type = pathTypeEditPopupComboBox.currentIndex;
+                    }
+                    pathTypeEditPopup.close();
+                }
+            }
+        }
+    }
 }
