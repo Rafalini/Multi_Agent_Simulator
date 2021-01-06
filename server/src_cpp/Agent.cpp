@@ -10,7 +10,7 @@
 
 Agent::Agent(){}
 Agent::Agent(int _id, std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, data_table _table)
-																 : agent_id(_id), limits(_table), origin(_origin), destination(_destination), total_load_to_transport(_load){}
+																 : agent_id(_id), origin(_origin), destination(_destination), total_load_to_transport(_load), limits(_table){}
 
 std::weak_ptr<City> Agent::getOrigin() {return origin;}
 std::weak_ptr<City> Agent::getDestination() {return destination;}
@@ -126,11 +126,18 @@ void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> ta
 					break;
 				}
 
-			std::string information;
+			std::string information, location;
+
+			if(current_pos->get_name().find("point") != std::string::npos)
+				location = "point";
+			else
+				location = "city";
+
+
 			information = std::string("{\"state\": ")+
 										std::string("\"moving\", ")+
 										std::string("\"locationtype\":")+
-										std::string( "\"city\", ")+
+										"\""+location+"\""+
 										std::string("\"locationid\": \"")+ std::to_string(path[path.size()-1])+std::string("\",")+
 										std::string("\"duration\": \"")+ std::to_string((int)(speed*distance))+std::string("\"}");
 			history.push_back(information);
@@ -151,7 +158,7 @@ void Agent::agent_load()
 		}
 
 		std::shared_ptr<City> ori = origin.lock();
-		std::string information;
+		std::string information, location;
 		information = std::string("{\"state\": ")+
 									std::string("\"loading\", ")+
 									std::string("\"locationtype\":")+
@@ -191,5 +198,5 @@ std::string Agent::get_history()
 	std::string output;
 	for(long unsigned int i=0; i<history.size(); i++)
 				output += history[i]+", ";
-	return output.substr(0, route.size()-1);
+	return output.substr(0, output.size()-1);
 }
