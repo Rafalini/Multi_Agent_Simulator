@@ -11,7 +11,6 @@ Page {
         target: remoteConnector
         function onAnswerReceived() {
             tabBar.currentIndex = 2;
-            tabBar.visible = false;
             draggableArea.enabled = false;
         }
         function onAnswerParsed() {

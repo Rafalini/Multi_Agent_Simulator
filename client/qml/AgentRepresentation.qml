@@ -43,12 +43,18 @@ Item {
             let point = map.getPointById(current["locationid"]);
             xAnimation.to = point.x*parent.width;
             yAnimation.to = point.y*parent.height;
-        } else if(current["state"] === "loading"){
-            agentText.text = "Trwa załadunek...";
-            xAnimation.to = x+1;
-            yAnimation.to = y+1;
+        } else if(current["state"] === "accident") {
+            let point = map.getPointById(current["locationid"]);
+            let percentage = parseFloat(current["percentage"])
+            agentText.text = "Wypadek...";
+            xAnimation.to = point.x*percentage*parent.width;
+            yAnimation.to = point.x*percentage*parent.width;
         } else {
-            agentText.text = "Trwa rozładunek...";
+            if(current["state"] === "loading"){
+                agentText.text = "Trwa załadunek...";
+             } else if(current["state"] === "unloading") {
+                agentText.text = "Trwa rozładunek...";
+             }
             xAnimation.to = x+1;
             yAnimation.to = y+1;
         }
