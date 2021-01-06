@@ -31,15 +31,13 @@ void Agents_Map::add_map_point(int id, std::string name, double ox, double oy)
           points.push_back(std::make_shared<City>(id,name,ox,oy));
       }
 
-void Agents_Map::add_agent(std::string s_origin, std::string s_destin, int load)
+void Agents_Map::add_agent(int id, std::string s_origin, std::string s_destin, int load)
       {
           auto origin =       std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_origin;});
           auto destination =  std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_destin;});
 
-          std::cout << typeid(*origin).name() << std::endl;
-
           if(origin != points.end() && destination != points.end())
-                agents.push_back(std::make_shared<Agent>(*origin, *destination, load, table));
+                agents.push_back(std::make_shared<Agent>(id, *origin, *destination, load, table));
       }
 
 void Agents_Map::add_path(int begin, int end, int type)
@@ -53,9 +51,7 @@ void Agents_Map::add_path(int begin, int end, int type)
 
 void Agents_Map::run()
       {
-            std::cout << "running map..." << std::endl;\
-            std::cout << "points: " << points.size() << std::endl;
-            std::cout << "agents: " << agents.size() << std::endl;
+            std::cout << "running simulation..." << std::endl;
 
             for(auto agent : agents)
                 agent->agent_go();

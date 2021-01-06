@@ -9,8 +9,7 @@ async def request_handler(websocket, path):
         try:
             request = await asyncio.wait_for(websocket.recv(), timeout = 3600)
             dict = json.loads(request)
-            cities =[]
-            agents =[]
+            #print(dict)
 
             map = dict["map"]
             map_agents = dict["agents"]
@@ -19,26 +18,32 @@ async def request_handler(websocket, path):
             map_paths = map["paths"]
 
             cpp_map = build.map_module.Agents_Map()
-            print("wczytuje miasta i agentow do mapy...")
+            print("\nwczytuje miasta i agentow do mapy...\n")
 
             for x in map_cities:
                 cpp_map.add_map_point(x["id"],x["name"], x["x"], x["y"])
-            for x in map_agents:
-                cpp_map.add_agent(x["begining"], x["destination"], x["load"])
+                print("Miasto: "+str(x["id"])+" "+x["name"]+" "+str(x["x"])+" "+str(x["y"]))
             for x in map_points:
                 cpp_map.add_map_point(x["id"],"point_"+str(x["id"]), x["x"], x["y"])
+                print("Pubnkt: "+str(x["id"])+" "+"point_"+str(x["id"])+" "+str(x["x"])+" "+str(x["y"]))
+            for x in map_agents:
+                cpp_map.add_agent(x["id"],x["begining"], x["destination"], x["load"])
+                print("Agent: "+str(x["id"])+" "+x["begining"]+" "+x["destination"]+" "+str(x["load"]))
             for x in map_paths:
-                cpp_map.add_path(x["begin"],x["end"],x["type"])
+                cpp_map.add_path(x["begining"],x["end"],x["type"])
 
-            print("wczytano miasta i agentow do mapy")
+            print("\nwczytano miasta i agentow do mapy\n")
 
             cpp_map.run()
 
             output_json =""
-            for x in agents:
-                output_json += json.dumps(cpp_map.get_agent_route(x.id).__dict__)
+            iter = 0
+            for x in map_agents:
+                output_json += json.loads(cpp_map.get_agent_route(iter).__dict__)
+                #print(cpp_map.get_agent_route(iter)) #dziala
+                iter += 1
 
-            print(dict)
+            print(output_json)
 
             await (websocket.send(output_json))
         except Exception as e:
