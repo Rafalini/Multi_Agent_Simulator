@@ -2,7 +2,7 @@
 #include <QJsonArray>
 #include "path.h"
 
-Path::Path(int id, Point* beg, Point* en) : id(id), begining(beg), end(en) {}
+Path::Path(int id, Point* beg, Point* en, RoadType type) : id(id), begining(beg), end(en), type(type) {}
 
 int Path::getId() const
 {
@@ -29,6 +29,16 @@ Point* Path::getEnd() const
 
 bool Path::operator==(const Path& o) const {
     return (this->begining == o.begining && this->end == o.end) || (this->end == o.begining && this->begining == o.end);
+}
+
+Path::RoadType Path::getType() const
+{
+    return type;
+}
+
+void Path::setType(const RoadType &value)
+{
+    type = value;
 }
 
 void Path::setBegining(Point* begining) {

@@ -49,8 +49,8 @@ Page {
             visible: x !== -1 && y && -1 && x2 !== -1 && y2 !== -1
             x: mapFrame.startPoint ? mapFrame.drawing ? mapFrame.startPoint.x*mapFrame.width : -1 : -1
             y: mapFrame.startPoint ? mapFrame.drawing ? mapFrame.startPoint.y*mapFrame.height : -1 : -1
-            x2: mapFrame.drawing ? draggableArea.mouseX : -1
-            y2: mapFrame.drawing ? draggableArea.mouseY : -1
+            x2: draggableArea.mouseX
+            y2: draggableArea.mouseY
         }
 
         MouseArea {

@@ -14,9 +14,17 @@ class Path : public QObject
     Q_OBJECT
     Q_PROPERTY(Point* begining READ getBegining WRITE setBegining NOTIFY beginingChanged);
     Q_PROPERTY(Point* end READ getEnd WRITE setEnd NOTIFY endChanged);
+    Q_PROPERTY(RoadType type READ getType WRITE setType NOTIFY typeChanged);
 
 public:
-    Path(int id, Point* beg, Point* en);
+    enum RoadType {
+        STANDARD = 0,
+        DUALCARRIAGEWAY,
+        HIGHWAY
+    };
+    Q_ENUMS(RoadType)
+
+    Path(int id, Point* beg, Point* en, RoadType type);
     QJsonObject toJson() const;
     int getId() const;
     virtual ~Path();
@@ -25,15 +33,19 @@ public:
     Point* getBegining() const;
     Point* getEnd() const;
     bool operator==(const Path&) const;
+    RoadType getType() const;
+    void setType(const RoadType &value);
 
 signals:
     void endChanged();
     void beginingChanged();
+    void typeChanged();
 
 private:
     int id;
     Point* begining;
     Point* end;
+    RoadType type;
 };
 
 #endif // PATH_H
