@@ -123,7 +123,6 @@ void MapProperties::fill() {
     addPath(cities[1], cities[13], Path::DUALCARRIAGEWAY); // Warszawa - Lublin
 }
 
-
 void MapProperties::addCity(const QString& name, const double& x, const double& y) {
     for(auto* city : cities) {
         if(city->getName() == name) {
