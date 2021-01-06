@@ -107,7 +107,6 @@ void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> ta
 
 		while(path.size()>1)
 		{
-			path_finder(current_pos, target);
 			double distance, speed;
 
 			std::vector<neighbor> cities = current_pos->get_neighbors();
@@ -141,6 +140,7 @@ void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> ta
 										std::string("\"locationid\": \"")+ std::to_string(path[path.size()-1])+std::string("\",")+
 										std::string("\"duration\": \"")+ std::to_string((int)(speed*distance))+std::string("\"}");
 			history.push_back(information);
+			path_finder(current_pos, target);
 		}
 }
 
@@ -167,6 +167,7 @@ void Agent::agent_load()
 									std::string("\"duration\": \"")+ std::to_string(limits.load_speed*current_load)+std::string("\"}");
 		history.push_back(information);
 }
+
 void Agent::agent_unload()
 {
 	std::shared_ptr<City> ori = origin.lock();
@@ -180,6 +181,7 @@ void Agent::agent_unload()
   current_load=0;
 	history.push_back(information);
 }
+
 void Agent::agent_go()
 {
 		std::shared_ptr<City> starting_city = origin.lock();
