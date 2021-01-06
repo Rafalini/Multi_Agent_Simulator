@@ -45,6 +45,7 @@ void Agents_Map::add_path(int begin, int end, int type)
         auto origin =       std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_id() == begin;});
         auto destination =  std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_id() == end;});
 
+        //new road
         points[origin     -points.begin()].get()->add_neighbor(*destination, type);
         points[destination-points.begin()].get()->add_neighbor(*origin, type);
     }

@@ -22,6 +22,7 @@ class City{
         double oy=0;
 
         std::vector<neighbor> neighbors;
+        //std::vector<std::pair<neighbor,road>> neighbors;
 
         public:
            City();
