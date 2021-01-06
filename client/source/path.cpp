@@ -38,7 +38,10 @@ Path::RoadType Path::getType() const
 
 void Path::setType(const RoadType &value)
 {
-    type = value;
+    if(type != value) {
+        type = value;
+        typeChanged();
+    }
 }
 
 void Path::setBegining(Point* begining) {

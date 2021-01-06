@@ -50,33 +50,34 @@ void MapProperties::fill() {
 
 
 //FULL MAP
-    addCity("Kraków", 0.5731213872832371, 0.85);  //0 - 0
-    addCity("Warszawa", 0.6719653179190753, 0.39884393063583834); //1 - 1
-    addCity("Szczecin", 0.1, 0.12); //2 - 2
-    addCity("Białystok", 0.8455284552845529, 0.2764227642276423); // 3 - 5
-    addCity("Gdańsk", 0.4476761125992762, 0.11035293011889657); // 4 - 6
-    addCity("Bydgoszcz", 0.4288617886178863, 0.22357723577235777); // 5 - 7
-    addCity("Poznań", 0.26016260162601634, 0.3556910569105693);// 6 - 8
-    addCity("Wrocław", 0.22201231260867552, 0.6401687109356643); // 7 - 9
-    addCity("Zielona Góra", 0.10772357723577239, 0.4268292682926829); // 8 - 10
-    addCity("Gorzów Wielkopolski", 0.12398373983739838, 0.2621951219512197); // 9 - 11
-    addCity("Rzeszów", 0.7624277456647398, 0.8653179190751445); // 10 - 12
-    addCity("Katowice", 0.4815028901734106, 0.769364161849711); // 11 - 13
-    addCity("Łódź", 0.5219653179190756, 0.44450867052023163); // 12 - 14
-    addCity("Lublin", 0.8213872832369947, 0.6514450867052026); //13 - 15
-    addCity("Opole", 0.38786127167630075, 0.6919075144508671); //14 - 16
-    addCity("Kielce", 0.6364161849710982, 0.6225433526011561); //15 - 17
-    addCity("Olsztyn", 0.6271676300578036, 0.17283236994219653); //16 - 21
-    addPoint(0.25028901734104053, 0.09884393063583821); //0 - 18 (środek między gdańskiem a szczecinem)
-    addPoint(0.26878612716763006, 0.20751445086705206); //1 - 19 (środek między gorzowem a bydgoszczą)
-    addPoint(0.7947976878612719, 0.18901734104046244); //2 - 20 (Punkt na prawo od Olsztyna)
-    addPoint(0.8456647398843933, 0.4364161849710984); //3 - 22 (Punkt między Białymstokiem, a Lublinem)
-    addPoint(0.7070595478406392, 0.545292876125849); //4 - 24 (Punkt między Warszawą a Kielcami)
-    addPoint(0.13005780346820808, 0.35317919075144505); //5 - 25 (Punkt na lewo od Poznania)
-    addPoint(0.6520605450074927, 0.3308768804446); //6 - 26 (Punkt między Warszawą, a Olsztynem)
-    addPoint(0.5068613642481179, 0.2909729084569247); //7 - 27
+    addCity("Kraków", 0.5731213872832371, 0.85);  //0
+    addCity("Warszawa", 0.6719653179190753, 0.39884393063583834); //1
+    addCity("Szczecin", 0.1, 0.12); //2
+    addCity("Białystok", 0.8455284552845529, 0.2764227642276423); // 3
+    addCity("Gdańsk", 0.4476761125992762, 0.11035293011889657); // 4
+    addCity("Bydgoszcz", 0.4288617886178863, 0.22357723577235777); // 5
+    addCity("Poznań", 0.26016260162601634, 0.3556910569105693);// 6
+    addCity("Wrocław", 0.22201231260867552, 0.6401687109356643); // 7
+    addCity("Zielona Góra", 0.10772357723577239, 0.4268292682926829); // 8
+    addCity("Gorzów Wielkopolski", 0.12398373983739838, 0.2621951219512197); // 9
+    addCity("Rzeszów", 0.7624277456647398, 0.8653179190751445); // 10
+    addCity("Katowice", 0.4815028901734106, 0.769364161849711); // 11
+    addCity("Łódź", 0.5219653179190756, 0.44450867052023163); // 12
+    addCity("Lublin", 0.8213872832369947, 0.6514450867052026); //13
+    addCity("Opole", 0.38786127167630075, 0.6919075144508671); //14
+    addCity("Kielce", 0.6364161849710982, 0.6225433526011561); //15
+    addCity("Olsztyn", 0.6271676300578036, 0.17283236994219653); //16
+    addPoint(0.25028901734104053, 0.09884393063583821); //0 - 17 (Między gdańskiem a szczecinem)
+    addPoint(0.26878612716763006, 0.20751445086705206); //1 - 18 (Między gorzowem a bydgoszczą)
+    addPoint(0.7947976878612719, 0.18901734104046244); //2 - 19 (Na prawo od Olsztyna)
+    addPoint(0.8456647398843933, 0.4364161849710984); //3 - 20 (Między Białymstokiem, a Lublinem)
+    addPoint(0.7070595478406392, 0.545292876125849); //4 - 21 (Między Warszawą a Kielcami)
+    addPoint(0.13005780346820808, 0.35317919075144505); //5 - 22 (Na lewo od Poznania)
+    addPoint(0.6520605450074927, 0.3308768804446); //6 - 23 (Między Warszawą, a Olsztynem)
+    addPoint(0.5068613642481179, 0.2909729084569247); //7 - 24 (Między Bydgoszczą, a Łodzią)
+    addPoint(0.3719888155, 0.54233869072); //8 - 25 (Punkt między Wrocławiem a Łodzią)
 
-    addPath(cities[4], cities[5]); // Gdańsk - Bydgoszcz
+    addPath(cities[4], cities[5], Path::DUALCARRIAGEWAY); // Gdańsk - Bydgoszcz
     addPath(cities[1], cities[12], Path::HIGHWAY); // Warszawa - Łódź
     addPath(cities[12], cities[6], Path::HIGHWAY); // Łódź - Poznań
     addPath(cities[9], cities[2], Path::DUALCARRIAGEWAY); // Gorzów Wielkopolski - Szczecin
@@ -102,12 +103,12 @@ void MapProperties::fill() {
     addPath(cities[15], cities[0]); // Kielce - Kraków
     addPath(cities[0], cities[11]); // Kraków - Katowice
     addPath(cities[0], cities[10]); // Kraków - Rzeszów
-    addPath(cities[11], cities[14]); // Katowice - Opole
-    addPath(cities[14], cities[7]); // Opole - Wrocław
+    addPath(cities[11], cities[14], Path::HIGHWAY); // Katowice - Opole
+    addPath(cities[14], cities[7], Path::HIGHWAY); // Opole - Wrocław
     addPath(cities[7], cities[6]); // Wrocław - Poznań
     addPath(cities[7], cities[8]); // Wrocław - Zielona Góra
-    addPath(points[5], cities[6]); // Punkt 5 - Poznań
-    addPath(points[5], cities[9]); // Punkt 5 - Gorzów Wielkopolski
+    addPath(points[5], cities[6], Path::DUALCARRIAGEWAY); // Punkt 5 - Poznań
+    addPath(points[5], cities[9], Path::DUALCARRIAGEWAY); // Punkt 5 - Gorzów Wielkopolski
     addPath(points[5], cities[8]); // Punkt 5 - Zielona Góra
     addPath(cities[16], points[6]); // Olsztyn - Punkt 6
     addPath(points[6], cities[1]); // Punkt 6 - Warszawa
@@ -115,6 +116,11 @@ void MapProperties::fill() {
     addPath(points[7], cities[5]); // Punkt 6 - Bydgoszcz
     addPath(points[7], cities[12]); // Punkt 6 - Łódź
     addPath(cities[6], points[1]); // Poznań - Punkt 1
+    addPath(points[8], cities[12]); // Punkt 8 - Łódź
+    addPath(points[8], cities[7]); // Punkt 8 - Wrocław
+    addPath(points[8], cities[11]); // Punkt 8 - Katowice
+    addPath(points[4], cities[13]); // Punkt 4 - Lublin
+    addPath(cities[1], cities[13], Path::DUALCARRIAGEWAY); // Warszawa - Lublin
 }
 
 
