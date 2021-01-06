@@ -36,14 +36,15 @@ async def request_handler(websocket, path):
 
             cpp_map.run()
 
-            output_json =""
+            output_json ="["
             iter = 0
             for x in map_agents:
                 #output_json += json.loads(cpp_map.get_agent_route(iter).__dict__)
-                output_json += cpp_map.get_agent_route(iter)
-                #print(cpp_map.get_agent_route(iter)) #
+                output_json += cpp_map.get_agent_route(iter)+", "
                 iter += 1
 
+            output_json = output_json[:-2]
+            output_json += "]"
             print(output_json)
 
             await (websocket.send(output_json))

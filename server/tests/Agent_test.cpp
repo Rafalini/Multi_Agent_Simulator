@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(basicAgentTest)
 			table.load_speed    = 1;
 			table.unload_speed  = 1;
 
-      Agent a1(c1,c2, 5, table);
+      Agent a1(0,c1,c2, 5, table);
     	BOOST_CHECK_EQUAL(a1.getLoad(), 5);
 }
 
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(pathTest1_nodeInserts)
 		 Agent a;
 		 a.insert_first_neighbors(map, c1, c1, history);
 //two neighbors
-	   BOOST_CHECK_EQUAL(map.size(),2);
+	  BOOST_CHECK_EQUAL(map.size(),2);
 		std::shared_ptr<City> c11 = map[0].second.city.lock();
 		std::shared_ptr<City> c12 = map[1].second.city.lock();
 
@@ -244,7 +244,7 @@ BOOST_AUTO_TEST_CASE(agent_route_test)
     table.unload_speed  = 1;
     table.load_limit    = 5;
 
-    Agent a(c1,c2, 10, table);
+    Agent a(0,c1,c2, 10, table);
     a.agent_go();
     std::cout << a.get_history() << std::endl;
 }
