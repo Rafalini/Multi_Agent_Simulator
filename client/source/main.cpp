@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
     agents.addAgent(map.getCities()[0], map.getCities()[1], 20);
     agents.addAgent(map.getCities()[2], map.getCities()[1], 22);
     agents.addAgent(map.getCities()[1], map.getCities()[2], 230);
-    agents.addAgent(map.getCities()[2], map.getCities()[0], 2450);
-    agents.addAgent(map.getCities()[1], map.getCities()[0], 265470);
+    agents.addAgent(map.getCities()[2], map.getCities()[0], 160);
+    agents.addAgent(map.getCities()[1], map.getCities()[0], 200);
 
     RemoteConnector remote(&map, &agents);
 
