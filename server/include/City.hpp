@@ -4,15 +4,14 @@
 #include <string>
 #include <vector>
 #include <memory>
-
-enum connections {COUNTRY=0,EXPRESS,HIGHWAY};
+#include "Road.hpp"
 
 class City;
 
 struct neighbor{
+  std::shared_ptr<City> city;
+  std::shared_ptr<Road> road;
   double distance;
-  std::shared_ptr<City> neighbor;
-  connections connection;
 };
 
 class City{
@@ -22,13 +21,12 @@ class City{
         double oy=0;
 
         std::vector<neighbor> neighbors;
-        //std::vector<std::pair<neighbor,road>> neighbors;
 
         public:
            City();
            City(int _id, std::string _city, double _ox, double _oy);
 
-           void add_neighbor(std::shared_ptr<City> neighbor, int conn);
+           void add_neighbor(std::shared_ptr<City> neighbor, std::shared_ptr<Road> road);
            double get_distance_to(City city);
 
            int get_id();
@@ -36,7 +34,6 @@ class City{
            double get_ox();
            double get_oy();
            std::vector<neighbor> get_neighbors();
-
 };
 
 #endif

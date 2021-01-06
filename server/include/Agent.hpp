@@ -42,13 +42,15 @@ class Agent{
         data_table limits;
 
 
-        std::weak_ptr<City> positionA;
-        float A_B_progress;
-        std::weak_ptr<City> positionB;
         std::vector<int> path; //ids of nodes
 
         std::vector<std::string> history;
         bool accident_happened = false;
+
+
+        std::string print_moving(int loc_id, int duration, std::string location);
+        std::string print_accident(int loc_id, int duration, std::string location);
+
 public:
 //public for tests
         void path_finder(std::shared_ptr<City> origin, std::shared_ptr<City> destination);
@@ -62,14 +64,14 @@ public:
         Agent(); //for tests
 
 //public methods
-           Agent(int id, std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, data_table _table);
-           std::weak_ptr<City> getOrigin();
-           std::weak_ptr<City> getDestination();
-           int getLoad();
-           int get_id();
-           void agent_go();
-           std::string get_history();
-           std::vector<std::string> get_his(); //for tests
+         Agent(int id, std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, data_table _table);
+         std::weak_ptr<City> getOrigin();
+         std::weak_ptr<City> getDestination();
+         int getLoad();
+         int get_id();
+         void agent_go();
+         std::string get_history();
+         std::vector<std::string> get_his(); //for tests
 };
 
 #endif

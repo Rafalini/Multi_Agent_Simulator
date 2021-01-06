@@ -28,16 +28,16 @@ void Agent::insert_neighbors(	std::vector<std::pair<double,graph_node>> &points,
 		std::vector<neighbor> neighbors = origin->get_neighbors();
 
 		for(int i=0; i<(int)neighbors.size(); ++i){
-					std::shared_ptr<City> neighbor = neighbors[i].neighbor;
+					std::shared_ptr<City> next_city = neighbors[i].city;
 
-					if(neighbor->get_id() != previous->get_id() && history.find(neighbor->get_id())==history.end())	{//dont add previously visited node
+					if(next_city->get_id() != previous->get_id() && history.find(next_city->get_id())==history.end())	{//dont add previously visited node
 
-								double metric = origin->get_distance_to(*neighbor)+		//cost to neighbor
-																target->get_distance_to(*neighbor)+		//direction cost
+								double metric = origin->get_distance_to(*next_city)+		//cost to neighbor
+																target->get_distance_to(*next_city)+		//direction cost
 																cost;								//previous cost
 
-								points.push_back(std::make_pair(metric, graph_node(neighbor, origin)));
-								history.insert(std::make_pair(neighbor->get_id(),origin->get_id()));
+								points.push_back(std::make_pair(metric, graph_node(next_city, origin)));
+								history.insert(std::make_pair(next_city->get_id(),origin->get_id()));
 					}
 		}
 }
@@ -47,12 +47,12 @@ void Agent::insert_first_neighbors(std::vector<std::pair<double,graph_node>> &po
 {
 	std::vector<neighbor> neighbors = origin->get_neighbors();
 	for(long unsigned int i=0; i<neighbors.size(); ++i){
-				std::shared_ptr<City> neighbor = neighbors[i].neighbor;
+				std::shared_ptr<City> next_city = neighbors[i].city;
 
-				double metric = origin->get_distance_to(*neighbor)+		//cost to neighbor
-												target->get_distance_to(*neighbor);		//direction cost
-			  points.push_back(std::make_pair(metric, graph_node(neighbor, origin)));
-				history.insert(std::make_pair(neighbor->get_id(),origin->get_id()));
+				double metric = origin->get_distance_to(*next_city)+		//cost to neighbor
+												target->get_distance_to(*next_city);		//direction cost
+			  points.push_back(std::make_pair(metric, graph_node(next_city, origin)));
+				history.insert(std::make_pair(next_city->get_id(),origin->get_id()));
 	}
 }
 
@@ -102,46 +102,44 @@ void Agent::path_finder(std::shared_ptr<City> position, std::shared_ptr<City> ta
 
 void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> target)
 {
-		path_finder(position, target);
+		path_finder(position, target); //fill path for the first time
 		std::shared_ptr<City> current_pos = position;
 
 		while(path.size()>1)
 		{
-			double distance, speed;
+			path_finder(current_pos, target);
 
 			std::vector<neighbor> cities = current_pos->get_neighbors();
+			int id = path[path.size()-2]; //last id = next node
 
-			for(auto city : cities)
-				if(city.neighbor->get_id() == path[path.size()-2])
-				{
-					distance = city.distance;
-					current_pos = city.neighbor;
-					switch(city.connection)
-					{
-						case COUNTRY: speed = limits.max_speed_0; break;
-						case EXPRESS: speed = limits.max_speed_1; break;
-						case HIGHWAY: speed = limits.max_speed_2; break;
-					}
-					break;
-				}
+			auto next_city = std::find_if(cities.begin(), cities.end(), [&id](const neighbor &n)
+																									{return n.city->get_id() == id;});
+      if(next_city != cities.end()){
+				current_pos = next_city->city;
 
-			std::string information, location;
-
-			if(current_pos->get_name().find("point") != std::string::npos)
-				location = "point";
-			else
-				location = "city";
-
-
-			information = std::string("{\"state\": ")+
-										std::string("\"moving\", ")+
-										std::string("\"locationtype\":")+
-										"\""+location+"\","+
-										std::string("\"locationid\": \"")+ std::to_string(path[path.size()-1])+std::string("\",")+
-										std::string("\"duration\": \"")+ std::to_string((int)(speed*distance))+std::string("\"}");
-			history.push_back(information);
-			path_finder(current_pos, target);
+				history.push_back(print_moving(path[path.size()-1],(int)(next_city->road->get_speed()*next_city->distance), //location, city or point
+				(current_pos->get_name().find("point") != std::string::npos)? "point":"city"));
+			}
 		}
+}
+
+std::string Agent::print_moving(int loc_id, int duration, std::string location)
+{
+	return        std::string("{\"state\": ")+
+								std::string("\"moving\", ")+
+								std::string("\"locationtype\":")+
+								"\""+location+"\","+
+								std::string("\"locationid\": \"")+ std::to_string(loc_id)+std::string("\",")+
+								std::string("\"duration\": \"")+ std::to_string(duration)+std::string("\"}");
+}
+std::string Agent::print_accident(int loc_id, int duration, std::string location)
+{
+	return        std::string("{\"state\": ")+
+								std::string("\"moving\", ")+
+								std::string("\"locationtype\":")+
+								"\""+location+"\","+
+								std::string("\"locationid\": \"")+ std::to_string(loc_id)+std::string("\",")+
+								std::string("\"duration\": \"")+ std::to_string(duration)+std::string("\"}");
 }
 
 void Agent::agent_load()

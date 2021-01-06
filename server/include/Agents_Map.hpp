@@ -20,7 +20,6 @@ class Agents_Map{
            void add_path(int begin, int end, int type);
            void run();
            std::string get_agent_route(int id);
-           //friend std::ostream& operator<< (std::ostream& os, Server_Core& s);
 };
 
 #endif
