@@ -191,5 +191,5 @@ std::string Agent::get_history()
 	std::string output;
 	for(long unsigned int i=0; i<history.size(); i++)
 				output += history[i]+", ";
-	return output;
+	return output.substr(0, route.size()-1);
 }
