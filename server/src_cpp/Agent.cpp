@@ -9,14 +9,15 @@
 
 
 Agent::Agent(){}
-Agent::Agent(std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, data_table _table)
-																 : limits(_table), origin(_origin), destination(_destination), total_load_to_transport(_load){}
+Agent::Agent(int _id, std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, data_table _table)
+																 : agent_id(_id), limits(_table), origin(_origin), destination(_destination), total_load_to_transport(_load){}
 
 std::weak_ptr<City> Agent::getOrigin() {return origin;}
 std::weak_ptr<City> Agent::getDestination() {return destination;}
 int Agent::getLoad() {return total_load_to_transport;}
 int Agent::get_id() {return agent_id;}
 std::vector<int> Agent::get_path() {return path;} //ids of nodes
+std::vector<std::string> Agent::get_his() {return history;}
 
 
 void Agent::insert_neighbors(	std::vector<std::pair<double,graph_node>> &points, double cost,	graph_node &node,
@@ -190,5 +191,5 @@ std::string Agent::get_history()
 	std::string output;
 	for(long unsigned int i=0; i<history.size(); i++)
 				output += history[i]+", ";
-	return output;
+	return output.substr(0, route.size()-1);
 }
