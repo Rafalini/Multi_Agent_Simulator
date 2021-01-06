@@ -29,11 +29,12 @@ int main(int argc, char *argv[])
 
     //fill default agents
     Agents agents;
-    agents.addAgent(map.getCities()[0], map.getCities()[1], 20);
-    agents.addAgent(map.getCities()[2], map.getCities()[1], 22);
-    agents.addAgent(map.getCities()[1], map.getCities()[2], 230);
-    agents.addAgent(map.getCities()[2], map.getCities()[0], 2450);
-    agents.addAgent(map.getCities()[1], map.getCities()[0], 265470);
+    auto cities = map.getCities();
+    agents.addAgent(cities[0], cities[1], 20);
+    agents.addAgent(cities[2], cities[1], 22);
+    agents.addAgent(cities[1], cities[2], 230);
+    agents.addAgent(cities[2], cities[0], 160);
+    agents.addAgent(cities[1], cities[0], 200);
 
     RemoteConnector remote(&map, &agents);
 

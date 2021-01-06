@@ -28,7 +28,6 @@ public:
     Q_INVOKABLE void removePath(Path* path);
     Q_INVOKABLE void splitPath(Path* old_path, double x, double y);
     Q_INVOKABLE void promotePointToCity(Point*, QString name);
-    Q_INVOKABLE City* getCityById(int id);
     Q_INVOKABLE Point* getPointById(int id);
     void fill();
 

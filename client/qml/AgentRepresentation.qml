@@ -9,15 +9,15 @@ Item {
     Text {
         id: agentText
         anchors.bottom: rec.top
-        visible: parent.visible
     }
 
     function animationFinished() {}
 
-    Text {
+    Image {
         id: rec
-        text: '🚚';
-        visible: parent.visible
+        width: 15
+        height: width
+        source: "../resource/truck_icon.png"
     }
     Connections {
         target: agent_
@@ -40,15 +40,9 @@ Item {
         animationDuration = current["duration"] * 10;
         if(current["state"] === "moving") {
             agentText.text = "";
-            if(current["locationtype"] === "city") {
-                let city = map.getCityById(current["locationid"]);
-                xAnimation.to = city.x*parent.width;
-                yAnimation.to = city.y*parent.height;
-            } else {
-                let point = map.getPointById(current["locationid"]);
-                xAnimation.to = point.x*parent.width;
-                yAnimation.to = point.y*parent.height;
-            }
+            let point = map.getPointById(current["locationid"]);
+            xAnimation.to = point.x*parent.width;
+            yAnimation.to = point.y*parent.height;
         } else if(current["state"] === "loading"){
             agentText.text = "Trwa załadunek...";
             xAnimation.to = x+1;
