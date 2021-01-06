@@ -28,9 +28,7 @@ test:
 	$(CC) $(CFLAGS) $(INC) -c $(TESTDIR)/Agent_test.cpp -o $(BUILDDIR)/Agent_test.o
 	$(CC) $(CFLAGS) $(INC) -c $(SRCDIR)/City.cpp -o $(BUILDDIR)/City.o
 	$(CC) $(CFLAGS) $(INC) -c $(TESTDIR)/City_test.cpp -o $(BUILDDIR)/City_test.o
-	$(CC) $(BUILDDIR)/Agent.o  $(BUILDDIR)/Agent_test.o -o $(TARGETDIR)/test_agent $(TESTFLAG)
-	$(CC) $(BUILDDIR)/City.o  $(BUILDDIR)/City_test.o -o $(TARGETDIR)/test_city $(TESTFLAG)
-
-runtests:
-	./bin/test_agent
+	$(CC) $(BUILDDIR)/City.o $(BUILDDIR)/Agent.o $(BUILDDIR)/Agent_test.o -o $(TARGETDIR)/test_agent $(TESTFLAG)
+	$(CC) $(BUILDDIR)/City.o $(BUILDDIR)/City_test.o -o $(TARGETDIR)/test_city $(TESTFLAG)
 	./bin/test_city
+	./bin/test_agent

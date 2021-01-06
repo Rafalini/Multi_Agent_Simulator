@@ -9,14 +9,17 @@
 #include "Agent.hpp"
 
 class Agents_Map{
-        std::vector<std::shared_ptr<City>>  cities;
+        data_table table;
+        std::vector<std::shared_ptr<City>>  points;
         std::vector<std::shared_ptr<Agent>> agents;
 
         public:
            Agents_Map();
-           void add_city(std::string name, double ox, double oy);
-           void add_agent(std::string origin, std::string destination, int load);
+           void add_map_point(int id, std::string name, double ox, double oy);
+           void add_agent(int id, std::string origin, std::string destination, int load);
+           void add_path(int begin, int end, int type);
            void run();
+           std::string get_agent_route(int id);
            //friend std::ostream& operator<< (std::ostream& os, Server_Core& s);
 };
 
