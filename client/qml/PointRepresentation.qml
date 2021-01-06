@@ -20,15 +20,15 @@ Item {
     Drag.active: draggedRec.drag.active
     Drag.hotSpot.x: 0
     Drag.hotSpot.y: 0
-    property var color: "blue"
+    property var color: "#cccccc"
     Rectangle {
         id: rec
         anchors.verticalCenter: parent.top
         anchors.horizontalCenter: parent.left
         color: parent.color
-        width: 14
-        height: 14
-        radius: 5
+        width: 2*radius
+        height: width
+        radius: 4
         MouseArea {
             id: draggedRec
             enabled: !pointRepresentation.isInAnimationMode

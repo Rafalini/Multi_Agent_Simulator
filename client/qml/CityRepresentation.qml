@@ -6,7 +6,7 @@ PointRepresentation {
     property var city
     point: city
     color: "red"
-
+    rec.radius: 6
     Text{
         id: cityName
         text: city ? city.name : ""

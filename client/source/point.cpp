@@ -49,11 +49,6 @@ QJsonObject Point::toJson() const {
     obj["x"] = x;
     obj["y"] = y;
     obj["id"] = id;
-//    QJsonArray pathsArray;
-//    for(auto &path : paths) {
-//        pathsArray.append(path->getId());
-//    }
-//    obj["paths"] = pathsArray;
     return obj;
 }
 

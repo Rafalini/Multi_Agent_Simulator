@@ -41,11 +41,13 @@ Item {
         if(current["state"] === "moving") {
             agentText.text = "";
             if(current["locationtype"] === "city") {
-                xAnimation.to = map.cities[current["locationid"]].x*parent.width;
-                yAnimation.to = map.cities[current["locationid"]].y*parent.height;
+                let city = map.getCityById(current["locationid"]);
+                xAnimation.to = city.x*parent.width;
+                yAnimation.to = city.y*parent.height;
             } else {
-                xAnimation.to = map.points[current["locationid"]].x*parent.width;
-                yAnimation.to = map.points[current["locationid"]].y*parent.height;
+                let point = map.getPointById(current["locationid"]);
+                xAnimation.to = point.x*parent.width;
+                yAnimation.to = point.y*parent.height;
             }
         } else if(current["state"] === "loading"){
             agentText.text = "Trwa załadunek...";

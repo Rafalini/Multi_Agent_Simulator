@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("agents", &agents);
 
     QQuickStyle::setStyle("Material");
-
+    qmlRegisterUncreatableType<Path>("MultiAgentSimulator", 1, 0,  "RoadType", "Error: only enums");
     engine.load(url);
     return app.exec();
 }
