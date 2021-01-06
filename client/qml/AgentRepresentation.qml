@@ -9,16 +9,15 @@ Item {
     Text {
         id: agentText
         anchors.bottom: rec.top
-        visible: parent.visible
     }
 
     function animationFinished() {}
 
-    Text {
+    Image {
         id: rec
-//        text: '🚚';
-        text: "\uD83D\uDE9A"
-        visible: parent.visible
+        width: 15
+        height: width
+        source: "../resource/truck_icon.png"
     }
     Connections {
         target: agent_
