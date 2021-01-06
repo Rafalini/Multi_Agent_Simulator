@@ -41,12 +41,12 @@ void MapProperties::fill() {
 //    addCity("Szczecin", 0.1, 0.12);
 //    addPoint(0.1, 0.5);
 //    addPoint(0.5, 0.7);
-//    addPath(getCities()[0], getPoints()[0]);
-//    addPath(getCities()[0], getPoints()[1]);
-//    addPath(getCities()[1], getPoints()[0]);
-//    addPath(getCities()[1], getPoints()[1]);
-//    addPath(getCities()[2], getPoints()[0]);
-//    addPath(getCities()[2], getCities()[1]);
+//    addPath(cities[0], points[0]);
+//    addPath(cities[0], points[1]);
+//    addPath(cities[1], points[0]);
+//    addPath(cities[1], points[1]);
+//    addPath(cities[2], points[0]);
+//    addPath(cities[2], cities[1]);
 
 
 //FULL MAP
