@@ -127,7 +127,7 @@ void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> ta
 
 						while(path.size()>1 && !accident_happened)
 						{
-							path_finder(current_pos, target);
+							//path_finder(current_pos, target);
 							std::vector<neighbor> cities = current_pos->get_neighbors();
 							int id = path[path.size()-2]; //last id=this node id, last-1 = next node
 
@@ -146,6 +146,7 @@ void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> ta
 									distance_made+=next_city->distance;
 									history.push_back(print_moving(path[path.size()-2],(int)(next_city->road->get_speed()*next_city->distance)*Agent::time_scale));
 								}
+								path_finder(current_pos, target);
 							}
 						}
 				}
