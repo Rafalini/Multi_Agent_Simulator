@@ -9,6 +9,8 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <ctime>
+#include <cstdlib>
 
 #include "Agents_Map.hpp"
 #include "City.hpp"
@@ -17,14 +19,17 @@
 
 Agents_Map::Agents_Map()
       {
-        table.max_speed_0   = 50;
-        table.max_speed_1   = 50;
-        table.max_speed_2   = 50;
-        table.accident      = 0.1;
-        table.step          = 0.00001;
-        table.load_speed    = 1;
-        table.unload_speed  = 1;
+        table.max_speed_0   = 60;
+        table.max_speed_1   = 80;
+        table.max_speed_2   = 100;
+        table.accident      = 0;
+        table.unload_time_per_unit  = 4;
+        table.unload_time_per_unit  = 4;
         table.load_limit    = 20;
+        table.break_time    = 1;
+        table.non_stop_working_time = 4;
+
+        srand(time(NULL));
       }
 
 void Agents_Map::add_map_point(int id, std::string name, double ox, double oy)
@@ -71,13 +76,33 @@ std::string Agents_Map::get_agent_route(int id)
         return route;
       }
 
-BOOST_PYTHON_MODULE(map_module)
-    {
+std::string Agents_Map::get_agent_raport(int id)
+      {
+        std::string raport;
+        auto agent = std::find_if(agents.begin(), agents.end(), [&id](std::shared_ptr<Agent> &a)
+                                                                    {return a->get_id() == id;});
+        if(agent != agents.end())
+            raport = (*agent)->get_raport();
 
-        boost::python::class_<Agents_Map>("Agents_Map", boost::python::init<>())
-            .def("add_map_point", &Agents_Map::add_map_point)
-            .def("add_agent", &Agents_Map::add_agent)
-            .def("run", &Agents_Map::run)
-            .def("get_agent_route", &Agents_Map::get_agent_route)
-            .def("add_path", &Agents_Map::add_path);
-    }
+        return raport;
+      }
+
+
+void Agents_Map::clean()
+      {
+        points.clear();
+        agents.clear();
+      }
+
+BOOST_PYTHON_MODULE(map_module)
+      {
+
+          boost::python::class_<Agents_Map>("Agents_Map", boost::python::init<>())
+              .def("add_map_point", &Agents_Map::add_map_point)
+              .def("add_agent", &Agents_Map::add_agent)
+              .def("run", &Agents_Map::run)
+              .def("get_agent_route", &Agents_Map::get_agent_route)
+              .def("get_agent_raport", &Agents_Map::get_agent_raport)
+              .def("add_path", &Agents_Map::add_path)
+              .def("clean", &Agents_Map::clean);
+      }

@@ -23,11 +23,14 @@ class City{
         std::vector<neighbor> neighbors;
 
         public:
+          static const int distance_per_unit = 941;
+
            City();
            City(int _id, std::string _city, double _ox, double _oy);
 
            void add_neighbor(std::shared_ptr<City> neighbor, std::shared_ptr<Road> road);
            double get_distance_to(City city);
+           double get_distance_to(std::shared_ptr<City> city);
 
            int get_id();
            std::string get_name();

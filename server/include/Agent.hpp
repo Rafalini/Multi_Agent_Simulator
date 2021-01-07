@@ -8,16 +8,18 @@
 #include "City.hpp"
 
 struct data_table{
-  int max_speed_0;
-  int max_speed_1;
-  int max_speed_2;
+  int max_speed_0=1;
+  int max_speed_1=2;
+  int max_speed_2=3;
 
-  double accident; //<0-1>
-  double step;
+  int accident=1; //<0-100>
 
-  int load_speed;
-  int unload_speed;
-  int load_limit;
+  int load_time_per_unit=5;
+  int unload_time_per_unit=5;
+  int load_limit=20;
+
+  int non_stop_working_time=4;
+  int break_time=1;
 };
 
 struct graph_node{
@@ -33,6 +35,9 @@ struct graph_node{
 
 class Agent{
     private:
+        static const int accident_rate = 100; //how longe distance has to be to accident may happen [km]
+        static const int time_scale = 5; //how longe distance has to be to accident may happen [km]
+
         int agent_id;
         std::weak_ptr<City> origin;
         std::weak_ptr<City> destination;
@@ -40,7 +45,10 @@ class Agent{
         int current_load=0;
 
         data_table limits;
-
+        int goods_delivered=0;
+        double distance_made=0;
+        int time_on_track=0;
+        int progres_between_cities=0; //<0-100>%
 
         std::vector<int> path; //ids of nodes
 
@@ -48,8 +56,10 @@ class Agent{
         bool accident_happened = false;
 
 
-        std::string print_moving(int loc_id, int duration, std::string location);
-        std::string print_accident(int loc_id, int duration, std::string location);
+        std::string print_moving(int loc_id, int duration);
+        std::string print_accident(int loc_id, int duration, double proc);
+
+        bool check_if_accident(int distance);
 
 public:
 //public for tests
@@ -59,6 +69,7 @@ public:
         void agent_load();
         void agent_unload();
         void agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> target);
+        void move_step_ahead();
         std::vector<int> get_path(); //ids of nodes
 
         Agent(); //for tests
@@ -71,6 +82,7 @@ public:
          int get_id();
          void agent_go();
          std::string get_history();
+         std::string get_raport();
          std::vector<std::string> get_his(); //for tests
 };
 
