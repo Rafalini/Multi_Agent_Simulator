@@ -12,9 +12,8 @@ Page {
         RowLayout {
             id: listViewLabel
             Layout.fillWidth: true
-
             Repeater {
-                model: ["Miasto początkowe","Miasto końcowe", "Ładunek"]
+                model: ["Miasto początkowe","Miasto końcowe", "Ładunek", "Ładowność"]
                 Label {
                     id: beginingHeaderLabel
                     Layout.preferredWidth: page.labelWidth
@@ -46,12 +45,13 @@ Page {
                 required property var destination
                 required property var load
                 required property var agent
+                required property var capacity
                 width: row.width
                 height: row.height
                 RowLayout {
                     id: row
                     Repeater {
-                        model: [begining.name, destination.name, load]
+                        model: [begining.name, destination.name, load, capacity]
 
                         Label {
                             id: beginingLabel
