@@ -13,6 +13,7 @@ async def request_handler(websocket, path):
 
             map = dict["map"]
             map_agents = dict["agents"]
+            map_agent_ids = []
             map_cities = map["cities"]
             map_points = map["points"]
             map_paths = map["paths"]
@@ -25,8 +26,9 @@ async def request_handler(websocket, path):
                 print("Miasto: "+str(x["id"])+" "+x["name"]+" "+str(x["x"])+" "+str(x["y"]))
             for x in map_points:
                 cpp_map.add_map_point(x["id"],"point_"+str(x["id"]), x["x"], x["y"])
-                print("Pubnkt: "+str(x["id"])+" "+"point_"+str(x["id"])+" "+str(x["x"])+" "+str(x["y"]))
+                print("Punkt:  "+str(x["id"])+" "+"point_"+str(x["id"])+" "+str(x["x"])+" "+str(x["y"]))
             for x in map_agents:
+                map_agent_ids.append(x["id"])
                 cpp_map.add_agent(x["id"],x["begining"], x["destination"], x["load"])
                 print("Agent: "+str(x["id"])+" "+x["begining"]+" "+x["destination"]+" "+str(x["load"]))
             for x in map_paths:
@@ -37,15 +39,15 @@ async def request_handler(websocket, path):
             cpp_map.run()
 
             output_json ="["
-            iter = 0
-            for x in map_agents:
-                #output_json += json.loads(cpp_map.get_agent_route(iter).__dict__)
-                output_json += cpp_map.get_agent_route(iter)+", "
-                iter += 1
+            for x in map_agent_ids:
+                output_json += cpp_map.get_agent_route(x)+", "
+                print("Agent: "+str(x)+" "+cpp_map.get_agent_raport(x))
 
             output_json = output_json[:-2]
             output_json += "]"
             print(output_json)
+
+            cpp_map.clean()
 
             await (websocket.send(output_json))
         except Exception as e:
