@@ -116,7 +116,7 @@ Page {
         }
 
         Label {
-            text: "Prawdopodonieństwo wypadku agenta na odcinki 10km:"
+            text: "Prawdopodonieństwo wypadku agenta na odcinku 100km:"
         }
         TextField {
             id: accidentProbability
