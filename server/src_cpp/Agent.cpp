@@ -122,8 +122,8 @@ void Agent::hit_the_road(double distance, neighbor next_city) //jack
 						if(time_on_track == limits.non_stop_working_time)
 						{
 							move_duration = (int)((current_progress-duration)*City::distance_per_unit/next_city.road->get_speed());
-							history.push_back(print_moving(next_city.city->get_id(), move_duration*Agent::time_scale, current_progress/distance));
-							history.push_back(print_waiting(next_city.city->get_id(), limits.break_time*Agent::time_scale));
+							history.push_back(print_moving(next_city.city->get_id(), move_duration, current_progress/distance));
+							history.push_back(print_waiting(next_city.city->get_id(), limits.break_time));
 							duration = current_progress;
 							time_on_track = 0;
 						}else{
@@ -133,7 +133,7 @@ void Agent::hit_the_road(double distance, neighbor next_city) //jack
 
 							if(distance < current_progress + next_step){
 									move_duration = (int)((10*distance-current_progress)*City::distance_per_unit/next_city.road->get_speed());
-									history.push_back(print_moving(next_city.city->get_id(), move_duration*Agent::time_scale));
+									history.push_back(print_moving(next_city.city->get_id(), move_duration));
 									break;
 							}else
 									current_progress += next_step;
@@ -266,6 +266,9 @@ std::string Agent::get_history()
 
 std::string Agent::get_raport()
 				{
-					return "przewiezono "+std::to_string(goods_delivered)+" towarow, pokonano: "+
-									std::to_string((int)distance_made)+" km.";
+					return std::string("\"delivered\": \"")+
+								 std::to_string(goods_delivered)+
+								 std::string("\", \"distance\" : \"")+
+								 std::to_string((int)distance_made)+
+								 std::string(" km.\"");
 				}
