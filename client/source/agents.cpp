@@ -32,6 +32,9 @@ QVariant Agents::data(const QModelIndex &index, int role) const { //unused role
     case LoadRole:
         return agents[index.row()]->getLoad();
         break;
+    case CapacityRole:
+        return agents[index.row()]->getCapacity();
+        break;
     case AgentRole:
         return QVariant::fromValue(agents[index.row()]);
         break;
@@ -45,20 +48,25 @@ QHash<int, QByteArray> Agents::roleNames() const {
     roles[BeginingRole] = "begining";
     roles[DestinationRole] = "destination",
     roles[LoadRole] = "load";
+    roles[CapacityRole] = "capacity";
     roles[AgentRole] = "agent";
     return roles;
 }
 
-void Agents::addAgent(City* begining, City* destination, double load) {
+void Agents::addAgent(City* begining, City* destination, const double& load, const double& capacity) {
     if(destination == begining) {
         emit wrongAddAgentArguments("Miasto docelowe i początkowe muszą być różne");
         return;
     }
     if(load <= 0) {
-        emit wrongAddAgentArguments("Ładunek musi być więc od 0");
+        emit wrongAddAgentArguments("Ładunek musi być większy od 0");
         return;
     }
-    Agent* newAgent = new Agent(begining, destination, load);
+    if(capacity <= 0) {
+        emit wrongAddAgentArguments("Ładowność musi być większa od 0");
+        return;
+    }
+    Agent* newAgent = new Agent(begining, destination, load, capacity);
     auto lambda = [newAgent, this]() {
             QModelIndex index = QAbstractListModel::index(agents.indexOf(newAgent), 0);
             emit QAbstractListModel::dataChanged(index, index);

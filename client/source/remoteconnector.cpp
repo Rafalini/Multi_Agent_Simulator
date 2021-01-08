@@ -11,10 +11,11 @@ RemoteConnector::RemoteConnector(MapProperties* map, Agents* agents) : map(map),
     connect(&webSocket, &QWebSocket::textMessageReceived, this, &RemoteConnector::onTextMessageReceived);
 }
 
-void RemoteConnector::submit() {
+void RemoteConnector::submit(const QJsonObject& parameters) {
     QJsonObject obj;
     obj["map"] = map->toJson();
     obj["agents"] = agents->toJson();
+    obj["parameters"] = parameters;
     QJsonDocument doc(obj);
     qDebug() << "trying to send a message...";
     sendMessage(doc.toJson(QJsonDocument::Compact));

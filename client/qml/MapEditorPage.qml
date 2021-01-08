@@ -11,7 +11,6 @@ Page {
         target: remoteConnector
         function onAnswerReceived() {
             tabBar.currentIndex = 2;
-            tabBar.visible = false;
             draggableArea.enabled = false;
         }
         function onAnswerParsed() {
@@ -49,8 +48,8 @@ Page {
             visible: x !== -1 && y && -1 && x2 !== -1 && y2 !== -1
             x: mapFrame.startPoint ? mapFrame.drawing ? mapFrame.startPoint.x*mapFrame.width : -1 : -1
             y: mapFrame.startPoint ? mapFrame.drawing ? mapFrame.startPoint.y*mapFrame.height : -1 : -1
-            x2: draggableArea.mouseX
-            y2: draggableArea.mouseY
+            x2: mapFrame.startPoint ? draggableArea.mouseX : x
+            y2: mapFrame.startPoint ? draggableArea.mouseY : y
         }
 
         MouseArea {

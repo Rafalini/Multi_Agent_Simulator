@@ -10,6 +10,7 @@ Popup {
         begining.currentIndex = -1;
         end.currentIndex = -1;
         load.text = "";
+        capacity.text = "";
         editedAgent = 0;
         this.visible = true;
     }
@@ -17,6 +18,7 @@ Popup {
     function editAgent(agent) {
         editedAgent = agent;
         load.text = agent.load.toString();
+        capacity.text = agent.capacity.toString();
         begining.currentIndex = -1;
         end.currentIndex = -1;
         for(var i = 0; i < begining.model.length; i++) {
@@ -51,8 +53,13 @@ Popup {
                 return false;
             }
 
-            if(load.text === "") {
-                windowDialog.showError("Nie podano ładunku");
+            if(load.text === "" || parseFloat(load.text) < 1) {
+                windowDialog.showError("Ładunek musi być nie mniejszy niż 1kg");
+                return false;
+            }
+
+            if(capacity.text === "" || parseFloat(capacity.text) < 1) {
+                windowDialog.showError("Ładowność pojazdu musi być nie mniejsza niż 1kg");
                 return false;
             }
             return true;
@@ -90,7 +97,7 @@ Popup {
         }
 
         Text {
-            text: qsTr("Ładunek [kg]")
+            text: qsTr("Ładunek do przewiezienia [kg]")
         }
 
         TextField {
@@ -104,12 +111,27 @@ Popup {
             Keys.onReturnPressed: parent.save()
         }
 
+        Text {
+            text: qsTr("Ładunek do przewiezienia [kg]")
+        }
+
+        TextField {
+            id: capacity
+            Layout.preferredWidth: 300
+            validator: DoubleValidator {
+                    locale: "en_US"
+                    bottom: 0
+            }
+            Keys.onEnterPressed: parent.save()
+            Keys.onReturnPressed: parent.save()
+        }
+
         function save() {
             if( !validate() ) return;
             if( editedAgent === 0 ) {
-                agents.addAgent(begining.model[begining.currentIndex], end.model[end.currentIndex], load.text.replace(',', ''));
+                agents.addAgent(begining.model[begining.currentIndex], end.model[end.currentIndex], load.text.replace(',', ''), capacity.text.replace(',', ''));
             } else {
-                editedAgent.update(begining.model[begining.currentIndex], end.model[end.currentIndex], load.text.replace(',', ''));
+                editedAgent.update(begining.model[begining.currentIndex], end.model[end.currentIndex], load.text.replace(',', ''), capacity.text.replace(',', ''));
             }
             agentPopup.visible = false;
         }

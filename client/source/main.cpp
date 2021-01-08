@@ -30,11 +30,11 @@ int main(int argc, char *argv[])
     //fill default agents
     Agents agents;
     auto cities = map.getCities();
-    agents.addAgent(cities[0], cities[1], 20);
-    agents.addAgent(cities[2], cities[1], 22);
-    agents.addAgent(cities[1], cities[2], 230);
-    agents.addAgent(cities[2], cities[0], 160);
-    agents.addAgent(cities[1], cities[0], 200);
+    agents.addAgent(cities[0], cities[1], 20, 200);
+    agents.addAgent(cities[2], cities[1], 22, 200);
+    agents.addAgent(cities[1], cities[2], 230, 100);
+    agents.addAgent(cities[2], cities[0], 160, 50);
+    agents.addAgent(cities[1], cities[0], 200, 500);
 
     RemoteConnector remote(&map, &agents);
 

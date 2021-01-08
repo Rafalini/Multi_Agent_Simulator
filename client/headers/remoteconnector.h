@@ -13,7 +13,7 @@ class RemoteConnector : public QObject
 
 public:
     RemoteConnector(MapProperties *map, Agents* agents);
-    Q_INVOKABLE void submit();
+    Q_INVOKABLE void submit(const QJsonObject& parameters);
 
 signals:
     void answerReceived();

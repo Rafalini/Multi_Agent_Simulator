@@ -10,18 +10,18 @@
 class Agents : public QAbstractListModel
 {
     Q_OBJECT
-
     enum AgentlRoles {
         BeginingRole = Qt::UserRole + 1,
         DestinationRole,
         LoadRole,
+        CapacityRole,
         AgentRole
     };
 
 public:
     explicit Agents(QObject *parent = nullptr);
     QJsonArray toJson() const ;
-    Q_INVOKABLE void addAgent(City* start, City* destination, double weight);
+    Q_INVOKABLE void addAgent(City* start, City* destination, const double& load, const double& capacity);
     Q_INVOKABLE Agent* getAgent(const QModelIndex &index);
     Q_INVOKABLE void removeAgent(Agent*);
     Q_INVOKABLE QVector<Agent*> getAgents() const;
