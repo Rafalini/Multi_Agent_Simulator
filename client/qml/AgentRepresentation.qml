@@ -48,11 +48,16 @@ Item {
             agentText.text = "";
             let point = map.getPointById(current["locationid"]);
             let percentage = 1;
+            let newX = point.x*percentage*parent.width;
+            let newY = point.y*percentage*parent.height;
             if(current.hasOwnProperty("percentage")) {
                 percentage = parseFloat(current["percentage"]);
+                newX = x + (newX-x)*percentage;
+                newY = y + (newY-y)*percentage;
+
             }
-            xAnimation.to = point.x*percentage*parent.width;
-            yAnimation.to = point.y*percentage*parent.height;
+            xAnimation.to = newX;
+            yAnimation.to = newY;
         } else {
             if(current["state"] === "loading"){
                 agentText.text = "Trwa załadunek...";
