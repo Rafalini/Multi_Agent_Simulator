@@ -3,6 +3,7 @@
 #include <boost/test/included/unit_test.hpp>
 #include "City.hpp"
 #include "Road.hpp"
+
 #include <memory>
 #include <vector>
 
@@ -61,7 +62,12 @@ BOOST_AUTO_TEST_CASE(neighboursCityTest1)
 		std::shared_ptr<City> c3 = std::make_shared<City>(2,"Warszawa2", 0, 1);
 		std::shared_ptr<City> c4 = std::make_shared<City>(3,"Krakow2", 1, 1);
 
-		std::shared_ptr<Road> r = std::make_shared<Road>(0);
+		data_table table;
+		table.max_speed_0   = 50;
+		table.max_speed_1   = 50;
+		table.max_speed_2   = 50;
+
+		std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
 
 		c1->add_neighbor(c2,r);  //  c1  ---  c2
 		c1->add_neighbor(c4,r);  //  |	   		|
@@ -104,7 +110,12 @@ BOOST_AUTO_TEST_CASE(neighboursCityTest2)
 		std::shared_ptr<City> c3 = std::make_shared<City>(2,"Warszawa2", 0, 1);
 		std::shared_ptr<City> c4 = std::make_shared<City>(3,"Krakow2", 1, 1);
 
-		std::shared_ptr<Road> r = std::make_shared<Road>(0);
+		data_table table;
+		table.max_speed_0   = 50;
+		table.max_speed_1   = 50;
+		table.max_speed_2   = 50;
+
+		std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
 
 		c1->add_neighbor(c2,r);  //  c1  ---- c2
 		c1->add_neighbor(c4,r);  //  | \____	|
