@@ -1,5 +1,6 @@
 #include "Agent.hpp"
 #include "City.hpp"
+
 #include <memory>
 #include <map>
 #include <algorithm>
@@ -9,8 +10,8 @@
 #include <cstdlib>
 
 Agent::Agent(){}
-Agent::Agent(int _id, std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, data_table _table)
-																 : agent_id(_id), origin(_origin), destination(_destination), total_load_to_transport(_load), limits(_table){}
+Agent::Agent(int _id, std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, int _cap, data_table _table)
+				: agent_id(_id), origin(_origin), destination(_destination), total_load_to_transport(_load), capacity(_cap), limits(_table){}
 
 std::weak_ptr<City> Agent::getOrigin() {return origin;}
 std::weak_ptr<City> Agent::getDestination() {return destination;}
@@ -113,41 +114,56 @@ bool Agent::check_if_accident(int distance)
 						return false;
 				}
 
-void Agent::move_step_ahead()
+void Agent::hit_the_road(double distance, neighbor next_city) //jack
 				{
-						//if(to_city_distance>step)
-								//go step
-								//rest
+					double current_progress=0, duration=0; //distance
+					int move_duration;
+					while(current_progress < distance)
+						if(time_on_track == limits.non_stop_working_time)
+						{
+							move_duration = (int)((current_progress-duration)*City::distance_per_unit/next_city.road->get_speed());
+							history.push_back(print_moving(next_city.city->get_id(), move_duration*Agent::time_scale, current_progress/distance));
+							history.push_back(print_waiting(next_city.city->get_id(), limits.break_time*Agent::time_scale));
+							duration = current_progress;
+							time_on_track = 0;
+						}else{
+							++time_on_track;
+							distance_made += next_city.road->get_speed();
+							double next_step = (double)next_city.road->get_speed() / (double)City::distance_per_unit;
+
+							if(distance < current_progress + next_step){
+									move_duration = (int)((10*distance-current_progress)*City::distance_per_unit/next_city.road->get_speed());
+									history.push_back(print_moving(next_city.city->get_id(), move_duration*Agent::time_scale));
+									break;
+							}else
+									current_progress += next_step;
+						}
 				}
 
 void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> target)
 				{
-						path_finder(position, target); //fill path for the first time
-						std::shared_ptr<City> current_pos = position;
+					path_finder(position, target); //fill path for the first time
+					std::shared_ptr<City> current_pos = position;
 
-						while(path.size()>1 && !accident_happened)
-						{
-							path_finder(current_pos, target);
-							std::vector<neighbor> cities = current_pos->get_neighbors();
-							int id = path[path.size()-2]; //last id=this node id, last-1 = next node
+					while(path.size()>1 && !accident_happened)
+					{
+						std::vector<neighbor> cities = current_pos->get_neighbors();
+						int id = path[path.size()-2]; //last id=this node id, last-1 = next node
 
-							auto next_city = std::find_if(cities.begin(), cities.end(), [&id](const neighbor &n)
-																													{return n.city->get_id() == id;});
-				      if(next_city != cities.end()){
+						auto next_city = std::find_if(cities.begin(), cities.end(), [&id](const neighbor &n)
+																												{return n.city->get_id() == id;});
+			      if(next_city != cities.end()){
+							if(check_if_accident((int)(next_city->distance*City::distance_per_unit))){
+									history.push_back(print_accident(path[path.size()-2],(int)(next_city->road->get_speed()*next_city->distance)*Agent::time_scale,0.5));
+							}	else
+							{
+								hit_the_road(current_pos->get_distance_to(next_city->city), *next_city);//jack
+								//history.push_back(print_moving(path[path.size()-2], 50));
 								current_pos = next_city->city;
-
-								if(check_if_accident((int)(next_city->distance*City::distance_per_unit))){
-										history.push_back(print_accident(path[path.size()-2],(int)(next_city->road->get_speed()*next_city->distance)*Agent::time_scale,0.5));
-								}	else
-								{
-									//while(progres_between_cities<100)
-									//		move_step_ahead();
-									//progres_between_cities=0;
-									distance_made+=next_city->distance;
-									history.push_back(print_moving(path[path.size()-2],(int)(next_city->road->get_speed()*next_city->distance)*Agent::time_scale));
-								}
 							}
+							path_finder(current_pos, target);
 						}
+					}
 				}
 
 std::string Agent::print_moving(int loc_id, int duration)
@@ -157,6 +173,22 @@ std::string Agent::print_moving(int loc_id, int duration)
 												std::string("\"locationid\": \"")+ std::to_string(loc_id)+std::string("\",")+
 												std::string("\"duration\": \"")+ std::to_string(duration)+std::string("\"}");
 				}
+std::string Agent::print_moving(int loc_id, int duration, double proc)
+				{
+					return        std::string("{\"state\": ")+
+												std::string("\"moving\", ")+
+												std::string("\"locationid\": \"")+ std::to_string(loc_id)+std::string("\",")+
+												std::string("\"duration\": \"")+ std::to_string(duration)+std::string("\",")+
+												std::string("\"percentage\": \"")+ std::to_string(proc)+std::string("\"}");
+				}
+std::string Agent::print_waiting(int loc_id, int duration)
+				{
+					return        std::string("{\"state\": ")+
+												std::string("\"break\", ")+
+												std::string("\"locationid\": \"")+ std::to_string(loc_id)+std::string("\",")+
+												std::string("\"duration\": \"")+ std::to_string(duration)+std::string("\"}");
+				}
+
 std::string Agent::print_accident(int loc_id, int duration, double proc)
 				{
 					return        std::string("{\"state\": ")+
@@ -168,10 +200,10 @@ std::string Agent::print_accident(int loc_id, int duration, double proc)
 
 void Agent::agent_load()
 				{
-						if(total_load_to_transport > limits.load_limit)
+						if(total_load_to_transport > capacity)
 						{
-								current_load = limits.load_limit;
-								total_load_to_transport -= limits.load_limit;
+								current_load = capacity;
+								total_load_to_transport -= capacity;
 						}
 						else
 						{
@@ -186,12 +218,13 @@ void Agent::agent_load()
 													std::string("\"locationid\": \"")+ std::to_string(ori->get_id())+std::string("\",")+
 													std::string("\"duration\": \"")+ std::to_string(limits.load_time_per_unit*current_load)+std::string("\"}");
 						history.push_back(information);
+						time_on_track=0;
 				}
 
 void Agent::agent_unload()
 				{
 					goods_delivered+=current_load;
-					std::shared_ptr<City> ori = origin.lock();
+					std::shared_ptr<City> ori = destination.lock();
 					std::string information;
 					information = std::string("{\"state\": ")+
 												std::string("\"unloading\", ")+
@@ -199,6 +232,7 @@ void Agent::agent_unload()
 												std::string("\"duration\": \"")+ std::to_string(limits.unload_time_per_unit*current_load)+std::string("\"}");
 				  current_load=0;
 					history.push_back(information);
+					time_on_track=0;
 				}
 
 void Agent::agent_go()
@@ -233,5 +267,5 @@ std::string Agent::get_history()
 std::string Agent::get_raport()
 				{
 					return "przewiezono "+std::to_string(goods_delivered)+" towarow, pokonano: "+
-									std::to_string(distance_made*City::distance_per_unit)+" km.";
+									std::to_string((int)distance_made)+" km.";
 				}

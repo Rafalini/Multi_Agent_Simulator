@@ -7,6 +7,7 @@
 #include "Road.hpp"
 
 class City;
+class Road;
 
 struct neighbor{
   std::shared_ptr<City> city;

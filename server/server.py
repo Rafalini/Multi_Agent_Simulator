@@ -17,9 +17,14 @@ async def request_handler(websocket, path):
             map_cities = map["cities"]
             map_points = map["points"]
             map_paths = map["paths"]
+            parameters = dict["parameters"]
 
             cpp_map = build.map_module.Agents_Map()
             print("\nwczytuje miasta i agentow do mapy...\n")
+
+            cpp_map.add_speeds(parameters["max_speed_0"],parameters["max_speed_1"],parameters["max_speed_2"])
+            cpp_map.add_loading_speeds(parameters["unload_speed"],parameters["load_speed"])
+            cpp_map.add_accident(parameters["accident"])
 
             for x in map_cities:
                 cpp_map.add_map_point(x["id"],x["name"], x["x"], x["y"])
@@ -29,8 +34,8 @@ async def request_handler(websocket, path):
                 print("Punkt:  "+str(x["id"])+" "+"point_"+str(x["id"])+" "+str(x["x"])+" "+str(x["y"]))
             for x in map_agents:
                 map_agent_ids.append(x["id"])
-                cpp_map.add_agent(x["id"],x["begining"], x["destination"], x["load"])
-                print("Agent: "+str(x["id"])+" "+x["begining"]+" "+x["destination"]+" "+str(x["load"]))
+                cpp_map.add_agent(x["id"],x["begining"], x["destination"], x["load"], x["capacity"])
+                print("Agent: "+str(x["id"])+" "+x["begining"]+" "+x["destination"]+" "+str(x["load"])+str(x["capacity"]))
             for x in map_paths:
                 cpp_map.add_path(x["begining"],x["end"],x["type"])
 

@@ -1,12 +1,14 @@
 #include "Road.hpp"
-Road::Road(int conn)
+#include "Agents_Map.hpp"
+
+Road::Road(int conn, data_table limits)
           {
               connection_type = static_cast<connections>(conn);
               switch(connection_type)
           					{
-          						case COUNTRY: speed = 60; break;
-          						case EXPRESS: speed = 80; break;
-          						case HIGHWAY: speed = 100; break;
+          						case COUNTRY: speed = limits.max_speed_0; break;
+          						case EXPRESS: speed = limits.max_speed_1; break;
+          						case HIGHWAY: speed = limits.max_speed_2; break;
           					}
           }
 
