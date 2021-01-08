@@ -43,7 +43,7 @@ Item {
             animationFinished();
             return;
         }
-        animationDuration = current["duration"] * 10;
+        animationDuration = current["duration"] * mapFrame.speed;
         if(current["state"] === "moving") {
             agentText.text = "";
             let point = map.getPointById(current["locationid"]);
