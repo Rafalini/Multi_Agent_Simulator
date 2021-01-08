@@ -69,6 +69,7 @@ private slots:
         comparableJson["destination"] = destination.getName();
         comparableJson["load"] = weight;
         comparableJson["capacity"] = capacity;
+        comparableJson["id"] = 0;
         Agent agent(&begining, &destination, weight, capacity);
         QCOMPARE(agent.tojSON(), comparableJson);
     }

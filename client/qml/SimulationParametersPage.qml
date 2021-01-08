@@ -13,7 +13,8 @@ Page {
     }
 
     function validate() {
-        var allFields = [standardRoadMaxSpeed, doubleCarriageWayRoadMaxSpeed, highwayMaxSpeed, accidentProbability, loadSpeed, unloadSpeed];
+        //timeBetweenBreaks breakDuration
+        var allFields = [standardRoadMaxSpeed, doubleCarriageWayRoadMaxSpeed, highwayMaxSpeed, accidentProbability, loadSpeed, unloadSpeed, timeBetweenBreaks, breakDuration];
         for(var field in allFields) {
             if(allFields[field].text === "") {
                 windowDialog.showError("Wszystkie pola muszą być wypełnione");
@@ -39,7 +40,12 @@ Page {
             return false;
         }
         if( parseInt(loadSpeed.text)<1 ||  parseInt(unloadSpeed.text)<1) {
-            windowDialog.showError("Tempot ładunku i rozładunku musi być większe od 0");
+            windowDialog.showError("Tempo ładunku i rozładunku musi być większe od 0");
+            return false;
+        }
+
+        if( parseInt(timeBetweenBreaks.text)<1 ||  parseInt(breakDuration.text)<1) {
+            windowDialog.showError("Czas między przerwami oraz przerwa muszą być większe od 0");
             return false;
         }
         return true;
@@ -154,6 +160,32 @@ Page {
                 }
         }
 
+        Label {
+            text: "Ilość godzin po której konieczny jest odpoczynek"
+        }
+        TextField {
+            id: timeBetweenBreaks
+            enabled: submitButton.enabled
+            text: "6"
+            selectByMouse: true
+            validator: IntValidator {
+                    bottom: 1
+                }
+        }
+
+        Label {
+            text: "Czas obowiązkowej przerwy po przejechaniu " + timeBetweenBreaks.text === "" ? 0 : parseInt(timeBetweenBreaks.text) + " godzin (w minutach)"
+        }
+        TextField {
+            id: breakDuration
+            enabled: submitButton.enabled
+            text: "30"
+            selectByMouse: true
+            validator: IntValidator {
+                    bottom: 1
+                }
+        }
+
 
         StyledButton {
             id: submitButton
@@ -169,7 +201,9 @@ Page {
                     "max_speed_2": parseInt(highwayMaxSpeed.text),
                     "accident": parseFloat(accidentProbability.text),
                     "load_speed": parseInt(loadSpeed.text),
-                    "unload_speed": parseInt(unloadSpeed.text)
+                    "unload_speed": parseInt(unloadSpeed.text),
+                    "time_between_breaks": 60*parseInt(timeBetweenBreaks.text),
+                    "break_duration": parseInt(breakDuration.text)
                 };
                 if(!isGraphicalButton.checked) {
                     parameters["number_of_simulations"] = parseInt(numberOfSimulations.text);

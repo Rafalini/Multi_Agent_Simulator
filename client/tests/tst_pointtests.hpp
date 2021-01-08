@@ -83,6 +83,7 @@ private slots:
         QJsonObject comparableJson;
         comparableJson["x"] = x;
         comparableJson["y"] = y;
+        comparableJson["id"] = 0;
         QJsonArray path;
         for(auto *obj : paths) {
              path.append(obj->toJson());
