@@ -24,9 +24,49 @@ Page {
         width: height
         height: 500
         scale: Math.min(parentItem.width/width, parentItem.height/height)
+        property int speed: 10
         Image {
             anchors.fill: parent
             source: "../resource/MapOfPoland.png"
+        }
+
+        Text {
+           id: timeText
+           anchors.right: parent.right
+           anchors.top: parent.top
+           color: "black"
+           visible: !draggableArea.enabled //display onlt during animation
+           property int minutes: 0
+           property int hour: 0
+           onVisibleChanged: {
+               if(!visible) {
+                   minutes = 0;
+                   hour = 0;
+               } else {
+                   minutes = 0;
+                   hour = 22;
+                   minutesAnimation.restart();
+               }
+           }
+           text: parseInt(hour) + ":" + (minutes < 10 ? "0" + minutes : minutes)
+           PropertyAnimation on minutes {
+                id: minutesAnimation
+                to: 60
+                from: 0
+                onFinished: {
+                    timeText.minutes = 0;
+                    timeText.hour += 1;
+                    if(timeText.hour === 24)
+                        timeText.hour = 0;
+                    if(timeText.hour > 21 || timeText.hour < 6)
+                        restart();
+                }
+                duration: mapFrame.speed * 60
+           }
+
+           NumberAnimation on x {
+               id: xAnimation
+           }
         }
 
         function finishDrawingPathAt(endPoint) {
