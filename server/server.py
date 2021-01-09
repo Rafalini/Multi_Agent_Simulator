@@ -45,11 +45,14 @@ async def request_handler(websocket, path):
 
             output_json ="["
             for x in map_agent_ids:
+                output_json += "{ \"history\": "
                 output_json += cpp_map.get_agent_route(x)+", "
-                print("Agent: "+str(x)+" "+cpp_map.get_agent_raport(x))
+                output_json += "\"statistics\": {"
+                output_json += cpp_map.get_agent_raport(x)+"} },"
+                #print("Agent: "+str(x)+" "+cpp_map.get_agent_raport(x))
 
             output_json = output_json[:-2]
-            output_json += "]"
+            output_json += "} ]"
             print(output_json)
 
             cpp_map.clean()

@@ -19,13 +19,13 @@ emsdk/emsdk_env.sh:
 build/index.html: emsdk/emsdk_env.sh build source/* headers/* qml/* $(QMAKE) build/Makefile
 	source emsdk/emsdk_env.sh && cd build && make && cp ../resource/Symulator_Wieloagentowy.html index.html
 	
-build/Makefile: Symulator_Wieloagentowy.pro build qml.qrc $(QMAKE)
+build/Makefile: Symulator_Wieloagentowy.pro build qml.qrc Qt
 	source emsdk/emsdk_env.sh && cd build && $(QMAKE) .. $(QMAKE_FLAGS) && sed -i $(SED_ARGUMENT) Makefile && sed -i 's|LFLAGS        = |LFLAGS        = -s TOTAL_MEMORY=33554432 |' Makefile
 
 run:
 	$(PYTHON) $(EMRUN) $(EMRUN_FLAGS) --port '8888' build/
 
-$(QMAKE): $(QT_INSTALLER)
+Qt: $(QT_INSTALLER)
 	./$(QT_INSTALLER) install qt.qt5.5151.wasm_32 --root $(PWD)/Qt --auto-answer telemetry-question=Yes,AssociateCommonFiletypes=Yes --accept-licenses --accept-obligations --email 300198@pw.edu.pl --pw fYBaX2CvzxaSZkewmpWg --confirm-command #--nd --nf
 
 $(QT_INSTALLER):
@@ -51,3 +51,7 @@ clean:
 	$(RM) -r build
 	$(RM) -r tests/build
 	$(RM) -r tests/build_wasm
+
+full_clean: clean
+	$(RM) -r Qt
+	$(RM) -r emsdk
