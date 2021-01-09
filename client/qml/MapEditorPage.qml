@@ -14,7 +14,7 @@ Page {
             draggableArea.enabled = false;
         }
         function onAnswerParsed() {
-            agentRepeater.visible = true;
+//            agentRepeater.visible = true;
             timeText.visible = true;
         }
     }
@@ -160,7 +160,7 @@ Page {
 
             Repeater {
                 id: agentRepeater
-                visible: false
+//                visible: false
                 anchors.fill: parent
                 model: agents
                 property int finishedAnimations: 0;
@@ -168,7 +168,7 @@ Page {
                     if(finishedAnimations === agents.rowCount()) {
                         tabBar.visible = true;
                         draggableArea.enabled = true;
-                        visible = false;
+//                        visible = false;
                         finishedAnimations = 0;
                     }
                 }
