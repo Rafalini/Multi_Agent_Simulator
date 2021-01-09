@@ -18,6 +18,9 @@ Page {
         }
     }
 
+
+    MapLegend {}
+
     Rectangle {
         id: mapFrame
         anchors.centerIn: parent
@@ -160,7 +163,6 @@ Page {
 
             Repeater {
                 id: agentRepeater
-//                visible: false
                 anchors.fill: parent
                 model: agents
                 property int finishedAnimations: 0;
@@ -168,7 +170,6 @@ Page {
                     if(finishedAnimations === agents.rowCount()) {
                         tabBar.visible = true;
                         draggableArea.enabled = true;
-//                        visible = false;
                         finishedAnimations = 0;
                     }
                 }
@@ -308,8 +309,6 @@ Page {
         id: agentsStatisticsPopup
         anchors.centerIn: parent
         visible: false
-//        contentWidth: agentsStatisticsListView.width
-//        contentHeight: agentsStatisticsListView.height
         background: Rectangle {
             color: "white"
             border.width: 1
