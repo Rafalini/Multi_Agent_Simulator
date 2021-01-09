@@ -60,6 +60,9 @@ Page {
                         timeText.hour = 0;
                     if(timeText.hour > 21 || timeText.hour < 6)
                         restart();
+                    else {
+                        agentsStatisticsPopup.open();
+                    }
                 }
                 duration: mapFrame.speed * 60
            }
@@ -296,6 +299,45 @@ Page {
         contentItem: Text {
             id: errorText
             text: qsTr("Nazwa miasta: ")
+        }
+    }
+
+    Popup {
+        id: agentsStatisticsPopup
+        anchors.centerIn: parent
+        visible: false
+        width: contentWidth
+        height: contentHeight
+        contentItem: ColumnLayout {
+            ListView {
+            model: agents
+
+            Layout.preferredHeight: contentHeight
+            Layout.preferredWidth: contentWidth
+
+            delegate: ItemDelegate {
+                required property var begining
+                required property var destination
+                required property var agent
+                width: row.width
+                height: row.height
+                id: delegate
+                property var repeaterValues: [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? agent.statistics["delivered"] : ""]
+                property var columnWidths: [30, 150, 150, 70]
+                RowLayout {
+                    id: row
+                    Repeater {
+                        model: delegate.repeaterValues.length
+                        Label {
+                            Layout.alignment: Qt.AlignVCenter
+                            horizontalAlignment: Qt.AlignHCenter
+                            Layout.preferredWidth: delegate.columnWidths[index]
+                            text: delegate.repeaterValues[index]
+                        }
+                    }
+                }
+            }
+        }
         }
     }
 

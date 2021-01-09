@@ -29,6 +29,21 @@ void Agent::setCapacity(double value)
     emit capacityUpdated();
 }
 
+int Agent::getId() const
+{
+    return id;
+}
+
+QJsonObject Agent::getStatistics() const
+{
+    return statistics;
+}
+
+void Agent::setStatistics(const QJsonObject &value)
+{
+    statistics = value;
+}
+
 void Agent::setHistory(const QJsonArray &history) {
     this->history = history;
     emit historyUpdated();

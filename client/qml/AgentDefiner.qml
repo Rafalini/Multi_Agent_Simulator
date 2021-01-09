@@ -112,7 +112,7 @@ Popup {
         }
 
         Text {
-            text: qsTr("Ładunek do przewiezienia [kg]")
+            text: qsTr("Ładowność pojazdu agenta [kg]")
         }
 
         TextField {

@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.15
 
 Page {
     id: page
-    property int labelWidth: 150
+    property var labelWidth: [30, 150, 150, 70, 70]
+    property var headers: ["id", "Miasto początkowe","Miasto końcowe", "Ładunek", "Ładowność"]
     ColumnLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         Layout.preferredHeight: parent.height
@@ -13,13 +14,13 @@ Page {
             id: listViewLabel
             Layout.fillWidth: true
             Repeater {
-                model: ["Miasto początkowe","Miasto końcowe", "Ładunek", "Ładowność"]
+                model: page.headers.length
                 Label {
-                    id: beginingHeaderLabel
-                    Layout.preferredWidth: page.labelWidth
+                    Layout.preferredWidth: page.labelWidth[index]
                     Layout.alignment: Qt.AlignVCenter
                     horizontalAlignment: Qt.AlignHCenter
-                    text: modelData
+                    text: page.headers[index]
+                    font.bold: true
                 }
             }
         }
@@ -46,21 +47,21 @@ Page {
                 required property var load
                 required property var agent
                 required property var capacity
+                required property int index
                 width: row.width
                 height: row.height
+                id: delegate
+                property var repeaterValues: [agent.id, begining.name, destination.name, load, capacity]
                 RowLayout {
                     id: row
                     Repeater {
-                        model: [begining.name, destination.name, load, capacity]
-
+                        model: page.headers.length
                         Label {
-                            id: beginingLabel
                             Layout.alignment: Qt.AlignVCenter
                             horizontalAlignment: Qt.AlignHCenter
-                            Layout.preferredWidth: page.labelWidth
-                            text: modelData
+                            Layout.preferredWidth: page.labelWidth[index]
+                            text: delegate.repeaterValues[index]
                         }
-
                     }
                     StyledButton {
                         Layout.fillHeight: true

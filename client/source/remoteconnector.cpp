@@ -49,9 +49,8 @@ void RemoteConnector::onTextMessageReceived(QString message) {
     emit answerReceived();
     for(int i = 0; i < arr.size(); ++i) {
         QJsonObject agentData = arr[i].toObject();
-//        qDebug() <<
         agents->addAgentHistory(i, agentData["history"].toArray());
-//        agents->addStatistics(i, agentData["statistics"].toObject());
+        agents->addAgentStatistics(i, agentData["statistics"].toObject());
     }
     emit answerParsed();
 }

@@ -65,6 +65,6 @@ QJsonObject Path::toJson() const {
     obj["id"] = id;
     obj["begining"] = begining->getId();
     obj["end"] = end->getId();
-    obj["type"] = 0;
+    obj["type"] = type;
     return obj;
 }
