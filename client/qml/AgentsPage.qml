@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.15
 
 Page {
     id: page
-    property var labelWidth: [30, 150, 150, 70, 70]
-    property var headers: ["id", "Miasto początkowe","Miasto końcowe", "Ładunek", "Ładowność"]
+    property var labelWidth: [30, 150, 150, 70, 70, 50, 50]
+    property var headers: ["id", "Miasto początkowe","Miasto końcowe", "Ładunek", "Ładowność", "", ""]
 
     MouseArea {
         anchors.fill: parent
@@ -61,7 +61,7 @@ Page {
                 RowLayout {
                     id: row
                     Repeater {
-                        model: page.headers.length
+                        model: repeaterValues.length
                         Label {
                             Layout.alignment: Qt.AlignVCenter
                             horizontalAlignment: Qt.AlignHCenter
