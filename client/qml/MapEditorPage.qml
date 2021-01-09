@@ -15,6 +15,7 @@ Page {
         }
         function onAnswerParsed() {
             agentRepeater.visible = true;
+            timeText.visible = true;
         }
     }
 
@@ -31,25 +32,25 @@ Page {
         }
 
         Text {
-           id: timeText
-           anchors.right: parent.right
-           anchors.top: parent.top
-           color: "black"
-           visible: !draggableArea.enabled //display onlt during animation
-           property int minutes: 0
-           property int hour: 0
-           onVisibleChanged: {
-               if(!visible) {
-                   minutes = 0;
-                   hour = 0;
-               } else {
-                   minutes = 0;
-                   hour = 22;
-                   minutesAnimation.restart();
-               }
-           }
-           text: parseInt(hour) + ":" + (minutes < 10 ? "0" + minutes : minutes)
-           PropertyAnimation on minutes {
+            id: timeText
+            anchors.right: parent.right
+            anchors.top: parent.top
+            color: "black"
+            visible: false //display onlt during animation
+            property int minutes: 0
+            property int hour: 0
+            onVisibleChanged: {
+                if(!visible) {
+                    minutes = 0;
+                    hour = 0;
+                } else {
+                    minutes = 0;
+                    hour = 22;
+                    minutesAnimation.restart();
+                }
+            }
+            text: parseInt(hour) + ":" + (minutes < 10 ? "0" + minutes : minutes)
+            PropertyAnimation on minutes {
                 id: minutesAnimation
                 to: 60
                 from: 0
@@ -61,15 +62,16 @@ Page {
                     if(timeText.hour > 21 || timeText.hour < 6)
                         restart();
                     else {
+                        timeText.visible = false;
                         agentsStatisticsPopup.open();
                     }
                 }
                 duration: mapFrame.speed * 60
-           }
+            }
 
-           NumberAnimation on x {
-               id: xAnimation
-           }
+            NumberAnimation on x {
+                id: xAnimation
+            }
         }
 
         function finishDrawingPathAt(endPoint) {
@@ -306,38 +308,68 @@ Page {
         id: agentsStatisticsPopup
         anchors.centerIn: parent
         visible: false
-        width: contentWidth
-        height: contentHeight
+//        contentWidth: agentsStatisticsListView.width
+//        contentHeight: agentsStatisticsListView.height
+        background: Rectangle {
+            color: "white"
+            border.width: 1
+            border.color: "black"
+        }
+
         contentItem: ColumnLayout {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            RowLayout {
+                id: listViewLabel
+                Layout.fillWidth: true
+                property var headers: ["id", "Miasto początkowe","Miasto końcowe", "Dostarczono", "Przejechano"]
+                Repeater {
+                    model: agentsStatisticsListView.columnWidths.length
+                    Label {
+                        Layout.preferredWidth: agentsStatisticsListView.columnWidths[index]
+                        Layout.alignment: Qt.AlignVCenter
+                        horizontalAlignment: Qt.AlignHCenter
+                        text: parent.headers[index]
+                        font.bold: true
+                    }
+                }
+            }
+
             ListView {
-            model: agents
+                model: agents
+                id: agentsStatisticsListView
 
-            Layout.preferredHeight: contentHeight
-            Layout.preferredWidth: contentWidth
+                property var columnWidths: [30, 150, 150, 70, 100]
 
-            delegate: ItemDelegate {
-                required property var begining
-                required property var destination
-                required property var agent
-                width: row.width
-                height: row.height
-                id: delegate
-                property var repeaterValues: [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? agent.statistics["delivered"] : ""]
-                property var columnWidths: [30, 150, 150, 70]
-                RowLayout {
-                    id: row
-                    Repeater {
-                        model: delegate.repeaterValues.length
-                        Label {
-                            Layout.alignment: Qt.AlignVCenter
-                            horizontalAlignment: Qt.AlignHCenter
-                            Layout.preferredWidth: delegate.columnWidths[index]
-                            text: delegate.repeaterValues[index]
+                Layout.preferredHeight: contentHeight
+                Layout.preferredWidth: columnWidths.reduce(function(a, b){
+                    return a + b;
+                }, 0);
+
+                delegate: ItemDelegate {
+                    required property var begining
+                    required property var destination
+                    required property var agent
+                    width: row.width
+
+                    height: row.height
+                    id: delegate
+                    property var repeaterValues: [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? agent.statistics["delivered"]/agent.load*100+"%" : "no data", agent.statistics["distance"] ? agent.statistics["distance"] : "no data"]
+                    RowLayout {
+                        id: row
+                        Repeater {
+                            model: delegate.repeaterValues.length
+                            Label {
+                                Layout.alignment: Qt.AlignVCenter
+                                horizontalAlignment: Qt.AlignHCenter
+                                Layout.preferredWidth: agentsStatisticsListView.columnWidths[index]
+                                text: delegate.repeaterValues[index]
+                            }
                         }
                     }
                 }
             }
-        }
         }
     }
 
