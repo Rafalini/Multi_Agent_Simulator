@@ -67,12 +67,14 @@ Page {
         }
 
         Label {
-            text: "Ilość powtórzeń symulacji\n(dla trybu statystycznego):"
+            text: "Ilość powtórzeń symulacji:"
+            visible: numberOfSimulations.visible
         }
 
         TextField {
             id: numberOfSimulations
-            enabled: !isGraphicalButton.checked && submitButton.enabled
+            visible: !isGraphicalButton.checked
+            enabled: submitButton.enabled
             text: "1"
             selectByMouse: true
             validator: IntValidator {
@@ -174,7 +176,7 @@ Page {
         }
 
         Label {
-            text: "Czas obowiązkowej przerwy po przejechaniu " + timeBetweenBreaks.text === "" ? 0 : parseInt(timeBetweenBreaks.text) + " godzin (w minutach)"
+            text: "Czas obowiązkowej przerwy po przejechaniu " + (timeBetweenBreaks.text === "" ? 0 : parseInt(timeBetweenBreaks.text)) + " godzin (w minutach)"
         }
         TextField {
             id: breakDuration
