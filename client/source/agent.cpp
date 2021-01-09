@@ -42,6 +42,7 @@ QJsonObject Agent::getStatistics() const
 void Agent::setStatistics(const QJsonObject &value)
 {
     statistics = value;
+    emit statisticsUpdated();
 }
 
 void Agent::setHistory(const QJsonArray &history) {
