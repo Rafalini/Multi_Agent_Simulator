@@ -5,7 +5,7 @@ int Agent::next_id = 0;
 
 Agent::Agent(QObject *parent) : QObject(parent) {}
 
-Agent::Agent(City* begining, City* destination, const double &weight) : beginingCity(begining), destinationCity(destination),  id(next_id++), load(weight) {
+Agent::Agent(City* begining, City* destination, const double &load, const double &capacity) : beginingCity(begining), destinationCity(destination),  id(next_id++), load(load), capacity(capacity) {
     connect(destinationCity, &City::deleted, this, &Agent::cityDeleted);
     connect(beginingCity, &City::deleted, this, &Agent::cityDeleted);
 }
@@ -18,14 +18,30 @@ QJsonArray Agent::getHistory() const {
     return history;
 }
 
+double Agent::getCapacity() const
+{
+    return capacity;
+}
+
+void Agent::setCapacity(double value)
+{
+    capacity = value;
+    emit capacityUpdated();
+}
+
 void Agent::setHistory(const QJsonArray &history) {
     this->history = history;
     emit historyUpdated();
 }
 
-void Agent::update(City* begining, City* destination, const double &load) {
+void Agent::update(City* begining, City* destination, const double &load, const double &capacity) {
     if(load <= 0) {
-        emit wrongUpdateArguments("Waga nie może być mniejsza od 0");
+        emit wrongUpdateArguments("Waga ładunki nie może być mniejsza od 0");
+        return;
+    }
+
+    if(capacity <= 0) {
+        emit wrongUpdateArguments("Ładowność nie może być mniejsza od 0");
         return;
     }
 
@@ -40,6 +56,9 @@ void Agent::update(City* begining, City* destination, const double &load) {
     }
 
     this->load = load;
+    emit loadUpdated();
+
+    this->capacity = capacity;
     emit loadUpdated();
 
     if(destination == beginingCity && begining == destinationCity) {
@@ -103,6 +122,7 @@ QJsonObject Agent::tojSON() const {
     obj["begining"] = beginingCity->getName();
     obj["destination"] = destinationCity->getName();
     obj["load"] = load;
+    obj["capacity"] = capacity;
     obj["id"] = id;
     return obj;
 }

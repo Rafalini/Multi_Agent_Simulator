@@ -24,11 +24,12 @@ clean:
 test:
 	mkdir -p $(TARGETDIR)
 	mkdir -p $(BUILDDIR)
+	$(CC) $(CFLAGS) $(INC) -c $(SRCDIR)/Road.cpp -o $(BUILDDIR)/Road.o
 	$(CC) $(CFLAGS) $(INC) -c $(SRCDIR)/Agent.cpp -o $(BUILDDIR)/Agent.o
 	$(CC) $(CFLAGS) $(INC) -c $(TESTDIR)/Agent_test.cpp -o $(BUILDDIR)/Agent_test.o
 	$(CC) $(CFLAGS) $(INC) -c $(SRCDIR)/City.cpp -o $(BUILDDIR)/City.o
 	$(CC) $(CFLAGS) $(INC) -c $(TESTDIR)/City_test.cpp -o $(BUILDDIR)/City_test.o
-	$(CC) $(BUILDDIR)/City.o $(BUILDDIR)/Agent.o $(BUILDDIR)/Agent_test.o -o $(TARGETDIR)/test_agent $(TESTFLAG)
-	$(CC) $(BUILDDIR)/City.o $(BUILDDIR)/City_test.o -o $(TARGETDIR)/test_city $(TESTFLAG)
+	$(CC) $(BUILDDIR)/City.o $(BUILDDIR)/Agent.o $(BUILDDIR)/Agent_test.o $(BUILDDIR)/Road.o -o $(TARGETDIR)/test_agent $(TESTFLAG)
+	$(CC) $(BUILDDIR)/City.o $(BUILDDIR)/City_test.o $(BUILDDIR)/Road.o -o $(TARGETDIR)/test_city $(TESTFLAG)
 	./bin/test_city
 	./bin/test_agent

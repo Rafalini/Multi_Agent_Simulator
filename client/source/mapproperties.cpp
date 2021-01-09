@@ -164,15 +164,16 @@ void MapProperties::splitPath(Path * old_path, double x, double y) {
 }
 
 Point* MapProperties::getPointById(int id) {
-    for(auto &point : points) {
-        if(point->getId() == id)
-            return point;
+    auto point = std::find_if(points.begin(), points.end(),
+                              [&id](const Point* point) { return point->getId() == id;});
+    if(point == points.end()) {
+        auto city = std::find_if(cities.begin(), cities.end(),
+                                 [&id](const City* city) { return city->getId() == id;});
+        if(city == cities.end())
+            return nullptr;
+        return *city;
     }
-    for(auto &city : cities) {
-        if(city->getId() == id)
-            return city;
-    }
-    return nullptr;
+    return *point;
 }
 
 void MapProperties::promotePointToCity(Point* point, QString name) {

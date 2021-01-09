@@ -9,18 +9,22 @@
 #include "Agent.hpp"
 
 class Agents_Map{
-        data_table table;
+        data_table limits;
         std::vector<std::shared_ptr<City>>  points;
         std::vector<std::shared_ptr<Agent>> agents;
 
         public:
            Agents_Map();
            void add_map_point(int id, std::string name, double ox, double oy);
-           void add_agent(int id, std::string origin, std::string destination, int load);
+           void add_agent(int id, std::string origin, std::string destination, int load, int capacity);
            void add_path(int begin, int end, int type);
+           void add_speeds(int v1, int v2, int v3);
+           void add_loading_speeds(int load, int unload);
+           void add_accident(double n);
            void run();
+           void clean();
            std::string get_agent_route(int id);
-           //friend std::ostream& operator<< (std::ostream& os, Server_Core& s);
+           std::string get_agent_raport(int id);
 };
 
 #endif

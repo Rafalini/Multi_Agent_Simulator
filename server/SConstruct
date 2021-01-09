@@ -17,5 +17,5 @@ def build_link_to_lib( target, source, env):
    shutil.copy( str(source[0]), str(target[0]) )
    return
 
-dll = e.SharedLibrary(source = ["src_cpp/Agents_Map.cpp", "src_cpp/City.cpp", "src_cpp/Agent.cpp"], target = "build/map_module")
+dll = e.SharedLibrary(source = ["src_cpp/Agents_Map.cpp", "src_cpp/City.cpp", "src_cpp/Agent.cpp", "src_cpp/Road.cpp"], target = "build/map_module")
 e.Command(target, dll, build_link_to_lib )

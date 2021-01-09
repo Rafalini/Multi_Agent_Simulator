@@ -2,6 +2,8 @@
 
 #include <boost/test/included/unit_test.hpp>
 #include "City.hpp"
+#include "Road.hpp"
+
 #include <memory>
 #include <vector>
 
@@ -43,12 +45,14 @@ BOOST_AUTO_TEST_CASE(distanceCityTest1)
 		c2 = new City(0,"Warszawa", 0, 0);
 }
 
-bool if_consists(std::vector<neighbor> v, int n)
+bool if_consists(std::vector<neighbor> v, int id)
 {
-	for(int i=0; i<(int)v.size(); ++i)
-		if(v[i].neighbor->get_id()==n)
+		auto city = std::find_if(v.begin(), v.end(), [&id](const neighbor &n)
+																							{return n.city->get_id() == id;});
+		if(city != v.end())
 			return true;
-	return false;
+		else
+			return false;
 }
 
 BOOST_AUTO_TEST_CASE(neighboursCityTest1)
@@ -58,14 +62,21 @@ BOOST_AUTO_TEST_CASE(neighboursCityTest1)
 		std::shared_ptr<City> c3 = std::make_shared<City>(2,"Warszawa2", 0, 1);
 		std::shared_ptr<City> c4 = std::make_shared<City>(3,"Krakow2", 1, 1);
 
-		c1->add_neighbor(c2,0);  //  c1  ---  c2
-		c1->add_neighbor(c4,0);  //  |	   		|
-		c2->add_neighbor(c1,0);  //	 |	 	  	|
-		c2->add_neighbor(c3,0);  //  c4 --- c3
-		c3->add_neighbor(c2,0);
-		c3->add_neighbor(c4,0);
-		c4->add_neighbor(c3,0);
-		c4->add_neighbor(c1,0);
+		data_table table;
+		table.max_speed_0   = 50;
+		table.max_speed_1   = 50;
+		table.max_speed_2   = 50;
+
+		std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+
+		c1->add_neighbor(c2,r);  //  c1  ---  c2
+		c1->add_neighbor(c4,r);  //  |	   		|
+		c2->add_neighbor(c1,r);  //	 |	 	  	|
+		c2->add_neighbor(c3,r);  //  c4 --- c3
+		c3->add_neighbor(c2,r);
+		c3->add_neighbor(c4,r);
+		c4->add_neighbor(c3,r);
+		c4->add_neighbor(c1,r);
 //count test
 		BOOST_CHECK_EQUAL(c1->get_neighbors().size(), 2);
 		BOOST_CHECK_EQUAL(c2->get_neighbors().size(), 2);
@@ -99,16 +110,23 @@ BOOST_AUTO_TEST_CASE(neighboursCityTest2)
 		std::shared_ptr<City> c3 = std::make_shared<City>(2,"Warszawa2", 0, 1);
 		std::shared_ptr<City> c4 = std::make_shared<City>(3,"Krakow2", 1, 1);
 
-		c1->add_neighbor(c2,0);  //  c1  ---- c2
-		c1->add_neighbor(c4,0);  //  | \____	|
-		c2->add_neighbor(c1,0);  //	 |	    \|
-		c2->add_neighbor(c3,0);  //  c4 --- c3
-		c3->add_neighbor(c2,0);
-		c3->add_neighbor(c4,0);
-		c4->add_neighbor(c3,0);
-		c4->add_neighbor(c1,0);
+		data_table table;
+		table.max_speed_0   = 50;
+		table.max_speed_1   = 50;
+		table.max_speed_2   = 50;
 
-		c1->add_neighbor(c3,0); //one direction
+		std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+
+		c1->add_neighbor(c2,r);  //  c1  ---- c2
+		c1->add_neighbor(c4,r);  //  | \____	|
+		c2->add_neighbor(c1,r);  //	 |	    \|
+		c2->add_neighbor(c3,r);  //  c4 --- c3
+		c3->add_neighbor(c2,r);
+		c3->add_neighbor(c4,r);
+		c4->add_neighbor(c3,r);
+		c4->add_neighbor(c1,r);
+
+		c1->add_neighbor(c3,r); //one direction
 
 //count test
 		BOOST_CHECK_EQUAL(c1->get_neighbors().size(), 3);
