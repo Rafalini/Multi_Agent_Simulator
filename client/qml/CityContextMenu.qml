@@ -18,7 +18,13 @@ Menu {
     }
     MenuItem {
         text: "Usuń miasto"
-        onTriggered: map.removeCity(cityContextMenu.cityRepresentation.city);
+        onTriggered: {
+            if(agents.isCityUsed(cityContextMenu.cityRepresentation.city)) {
+                windowDialog.showError("Nie można usunąć miasto ustawionego dla jednego z agentów!");
+                return;
+            }
+            map.removeCity(cityContextMenu.cityRepresentation.city);
+        }
     }
     MenuItem {
         text: "Zmień nazwę"

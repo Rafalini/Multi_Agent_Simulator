@@ -48,6 +48,15 @@ QVariant Agents::data(const QModelIndex &index, int role) const { //unused role
     }
 }
 
+bool Agents::isCityUsed(City *city)
+{
+    for(auto agent : agents) {
+        if(agent->getBegining() == city || agent->getDestination() == city)
+            return true;
+    }
+    return false;
+}
+
 QHash<int, QByteArray> Agents::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[BeginingRole] = "begining";
