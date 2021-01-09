@@ -30,11 +30,12 @@ void Agent::insert_neighbors(	std::vector<std::pair<double,graph_node>> &points,
 
 						for(int i=0; i<(int)neighbors.size(); ++i){
 									std::shared_ptr<City> next_city = neighbors[i].city;
+									int speed = neighbors[i].road->get_speed();
 
 									if(next_city->get_id() != previous->get_id() && history.find(next_city->get_id())==history.end())	{//dont add previously visited node
 
-												double metric = origin->get_distance_to(*next_city)+		//cost to neighbor
-																				target->get_distance_to(*next_city)+		//direction cost
+												double metric = origin->get_distance_to(*next_city)/speed+		//cost to neighbor
+																				target->get_distance_to(*next_city)/speed+		//direction cost
 																				cost;								//previous cost
 
 												points.push_back(std::make_pair(metric, graph_node(next_city, origin)));
@@ -49,9 +50,10 @@ void Agent::insert_first_neighbors(std::vector<std::pair<double,graph_node>> &po
 					std::vector<neighbor> neighbors = origin->get_neighbors();
 					for(long unsigned int i=0; i<neighbors.size(); ++i){
 								std::shared_ptr<City> next_city = neighbors[i].city;
+								int speed = neighbors[i].road->get_speed();
 
-								double metric = origin->get_distance_to(*next_city)+		//cost to neighbor
-																target->get_distance_to(*next_city);		//direction cost
+								double metric = origin->get_distance_to(*next_city)/speed+		//cost to neighbor
+																target->get_distance_to(*next_city)/speed;		//direction cost
 							  points.push_back(std::make_pair(metric, graph_node(next_city, origin)));
 								history.insert(std::make_pair(next_city->get_id(),origin->get_id()));
 					}
@@ -119,20 +121,20 @@ void Agent::hit_the_road(double distance, neighbor next_city) //jack
 					double current_progress=0, duration=0; //distance
 					int move_duration;
 					while(current_progress < distance)
-						if(time_on_track == limits.non_stop_working_time)
+						if(time_on_track >= limits.non_stop_working_time)
 						{
-							move_duration = (int)((current_progress-duration)*City::distance_per_unit/next_city.road->get_speed());
+							move_duration = (int)((current_progress-duration)*City::distance_per_unit/next_city.road->get_speed()*60);
 							history.push_back(print_moving(next_city.city->get_id(), move_duration, current_progress/distance));
 							history.push_back(print_waiting(next_city.city->get_id(), limits.break_time));
 							duration = current_progress;
 							time_on_track = 0;
 						}else{
-							++time_on_track;
+							time_on_track += 60;
 							distance_made += next_city.road->get_speed();
 							double next_step = (double)next_city.road->get_speed() / (double)City::distance_per_unit;
 
 							if(distance < current_progress + next_step){
-									move_duration = (int)((10*distance-current_progress)*City::distance_per_unit/next_city.road->get_speed());
+									move_duration = (int)((distance-current_progress)*City::distance_per_unit/next_city.road->get_speed()*60);
 									history.push_back(print_moving(next_city.city->get_id(), move_duration));
 									break;
 							}else

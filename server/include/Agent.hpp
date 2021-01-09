@@ -31,8 +31,8 @@ struct data_table{
   int load_time_per_unit;
   int unload_time_per_unit;
 
-  int non_stop_working_time=2;
-  int break_time=1;
+  int non_stop_working_time;
+  int break_time;
 };
 
 class Agent{
@@ -48,9 +48,10 @@ class Agent{
         int current_load=0;
 
         data_table limits;
+        //statistics
         int goods_delivered=0;
         double distance_made=0;
-        int time_on_track=0;
+        int time_on_track=0; //minutes
 
         std::vector<int> path; //ids of nodes after path finding
         std::vector<std::string> history; //list of events, base of animation

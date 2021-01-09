@@ -58,9 +58,11 @@ void Agents_Map::add_loading_speeds(int load, int unload)
     limits.load_time_per_unit = load;
     limits.unload_time_per_unit = unload;
 }
-void Agents_Map::add_accident(double n)
+void Agents_Map::add_accident(double n, int work_time, int break_time)
 {
-    limits.accident = (int)(100*n);
+    limits.accident = n;
+    limits.non_stop_working_time = work_time;
+    limits.break_time = break_time;
 }
 
 void Agents_Map::run()
