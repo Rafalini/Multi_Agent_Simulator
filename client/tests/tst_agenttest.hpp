@@ -27,8 +27,8 @@ private slots:
         QString des = "Warszawa";
         double load = 2.15;
         double capacity = 1;
-        City begining(beg, 0, 0, 0);
-        City destination(des, 0, 0, 0);
+        City begining(beg, 0, 0);
+        City destination(des, 0, 0);
         Agent *agent = new Agent(&begining, &destination, load, capacity);
 
         //QSignalSpy spyEdited(agent, SIGNAL(edited()));
@@ -40,8 +40,8 @@ private slots:
 
         QString newBeg = "Katowice";
         QString newDes = "Wrocław";
-        City newBegining(newBeg, 0, 0, 0);
-        City newDestination(newBeg, 0, 0, 0);
+        City newBegining(newBeg, 0, 0);
+        City newDestination(newBeg, 0, 0);
         double newWeight = 1000.75;
         double newCapacity = 100;
 
@@ -62,15 +62,15 @@ private slots:
         QString des = "Warszawa";
         double weight = 2.15;
         double capacity = 1;
-        City begining(beg, 0, 0, 0);
-        City destination(des, 0, 0, 0);
+        City begining(beg, 0, 0);
+        City destination(des, 0, 0);
         QJsonObject comparableJson;
         comparableJson["begining"] = begining.getName();
         comparableJson["destination"] = destination.getName();
         comparableJson["load"] = weight;
         comparableJson["capacity"] = capacity;
-        comparableJson["id"] = 0;
         Agent agent(&begining, &destination, weight, capacity);
+        comparableJson["id"] = agent.getId();
         QCOMPARE(agent.tojSON(), comparableJson);
     }
 };
