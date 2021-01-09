@@ -14,7 +14,6 @@ Page {
             draggableArea.enabled = false;
         }
         function onAnswerParsed() {
-//            agentRepeater.visible = true;
             timeText.visible = true;
         }
     }
@@ -38,7 +37,7 @@ Page {
             color: "black"
             visible: false //display onlt during animation
             property int minutes: 0
-            property int hour: 0
+            property int hour: 100
             onVisibleChanged: {
                 if(!visible) {
                     minutes = 0;
@@ -51,6 +50,7 @@ Page {
             }
             text: parseInt(hour) + ":" + (minutes < 10 ? "0" + minutes : minutes)
             PropertyAnimation on minutes {
+                running: false
                 id: minutesAnimation
                 to: 60
                 from: 0
