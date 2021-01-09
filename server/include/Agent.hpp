@@ -51,6 +51,7 @@ class Agent{
         //statistics
         int goods_delivered=0;
         double distance_made=0;
+        int total_time_on_track=0;
         int time_on_track=0; //minutes
 
         std::vector<int> path; //ids of nodes after path finding
@@ -73,6 +74,8 @@ public:
         void agent_unload();
         void agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> target);
         void hit_the_road(double distance, neighbor next_city);//jack
+        void hit_the_road(int time, neighbor next_city);//jack
+
         std::vector<int> get_path(); //ids of nodes
 
         Agent(); //for tests

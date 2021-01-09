@@ -107,7 +107,7 @@ bool Agent::check_if_accident(int distance)
 				{
 						while(distance > 0)
 						{
-							if(std::rand()%100 < limits.accident){
+							if(std::rand()/RAND_MAX < limits.accident){
 									accident_happened=true;
 									return true;
 							}
@@ -116,31 +116,33 @@ bool Agent::check_if_accident(int distance)
 						return false;
 				}
 
-void Agent::hit_the_road(double distance, neighbor next_city) //jack
+void Agent::hit_the_road(int time_to_travel, neighbor next_city) //jack
 				{
-					double current_progress=0, duration=0; //distance
-					int move_duration;
-					while(current_progress < distance)
-						if(time_on_track >= limits.non_stop_working_time)
+						int time_on_this_route=0;
+						if(time_on_track >= limits.non_stop_working_time) //break in city
 						{
-							move_duration = (int)((current_progress-duration)*City::distance_per_unit/next_city.road->get_speed()*60);
-							history.push_back(print_moving(next_city.city->get_id(), move_duration, current_progress/distance));
 							history.push_back(print_waiting(next_city.city->get_id(), limits.break_time));
-							duration = current_progress;
+							total_time_on_track += time_on_track;
 							time_on_track = 0;
-						}else{
-							time_on_track += 60;
-							distance_made += next_city.road->get_speed();
-							double next_step = (double)next_city.road->get_speed() / (double)City::distance_per_unit;
-
-							if(distance < current_progress + next_step){
-									move_duration = (int)((distance-current_progress)*City::distance_per_unit/next_city.road->get_speed()*60);
-									history.push_back(print_moving(next_city.city->get_id(), move_duration));
-									break;
-							}else
-									current_progress += next_step;
 						}
+
+						if(time_to_travel < limits.non_stop_working_time-time_on_track)	{		//no breaks
+								history.push_back(print_moving(next_city.city->get_id(), time_to_travel));
+								time_on_track += time_to_travel;
+						} else {																														//breaks
+								while(time_to_travel > time_on_this_route + limits.non_stop_working_time - time_on_track)
+								{
+									time_on_this_route += limits.non_stop_working_time-time_on_track;
+									history.push_back(print_moving(next_city.city->get_id(), time_on_this_route, (double)time_on_this_route/(double)time_to_travel));
+									history.push_back(print_waiting(next_city.city->get_id(), limits.break_time));
+									total_time_on_track += time_on_track;
+									time_on_track = 0;
+								}
+								history.push_back(print_moving(next_city.city->get_id(), time_to_travel-time_on_this_route));
+								time_on_track += time_to_travel-time_on_this_route;
+					  }
 				}
+
 
 void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> target)
 				{
@@ -158,9 +160,9 @@ void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> ta
 							if(check_if_accident((int)(next_city->distance*City::distance_per_unit))){
 									history.push_back(print_accident(path[path.size()-2],(int)(next_city->road->get_speed()*next_city->distance)*Agent::time_scale,0.5));
 							}	else
-							{
-								hit_the_road(current_pos->get_distance_to(next_city->city), *next_city);//jack
-								//history.push_back(print_moving(path[path.size()-2], 50));
+							{										// distance_on_map * scale / speed * 60 [for minutes]
+								int time_to_travel = current_pos->get_distance_to(next_city->city)*City::distance_per_unit/next_city->road->get_speed()*60;
+								hit_the_road(time_to_travel, *next_city);//jack
 								current_pos = next_city->city;
 							}
 							path_finder(current_pos, target);
@@ -270,6 +272,8 @@ std::string Agent::get_raport()
 				{
 					return std::string("\"delivered\": \"")+
 								 std::to_string(goods_delivered)+
+								 std::string("\", \"working_time\": \"")+
+			 					 std::to_string(total_time_on_track)+
 								 std::string("\", \"distance\" : \"")+
 								 std::to_string((int)distance_made)+
 								 std::string(" km.\"");

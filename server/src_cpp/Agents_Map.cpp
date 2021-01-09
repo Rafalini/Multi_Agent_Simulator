@@ -11,6 +11,7 @@
 #include <memory>
 #include <ctime>
 #include <cstdlib>
+#include <thread>
 
 #include "Agents_Map.hpp"
 #include "City.hpp"
@@ -68,9 +69,13 @@ void Agents_Map::add_accident(double n, int work_time, int break_time)
 void Agents_Map::run()
       {
             std::cout << "running simulation..." << std::endl;
+            std::vector<std::thread> running;
 
             for(auto agent : agents)
-                agent->agent_go();
+                running.push_back(std::thread(&Agent::agent_go, agent));//agent->agent_go();
+                
+            for(long unsigned int i=0; i<running.size(); i++)
+                running[i].join();
       }
 
 std::string Agents_Map::get_agent_route(int id)
