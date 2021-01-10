@@ -11,7 +11,7 @@
 #include <semaphore.h>
 #include <thread>
 
-Agent::Agent(){}
+Agent::Agent(){} //for tests
 Agent::Agent(int _id, std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, int _cap, data_table _table)
 				: agent_id(_id), origin(_origin), destination(_destination), total_load_to_transport(_load), capacity(_cap), limits(_table)
 				{
@@ -113,7 +113,7 @@ bool Agent::check_if_accident(int distance)
 				{
 						while(distance > 0)
 						{
-							if(std::rand()/RAND_MAX < limits.accident){
+							if((double)std::rand()/(double)RAND_MAX < limits.accident){
 									accident_happened=true;
 									return true;
 							}

@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <vector>
+#include <semaphore.h>
 
 using namespace boost::unit_test;
 
@@ -23,10 +24,10 @@ BOOST_AUTO_TEST_CASE(getsCityTest2)
 {
 		City *c1 = new City(0,"Krakow", 58, -2);
 
-		BOOST_CHECK_EQUAL(c1->get_id(), 0);
-		BOOST_CHECK_EQUAL(c1->get_name(), "Krakow");
-		BOOST_CHECK_EQUAL(c1->get_ox(), 58);
-		BOOST_CHECK_EQUAL(c1->get_oy(), -2);
+			BOOST_CHECK_EQUAL(c1->get_id(), 0);
+			BOOST_CHECK_EQUAL(c1->get_name(), "Krakow");
+			BOOST_CHECK_EQUAL(c1->get_ox(), 58);
+			BOOST_CHECK_EQUAL(c1->get_oy(), -2);
 }
 
 

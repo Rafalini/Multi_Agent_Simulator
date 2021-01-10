@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <semaphore.h>
 
-City::City(){}
 City::City(int _id, std::string _city, double _ox, double _oy): id(_id), name(_city), ox(_ox), oy(_oy)
 {
   sem_init(&queue_sem,0,1);

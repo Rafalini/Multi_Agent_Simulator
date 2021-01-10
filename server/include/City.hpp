@@ -32,7 +32,6 @@ class City{
         public:
           static const int distance_per_unit = 988;
 
-           City();
            City(int _id, std::string _city, double _ox, double _oy);
 
            void add_neighbor(std::shared_ptr<City> neighbor, std::shared_ptr<Road> road);
