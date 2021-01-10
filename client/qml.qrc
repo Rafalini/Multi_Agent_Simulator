@@ -18,5 +18,6 @@
         <file>qml/AgentRepresentation.qml</file>
         <file>resource/MapOfPoland.png</file>
         <file>resource/truck_icon.png</file>
+        <file>qml/MapLegend.qml</file>
     </qresource>
 </RCC>

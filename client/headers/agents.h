@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE int virtual rowCount(const QModelIndex &parent = QModelIndex()) const;
     Q_INVOKABLE virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     Q_INVOKABLE virtual QHash<int, QByteArray> roleNames() const;
+    Q_INVOKABLE bool isCityUsed(City* city);
     void addAgentHistory(int index, const QJsonArray& history);
     void addAgentStatistics(int index, const QJsonObject& statistics);
     ~Agents();

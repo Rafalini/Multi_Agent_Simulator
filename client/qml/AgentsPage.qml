@@ -4,9 +4,21 @@ import QtQuick.Layouts 1.15
 
 Page {
     id: page
-    property var labelWidth: [30, 150, 150, 70, 70]
-    property var headers: ["id", "Miasto początkowe","Miasto końcowe", "Ładunek", "Ładowność"]
+    property var labelWidth: [30, 150, 150, 70, 70, 50, 50]
+    property var headers: ["id", "Miasto początkowe","Miasto końcowe", "Ładunek", "Ładowność", "", ""]
+
+    MouseArea {
+        anchors.fill: parent
+        onWheel: (wheel) => {
+            if(wheel.angleDelta.y < 0)
+                agentsScrollBar.increase();
+            else
+                agentsScrollBar.decrease();
+        }
+    }
+
     ColumnLayout {
+        id: columns
         anchors.horizontalCenter: parent.horizontalCenter
         Layout.preferredHeight: parent.height
         Layout.fillHeight: true
@@ -29,18 +41,12 @@ Page {
             id: agentsListView
             model: agents
             Layout.maximumHeight: page.height - listViewLabel.height - newAgentButton.height
-            interactive: true
+            interactive: false
             Layout.preferredHeight: contentHeight
-            Layout.fillHeight: true
+            Layout.fillHeight: false
             spacing: 10
-            ScrollBar.vertical: ScrollBar {
-                id: agentsScrollBar
-                active: true
-                interactive: true
-                height: agentsListView.height
-                visible: agentsListView.height < agentsListView.contentHeight
-                policy: ScrollBar.AlwaysOn
-            }
+
+            ScrollBar.vertical: agentsScrollBar
             delegate: ItemDelegate {
                 required property var begining
                 required property var destination
@@ -55,7 +61,7 @@ Page {
                 RowLayout {
                     id: row
                     Repeater {
-                        model: page.headers.length
+                        model: repeaterValues.length
                         Label {
                             Layout.alignment: Qt.AlignVCenter
                             horizontalAlignment: Qt.AlignHCenter
@@ -82,8 +88,6 @@ Page {
                 }
             }
         }
-
-
         StyledButton {
             id: newAgentButton
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -94,6 +98,19 @@ Page {
                 agentDefiner.addNewAgent();
             }
         }
+    }
+
+    ScrollBar {
+        id: agentsScrollBar
+        active: true
+        interactive: true
+        height: agentsListView.height
+        visible: agentsListView.height < agentsListView.contentHeight
+        policy: ScrollBar.AlwaysOn
+        wheelEnabled: true
+        anchors.right: parent.right
+        anchors.top: columns.top
+        anchors.topMargin: listViewLabel.height
     }
 
     AgentDefiner {

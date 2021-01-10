@@ -35,21 +35,6 @@ QJsonObject MapProperties::toJson() const {
 
 void MapProperties::fill() {
     if(cities.size() > 0) return;
-//BASIC MAP
-//    addCity("Kraków", 0.55, 0.85);
-//    addCity("Warszawa", 0.65, 0.4);
-//    addCity("Szczecin", 0.1, 0.12);
-//    addPoint(0.1, 0.5);
-//    addPoint(0.5, 0.7);
-//    addPath(cities[0], points[0]);
-//    addPath(cities[0], points[1]);
-//    addPath(cities[1], points[0]);
-//    addPath(cities[1], points[1]);
-//    addPath(cities[2], points[0]);
-//    addPath(cities[2], cities[1]);
-
-
-//FULL MAP
     addCity("Kraków", 0.5731213872832371, 0.85);  //0
     addCity("Warszawa", 0.6719653179190753, 0.39884393063583834); //1
     addCity("Szczecin", 0.1, 0.12); //2
@@ -130,13 +115,13 @@ void MapProperties::addCity(const QString& name, const double& x, const double& 
             return;
         }
     }
-    City* city = new City(name, x, y, nextPointId++);
+    City* city = new City(name, x, y);
     cities.push_back(city);
     emit citiesChanged();
 }
 
 void MapProperties::addPoint(const double& x, const double& y) {
-    Point* point = new Point(x, y, nextPointId++);
+    Point* point = new Point(x, y);
     points.push_back(point);
     emit pointsChanged();
 }
@@ -151,9 +136,9 @@ void MapProperties::splitPath(Path * old_path, double x, double y) {
     Path::RoadType type = old_path->getType();
     delete old_path;
 
-    Point* point = new Point(x, y, nextPointId++);
-    Path* firstPath = new Path(nextPathId++, begining, point, type);
-    Path* secondPath = new Path(nextPathId++, point, end, type);
+    Point* point = new Point(x, y);
+    Path* firstPath = new Path(begining, point, type);
+    Path* secondPath = new Path(point, end, type);
     point->addPath(firstPath);
     point->addPath(secondPath);
     paths.push_back(firstPath);
@@ -177,7 +162,7 @@ Point* MapProperties::getPointById(int id) {
 }
 
 void MapProperties::promotePointToCity(Point* point, QString name) {
-    City* city = new City(name, point->getX(), point->getY(), point->getId());
+    City* city = new City(name, point->getX(), point->getY());
     cities.push_back(city);
     points.removeOne(point);
     for(auto &path : point->getPaths()) {
@@ -198,7 +183,7 @@ void MapProperties::addPath(Point* begining, Point* end, Path::RoadType type) {
         emit pathEndOnBegining();
         return;
     }
-    Path* path = new Path(nextPathId++, begining, end, type);
+    Path* path = new Path(begining, end, type);
     for(auto old_path : paths) {
         if(*path == *old_path) {
             emit pathAlreadyExist();

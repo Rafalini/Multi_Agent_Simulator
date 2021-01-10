@@ -3,7 +3,9 @@
 #include "path.h"
 #include "point.h"
 
-Point::Point(const double& x, const double& y, const int& id) : id(id) {
+int Point::next_id = 0;
+
+Point::Point(const double& x, const double& y) : id(next_id++) {
     setX(x);
     setY(y);
 }

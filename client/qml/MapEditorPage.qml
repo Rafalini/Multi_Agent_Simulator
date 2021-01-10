@@ -14,10 +14,12 @@ Page {
             draggableArea.enabled = false;
         }
         function onAnswerParsed() {
-//            agentRepeater.visible = true;
             timeText.visible = true;
         }
     }
+
+
+    MapLegend {}
 
     Rectangle {
         id: mapFrame
@@ -38,7 +40,7 @@ Page {
             color: "black"
             visible: false //display onlt during animation
             property int minutes: 0
-            property int hour: 0
+            property int hour: 100
             onVisibleChanged: {
                 if(!visible) {
                     minutes = 0;
@@ -51,6 +53,7 @@ Page {
             }
             text: parseInt(hour) + ":" + (minutes < 10 ? "0" + minutes : minutes)
             PropertyAnimation on minutes {
+                running: false
                 id: minutesAnimation
                 to: 60
                 from: 0
@@ -160,7 +163,6 @@ Page {
 
             Repeater {
                 id: agentRepeater
-//                visible: false
                 anchors.fill: parent
                 model: agents
                 property int finishedAnimations: 0;
@@ -168,7 +170,6 @@ Page {
                     if(finishedAnimations === agents.rowCount()) {
                         tabBar.visible = true;
                         draggableArea.enabled = true;
-//                        visible = false;
                         finishedAnimations = 0;
                     }
                 }
@@ -308,8 +309,6 @@ Page {
         id: agentsStatisticsPopup
         anchors.centerIn: parent
         visible: false
-//        contentWidth: agentsStatisticsListView.width
-//        contentHeight: agentsStatisticsListView.height
         background: Rectangle {
             color: "white"
             border.width: 1

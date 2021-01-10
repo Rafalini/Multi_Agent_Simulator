@@ -2,7 +2,9 @@
 #include <QJsonArray>
 #include "path.h"
 
-Path::Path(int id, Point* beg, Point* en, RoadType type) : id(id), begining(beg), end(en), type(type) {}
+int Path::next_id = 0;
+
+Path::Path(Point* beg, Point* en, RoadType type) : id(next_id++), begining(beg), end(en), type(type) {}
 
 int Path::getId() const
 {

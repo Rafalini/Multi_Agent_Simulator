@@ -52,172 +52,180 @@ Page {
     }
 
 
-    GridLayout {
-        anchors.centerIn: parent
-        anchors.topMargin: 20
-        columns: 2
-        Label {
-            text: "Tryb graficzny:"
-        }
-
-        CheckBox {
-            id: isGraphicalButton
-            checked: true
-            enabled: submitButton.enabled
-        }
-
-        Label {
-            text: "Ilość powtórzeń symulacji:"
-            visible: numberOfSimulations.visible
-        }
-
-        TextField {
-            id: numberOfSimulations
-            visible: !isGraphicalButton.checked
-            enabled: submitButton.enabled
-            text: "1"
-            selectByMouse: true
-            validator: IntValidator {
-                    bottom: 1
-                }
-        }
-
-        Label {
-            text: "Maksymalna prędkość na drodze zwykłej:"
-        }
-        TextField {
-            id: standardRoadMaxSpeed
-            text: "90"
-            selectByMouse: true
-            enabled: submitButton.enabled
-            validator: IntValidator {
-                    bottom: 1
-                }
-        }
 
 
-        Label {
-            text: "Maksymalna prędkość na drodze przyspieszonej:"
-        }
-        TextField {
-            id: doubleCarriageWayRoadMaxSpeed
-            text: "110"
-            selectByMouse: true
-            enabled: submitButton.enabled
-            validator: IntValidator {
-                    bottom: 1
+    ScrollView {
+        id: scrollView
+        anchors.centerIn: parent;
+        width: Math.min(grid.width, parent.width);
+        height: Math.min(grid.height, parent.height);
+
+        GridLayout {
+            id: grid
+            columns: 2
+            Label {
+                text: "Tryb graficzny:"
             }
-        }
 
+            CheckBox {
+                id: isGraphicalButton
+                checked: true
+                enabled: submitButton.enabled
+            }
 
-        Label {
-            text: "Maksymalna prędkość na autostradzie:"
-        }
-        TextField {
-            id: highwayMaxSpeed
-            text: "140"
-            selectByMouse: true
-            enabled: submitButton.enabled
-            validator: IntValidator {
+            Label {
+                text: "Ilość powtórzeń symulacji:"
+                visible: numberOfSimulations.visible
+            }
+
+            TextField {
+                id: numberOfSimulations
+                visible: !isGraphicalButton.checked
+                enabled: submitButton.enabled
+                text: "1"
+                selectByMouse: true
+                validator: IntValidator {
                     bottom: 1
                 }
-        }
+            }
 
-        Label {
-            text: "Prawdopodonieństwo wypadku agenta na odcinku 100km:"
-        }
-        TextField {
-            id: accidentProbability
-            enabled: submitButton.enabled
-            text: "0.00001"
-            selectByMouse: true
-            validator: DoubleValidator {
+            Label {
+                text: "Maksymalna prędkość na drodze zwykłej:"
+            }
+            TextField {
+                id: standardRoadMaxSpeed
+                text: "90"
+                selectByMouse: true
+                enabled: submitButton.enabled
+                validator: IntValidator {
+                    bottom: 1
+                }
+            }
+
+
+            Label {
+                text: "Maksymalna prędkość na drodze przyspieszonej:"
+            }
+            TextField {
+                id: doubleCarriageWayRoadMaxSpeed
+                text: "110"
+                selectByMouse: true
+                enabled: submitButton.enabled
+                validator: IntValidator {
+                    bottom: 1
+                }
+            }
+
+
+            Label {
+                text: "Maksymalna prędkość na autostradzie:"
+            }
+            TextField {
+                id: highwayMaxSpeed
+                text: "140"
+                selectByMouse: true
+                enabled: submitButton.enabled
+                validator: IntValidator {
+                    bottom: 1
+                }
+            }
+
+            Label {
+                text: "Prawdopodonieństwo wypadku agenta na odcinku 100km:"
+            }
+            TextField {
+                id: accidentProbability
+                enabled: submitButton.enabled
+                text: "0.00001"
+                selectByMouse: true
+                validator: DoubleValidator {
                     bottom: 0
                     top: 1
                 }
-        }
-        Label {
-            text: "Średnia liczba minut potrzebna do załadowania 1kg ładunku do pojazdu"
-        }
-        TextField {
-            id: loadSpeed
-            enabled: submitButton.enabled
-            text: "1"
-            selectByMouse: true
-            validator: IntValidator {
-                    bottom: 1
-                }
-        }
-
-        Label {
-            text: "Średnia liczba minut potrzebna do rozładowania 1kg ładunku z pojazdu"
-        }
-        TextField {
-            id: unloadSpeed
-            enabled: submitButton.enabled
-            text: "1"
-            selectByMouse: true
-            validator: IntValidator {
-                    bottom: 1
-                }
-        }
-
-        Label {
-            text: "Ilość godzin po której konieczny jest odpoczynek"
-        }
-        TextField {
-            id: timeBetweenBreaks
-            enabled: submitButton.enabled
-            text: "6"
-            selectByMouse: true
-            validator: IntValidator {
-                    bottom: 1
-                }
-        }
-
-        Label {
-            text: "Czas obowiązkowej przerwy po przejechaniu " + (timeBetweenBreaks.text === "" ? 0 : parseInt(timeBetweenBreaks.text)) + " godzin (w minutach)"
-        }
-        TextField {
-            id: breakDuration
-            enabled: submitButton.enabled
-            text: "30"
-            selectByMouse: true
-            validator: IntValidator {
-                    bottom: 1
-                }
-        }
-
-
-        StyledButton {
-            id: submitButton
-            Layout.rowSpan: 2
-            text: "Wyślij"
-            Layout.alignment: Qt.AlignCenter
-            function activate() {
-                if(!simulationParametersPage.validate()) return;
-                let parameters = {
-                    "isGraphical": isGraphicalButton.checked,
-                    "max_speed_0": parseInt(standardRoadMaxSpeed.text),
-                    "max_speed_1": parseInt(doubleCarriageWayRoadMaxSpeed.text),
-                    "max_speed_2": parseInt(highwayMaxSpeed.text),
-                    "accident": parseFloat(accidentProbability.text),
-                    "load_speed": parseInt(loadSpeed.text),
-                    "unload_speed": parseInt(unloadSpeed.text),
-                    "time_between_breaks": 60*parseInt(timeBetweenBreaks.text),
-                    "break_duration": parseInt(breakDuration.text)
-                };
-                if(!isGraphicalButton.checked) {
-                    parameters["number_of_simulations"] = parseInt(numberOfSimulations.text);
-                } else {
-                    parameters["number_of_simulations"] = 1;
-                }
-                tabBar.visible = false;
-                remoteConnector.submit(parameters);
-                enabled = false;
             }
-        }
+            Label {
+                text: "Średnia liczba minut potrzebna do załadowania 1kg ładunku do pojazdu"
+            }
+            TextField {
+                id: loadSpeed
+                enabled: submitButton.enabled
+                text: "1"
+                selectByMouse: true
+                validator: IntValidator {
+                    bottom: 1
+                }
+            }
 
+            Label {
+                text: "Średnia liczba minut potrzebna do rozładowania 1kg ładunku z pojazdu"
+            }
+            TextField {
+                id: unloadSpeed
+                enabled: submitButton.enabled
+                text: "1"
+                selectByMouse: true
+                validator: IntValidator {
+                    bottom: 1
+                }
+            }
+
+            Label {
+                text: "Ilość godzin po której konieczny jest odpoczynek"
+            }
+            TextField {
+                id: timeBetweenBreaks
+                enabled: submitButton.enabled
+                text: "6"
+                selectByMouse: true
+                validator: IntValidator {
+                    bottom: 1
+                }
+            }
+
+            Label {
+                text: "Czas obowiązkowej przerwy po przejechaniu " + (timeBetweenBreaks.text === "" ? 0 : parseInt(timeBetweenBreaks.text)) + " godzin (w minutach)"
+            }
+            TextField {
+                id: breakDuration
+                enabled: submitButton.enabled
+                text: "30"
+                selectByMouse: true
+                validator: IntValidator {
+                    bottom: 1
+                }
+            }
+
+
+            StyledButton {
+                id: submitButton
+                Layout.rowSpan: 2
+                text: "Wyślij"
+                Layout.alignment: Qt.AlignCenter
+                function activate() {
+                    if(!simulationParametersPage.validate()) return;
+                    let parameters = {
+                        "isGraphical": isGraphicalButton.checked,
+                        "max_speed_0": parseInt(standardRoadMaxSpeed.text),
+                        "max_speed_1": parseInt(doubleCarriageWayRoadMaxSpeed.text),
+                        "max_speed_2": parseInt(highwayMaxSpeed.text),
+                        "accident": parseFloat(accidentProbability.text),
+                        "load_speed": parseInt(loadSpeed.text),
+                        "unload_speed": parseInt(unloadSpeed.text),
+                        "time_between_breaks": 60*parseInt(timeBetweenBreaks.text),
+                        "break_duration": parseInt(breakDuration.text)
+                    };
+                    if(!isGraphicalButton.checked) {
+                        parameters["number_of_simulations"] = parseInt(numberOfSimulations.text);
+                    } else {
+                        parameters["number_of_simulations"] = 1;
+                    }
+                    tabBar.visible = false;
+                    remoteConnector.submit(parameters);
+                    enabled = false;
+                }
+            }
+
+        }
     }
 
     property int radius: 100

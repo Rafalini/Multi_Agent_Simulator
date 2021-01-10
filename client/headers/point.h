@@ -14,7 +14,7 @@ class Point : public QObject
     Q_PROPERTY(double y READ getY WRITE setY NOTIFY yChanged FINAL);
 
 public:
-    Point(const double& x, const double& y, const int& id);
+    Point(const double& x, const double& y);
     virtual ~Point() {emit deleted();}
     const double& getX() const;
     const double& getY() const;
@@ -36,6 +36,7 @@ protected:
     double x;
     double y;
     int id;
+    static int next_id;
 };
 
 #endif // POINT_H

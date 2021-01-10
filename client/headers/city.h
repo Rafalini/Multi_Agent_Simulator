@@ -13,7 +13,7 @@ class City : public Point
     Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged);
 
 public:
-    City(const QString& name, const double& x, const double& y, const int& id);
+    City(const QString& name, const double& x, const double& y);
     virtual QJsonObject toJson() const;
     const QString& getName() const;
     void setName(const QString& name);
