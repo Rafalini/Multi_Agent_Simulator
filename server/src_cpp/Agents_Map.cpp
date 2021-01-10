@@ -18,10 +18,9 @@
 #include "Agent.hpp"
 #include "Road.hpp"
 
-Agents_Map::Agents_Map()
-      {
-        srand(time(NULL));
-      }
+Agents_Map::Agents_Map()  {srand(time(NULL));}
+
+void Agents_Map::agents_num(int agents) {} //unused
 
 void Agents_Map::add_map_point(int id, std::string name, double ox, double oy)
       {
@@ -71,12 +70,52 @@ void Agents_Map::run()
             std::cout << "running simulation..." << std::endl;
             std::vector<std::thread> running;
 
+            std::thread sched(&Agents_Map::scheduler, this);
+
+            //std::cout << "threads..." << std::endl;
+
             for(auto agent : agents)
-                running.push_back(std::thread(&Agent::agent_go, agent));//agent->agent_go();
-                
-            for(long unsigned int i=0; i<running.size(); i++)
-                running[i].join();
+                agent->agent_go();
+            std::cout << "joins..." << std::endl;
+
+            for(auto agent : agents)
+                agent->agent_stop();
+
+           std::cout << "joined..." << std::endl;
+
+           sched.join();
       }
+
+void Agents_Map::scheduler()
+{
+  long unsigned int finished_agents=0;
+  std::cout << "sched running..." << std::endl;
+  std::cout << "total agents:" << agents.size()<<std::endl;
+  while(true)
+  {
+    finished_agents=0;
+    for(auto agent : agents) //acquire all tickets = all agents waiting
+        agent->acces_sched(); //it will wait for working Agenst, and acces instantly for finished Agents
+
+    //std::cout << "agents locked" << std::endl;
+    for(auto city : points)
+        city->organize_times(); //organize cities
+
+    //std::cout << "agents organized" << std::endl;
+
+    for(auto agent : agents) //acquire all tickets = all agents waiting
+    {
+        if(agent->is_running() == false)
+          finished_agents++;
+        agent->unlock_mutex();
+    }
+
+    //std::cout << "agents rerun" << std::endl;
+    if(finished_agents == agents.size())
+      break;
+  }
+}
+
 
 std::string Agents_Map::get_agent_route(int id)
       {
@@ -111,6 +150,7 @@ BOOST_PYTHON_MODULE(map_module)
       {
 
           boost::python::class_<Agents_Map>("Agents_Map", boost::python::init<>())
+              .def("agents_num", &Agents_Map::agents_num)
               .def("add_map_point", &Agents_Map::add_map_point)
               .def("add_agent", &Agents_Map::add_agent)
               .def("run", &Agents_Map::run)

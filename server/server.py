@@ -20,6 +20,8 @@ async def request_handler(websocket, path):
             parameters = dict["parameters"]
 
             cpp_map = build.map_module.Agents_Map()
+            cpp_map.agents_num(len(map_agents))
+
             print("\nwczytuje miasta i agentow do mapy...\n")
 
             cpp_map.add_speeds(parameters["max_speed_0"],parameters["max_speed_1"],parameters["max_speed_2"])
