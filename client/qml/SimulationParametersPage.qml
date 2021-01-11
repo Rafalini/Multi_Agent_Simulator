@@ -93,6 +93,19 @@ Page {
             }
 
             Label {
+                text: "Tempo wyświetlania animacji"
+                visible: simulationSpeed.visible
+            }
+
+            ComboBox {
+                id: simulationSpeed
+                visible: isGraphicalButton.checked
+                enabled: submitButton.enabled
+                model: ["szybka", "średnia", "wolna"]
+                currentIndex: 1
+            }
+
+            Label {
                 text: "Maksymalna prędkość na drodze zwykłej:"
             }
             TextField {
@@ -223,6 +236,19 @@ Page {
                     } else {
                         parameters["number_of_simulations"] = 1;
                         tabBar.visible = false;
+                    }
+
+                    let index = simulationSpeed.currentIndex;
+                    switch(index) {
+                    case 0:
+                        root.speed = 10;
+                        break;
+                    case 1:
+                        root.speed = 30;
+                        break;
+                    default:
+                        root.speed = 60;
+                        break;
                     }
                     remoteConnector.submit(parameters);
                     enabled = false;

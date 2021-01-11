@@ -32,7 +32,7 @@ Page {
         width: height
         height: 500
         scale: Math.min(parentItem.width/width, parentItem.height/height)
-        property int speed: 60
+        property int speed: root.speed
         Image {
             anchors.fill: parent
             source: "../resource/MapOfPoland.png"
@@ -73,8 +73,7 @@ Page {
                         timeText.visible = false;
                         draggableArea.enabled = true;
                         tabBar.visible = true;
-                        draggableArea.enabled = true;
-                        sStatisticsPopup.open();
+                        agentsStatisticsPopup.open();
                     }
                 }
                 duration: mapFrame.speed * 60

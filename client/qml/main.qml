@@ -5,13 +5,15 @@ import QtQuick.Window 2.15
 import QtQuick.Controls.Material 2.15
 
 ApplicationWindow {
-    visible: true
     id: root
-    height: Screen.height/2
-    width: Screen.width/2
+    visible: true
+    height: Screen.height
+    width: Screen.width
 
     Material.theme: Material.Light
     Material.accent: Material.Orange
+
+    property int speed: 60
 
     ColumnLayout {
         height: parent.height

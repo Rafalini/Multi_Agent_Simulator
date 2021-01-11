@@ -46,8 +46,11 @@ void RemoteConnector::onConnected() {
 
 void RemoteConnector::onTextMessageReceived(QString message) {
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
-    QJsonArray arr = doc.array();
     if(isGraphicalMode) {
+        QJsonObject obj = doc.object();
+        QJsonArray arr = obj["agents"].toArray();
+        QJsonArray arrPaths = obj["paths"].toArray();
+        qDebug() << arrPaths;
         emit answerReceived();
         for(int i = 0; i < arr.size(); ++i) {
             QJsonObject agentData = arr[i].toObject();
@@ -57,6 +60,7 @@ void RemoteConnector::onTextMessageReceived(QString message) {
         emit answerParsed();
     }
     else {
+        QJsonArray arr = doc.array();
         for(int i = 0; i < arr.size(); ++i) {
             agents->addAgentStatistics(i, arr[i].toObject());
         }

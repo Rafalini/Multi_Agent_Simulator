@@ -14,24 +14,24 @@ Rectangle {
             text: "Droga zwykła"
         }
         Rectangle {
-            Layout.preferredHeight: 8
-            Layout.preferredWidth: 10
+            Layout.preferredHeight: 4
+            Layout.preferredWidth: 50
             color: "black"
         }
         Label {
             text: "Droga ekspresowa"
         }
         Rectangle {
-            Layout.preferredHeight: 12
-            Layout.preferredWidth: 10
+            Layout.preferredHeight: 6
+            Layout.preferredWidth: 50
             color: "darkblue"
         }
         Label {
             text: "Autostrada"
         }
         Rectangle {
-            Layout.preferredHeight: 16
-            Layout.preferredWidth: 10
+            Layout.preferredHeight: 8
+            Layout.preferredWidth: 50
             color: "purple"
         }
     }

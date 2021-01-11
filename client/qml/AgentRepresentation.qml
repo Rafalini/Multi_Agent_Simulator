@@ -19,9 +19,21 @@ Item {
         height: width
         source: "../resource/truck_icon.png"
     }
+
+    Image {
+        id: flame
+        visible: false
+        width: 10
+        height: width
+        anchors.bottom: rec.top
+        anchors.horizontalCenter: rec.horizontalCenter
+        source: "../resource/flame.png"
+    }
+
     Connections {
         target: agent_
         function onHistoryUpdated() {
+            flame.visible = false;
             agentText.text = "";
             x = agent_.begining.x*parent.width;
             y = agent_.begining.y*parent.height;
@@ -38,7 +50,7 @@ Item {
         }
         let current = history[currentAnimationIndex];
         if(current["state"] === "accident") {
-            agentText.text = "Wypadek...";
+            flame.visible = true;
             return;
         }
         animationDuration = current["duration"] * mapFrame.speed;
@@ -52,7 +64,6 @@ Item {
                 percentage = parseFloat(current["percentage"]);
                 newX = x + (newX-x)*percentage;
                 newY = y + (newY-y)*percentage;
-
             }
             xAnimation.to = newX;
             yAnimation.to = newY;

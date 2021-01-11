@@ -19,5 +19,6 @@
         <file>resource/MapOfPoland.png</file>
         <file>resource/truck_icon.png</file>
         <file>qml/MapLegend.qml</file>
+        <file>resource/flame.png</file>
     </qresource>
 </RCC>
