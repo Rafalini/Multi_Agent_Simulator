@@ -6,6 +6,8 @@
 #include <memory>
 #include <map>
 #include "City.hpp"
+#include <semaphore.h>
+#include <thread>
 
 class City;
 struct neighbor;
@@ -31,14 +33,16 @@ struct data_table{
   int load_time_per_unit;
   int unload_time_per_unit;
 
-  int non_stop_working_time=2;
-  int break_time=1;
+  int non_stop_working_time;
+  int break_time;
 };
 
 class Agent{
     private:
         static const int accident_rate = 100; //how longe distance has to be to accident may happen [km]
         static const int time_scale = 5; //how longe distance has to be to accident may happen [km]
+
+        std::thread t;
 
         int agent_id;
         std::weak_ptr<City> origin;
@@ -48,22 +52,28 @@ class Agent{
         int current_load=0;
 
         data_table limits;
+        //statistics
         int goods_delivered=0;
         double distance_made=0;
-        int time_on_track=0;
+        int total_time_on_track=0;
+        int time_on_track=-1; //minutes
+        int actual_time=0;
 
         std::vector<int> path; //ids of nodes after path finding
         std::vector<std::string> history; //list of events, base of animation
         bool accident_happened = false;
+        bool running = true;
 
         std::string print_moving(int loc_id, int duration);
         std::string print_moving(int loc_id, int duration, double procent);
         std::string print_waiting(int loc_id, int duration);
         std::string print_accident(int loc_id, int duration, double procent);
-
         bool check_if_accident(int distance);
 
+        sem_t acces_sem;
+        sem_t break_sem;
 public:
+
 //public for tests
         void path_finder(std::shared_ptr<City> origin, std::shared_ptr<City> destination);
         void insert_first_neighbors(std::vector<std::pair<double,graph_node>> &points, std::shared_ptr<City> &origin, std::shared_ptr<City> &target, std::map<int,int> &history);
@@ -71,7 +81,8 @@ public:
         void agent_load();
         void agent_unload();
         void agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> target);
-        void hit_the_road(double distance, neighbor next_city);//jack
+        void hit_the_road(int time, neighbor next_city);//jack
+
         std::vector<int> get_path(); //ids of nodes
 
         Agent(); //for tests
@@ -83,9 +94,14 @@ public:
         int getLoad();
         int get_id();
         void agent_go();
+        void agent_stop();
+        void agent_travel();
         std::string get_history();
         std::string get_raport();
         std::vector<std::string> get_his(); //for tests
+        void unlock_mutex();
+        void acces_sched();
+        bool is_running();
 };
 
 #endif

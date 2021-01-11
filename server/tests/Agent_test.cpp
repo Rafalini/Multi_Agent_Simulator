@@ -269,12 +269,14 @@ BOOST_AUTO_TEST_CASE(agent_route_response_test)
     std::shared_ptr<City> c2 = std::make_shared<City>(1,"Krakow", 3, 4);
 
     data_table table;
-    table.max_speed_0   = 50;
-    table.max_speed_1   = 50;
-    table.max_speed_2   = 50;
-    table.accident      = 1;
+    table.max_speed_0   = 100;
+    table.max_speed_1   = 100;
+    table.max_speed_2   = 100;
+    table.accident      = 0;
     table.load_time_per_unit    = 1;
     table.unload_time_per_unit  = 1;
+    table.non_stop_working_time = 100;
+    table.break_time = 0;
 
     std::shared_ptr<Road> r = std::make_shared<Road>(0, table);
 
@@ -283,7 +285,7 @@ BOOST_AUTO_TEST_CASE(agent_route_response_test)
 
     Agent a(0,c1,c2, 10, 10, table);
     a.agent_go();
-    //std::cout << a.get_history() << std::endl;
+    std::cout << a.get_history() << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE(agent_accident_response_test)
@@ -298,6 +300,8 @@ BOOST_AUTO_TEST_CASE(agent_accident_response_test)
     table.accident      = 101; //101%
     table.load_time_per_unit    = 1;
     table.unload_time_per_unit  = 1;
+    table.non_stop_working_time = 10;
+    table.break_time = 0;
 
     std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
 
@@ -320,12 +324,14 @@ BOOST_AUTO_TEST_CASE(agent_hit_the_road_test)
     table.max_speed_2   = 50;
     table.non_stop_working_time = 1;
     table.break_time = 1;
+    table.non_stop_working_time = 10;
+    table.break_time = 0;
 
     std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
 
     c1->add_neighbor(c2,r);  //
 
     Agent a(0,c1,c2, 10, 10, table);
-    a.hit_the_road(0.2, c1->get_neighbors()[0]);
-    std::cout <<std::endl<< a.get_history() << std::endl;
+    //a.hit_the_road(0.2, c1->get_neighbors()[0]);
+    //std::cout <<std::endl<< a.get_history() << std::endl;
 }

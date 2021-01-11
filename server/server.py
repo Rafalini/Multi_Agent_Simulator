@@ -20,11 +20,13 @@ async def request_handler(websocket, path):
             parameters = dict["parameters"]
 
             cpp_map = build.map_module.Agents_Map()
+            cpp_map.agents_num(len(map_agents))
+
             print("\nwczytuje miasta i agentow do mapy...\n")
 
             cpp_map.add_speeds(parameters["max_speed_0"],parameters["max_speed_1"],parameters["max_speed_2"])
             cpp_map.add_loading_speeds(parameters["unload_speed"],parameters["load_speed"])
-            cpp_map.add_accident(parameters["accident"])
+            cpp_map.add_accident(parameters["accident"], parameters["time_between_breaks"], parameters["break_duration"])
 
             for x in map_cities:
                 cpp_map.add_map_point(x["id"],x["name"], x["x"], x["y"])
