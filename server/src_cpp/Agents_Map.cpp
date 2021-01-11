@@ -20,8 +20,6 @@
 
 Agents_Map::Agents_Map()  {srand(time(NULL));}
 
-void Agents_Map::agents_num(int agents) {} //unused
-
 void Agents_Map::add_map_point(int id, std::string name, double ox, double oy)
       {
           points.push_back(std::make_shared<City>(id,name,ox,oy));
@@ -32,8 +30,10 @@ void Agents_Map::add_agent(int id, std::string s_origin, std::string s_destin, i
           auto origin =       std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_origin;});
           auto destination =  std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_destin;});
 
-          if(origin != points.end() && destination != points.end())
+          if(origin != points.end() && destination != points.end()){
                 agents.push_back(std::make_shared<Agent>(id, *origin, *destination, load, capacity, limits));
+                agents_backup.push_back(std::make_shared<Agent>(id, *origin, *destination, load, capacity, limits));
+          }
       }
 
 void Agents_Map::add_path(int begin, int end, int type)
@@ -72,16 +72,19 @@ void Agents_Map::run()
 
             std::thread sched(&Agents_Map::scheduler, this);
 
-            //std::cout << "threads..." << std::endl;
-
             for(auto agent : agents)
                 agent->agent_go();
-            std::cout << "joins..." << std::endl;
 
             for(auto agent : agents)
-                agent->agent_stop();
-
-           std::cout << "joined..." << std::endl;
+            {
+                  agent->agent_stop();
+                  std::vector<int> v;
+                  v.push_back(agent->get_goods_delivered());
+                  v.push_back(agent->get_total_time_on_track());
+                  v.push_back(agent->get_distance_made());
+                  v.push_back(agent->get_num_of_breaks());
+                  stats.push_back(v);
+            }
 
            sched.join();
       }
@@ -89,19 +92,14 @@ void Agents_Map::run()
 void Agents_Map::scheduler()
 {
   long unsigned int finished_agents=0;
-  std::cout << "sched running..." << std::endl;
-  std::cout << "total agents:" << agents.size()<<std::endl;
   while(true)
   {
     finished_agents=0;
     for(auto agent : agents) //acquire all tickets = all agents waiting
         agent->acces_sched(); //it will wait for working Agenst, and acces instantly for finished Agents
 
-    //std::cout << "agents locked" << std::endl;
     for(auto city : points)
         city->organize_times(); //organize cities
-
-    //std::cout << "agents organized" << std::endl;
 
     for(auto agent : agents) //acquire all tickets = all agents waiting
     {
@@ -110,7 +108,6 @@ void Agents_Map::scheduler()
         agent->unlock_mutex();
     }
 
-    //std::cout << "agents rerun" << std::endl;
     if(finished_agents == agents.size())
       break;
   }
@@ -146,16 +143,59 @@ void Agents_Map::clean()
         agents.clear();
       }
 
+std::string Agents_Map::get_agent_stats(int id, int runs)
+{
+  std::string output;
+
+  auto stat_set = std::find_if(stats.begin(), stats.end(), [&id](std::vector<int> &v)
+                                                              {return v[0] == id;});
+  if(stat_set != stats.end())
+    output =  std::string("{\"avg_delivered\": \"")+
+              std::to_string((*stat_set)[1] / runs)+
+              std::string("\", \"avg_working_time\": \"")+
+              std::to_string((*stat_set)[2] / runs)+
+              std::string("\", \"avg_distance\" : \"")+
+              std::to_string((*stat_set)[3] / runs)+
+              std::string(" km.\"}");
+  return output;
+}
+
+void Agents_Map::restart()
+{
+  if(stats.size() == 0)
+    for(auto agent : agents)
+    {
+          std::vector<int> v;
+          v.push_back(agent->get_id());
+          v.push_back(agent->get_goods_delivered());
+          v.push_back(agent->get_total_time_on_track());
+          v.push_back(agent->get_distance_made());
+          v.push_back(agent->get_num_of_breaks());
+          stats.push_back(v);
+    }
+  else
+    for(long unsigned int i=0; i<agents.size(); ++i)
+    {
+          stats[i][1] += agents[i]->get_goods_delivered();
+          stats[i][2] += agents[i]->get_total_time_on_track();
+          stats[i][3] += agents[i]->get_distance_made();
+          stats[i][4] += agents[i]->get_num_of_breaks();
+    }
+  agents = agents_backup;
+}
+
+
 BOOST_PYTHON_MODULE(map_module)
       {
 
           boost::python::class_<Agents_Map>("Agents_Map", boost::python::init<>())
-              .def("agents_num", &Agents_Map::agents_num)
               .def("add_map_point", &Agents_Map::add_map_point)
               .def("add_agent", &Agents_Map::add_agent)
               .def("run", &Agents_Map::run)
+              .def("restart", &Agents_Map::restart)
               .def("get_agent_route", &Agents_Map::get_agent_route)
               .def("get_agent_raport", &Agents_Map::get_agent_raport)
+              .def("get_agent_stats", &Agents_Map::get_agent_stats)
               .def("add_path", &Agents_Map::add_path)
               .def("add_speeds", &Agents_Map::add_speeds)
               .def("add_loading_speeds", &Agents_Map::add_loading_speeds)
