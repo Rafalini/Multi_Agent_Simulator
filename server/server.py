@@ -20,7 +20,6 @@ async def request_handler(websocket, path):
             parameters = dict["parameters"]
 
             cpp_map = build.map_module.Agents_Map()
-            cpp_map.agents_num(len(map_agents))
 
             print("\nwczytuje miasta i agentow do mapy...\n")
 
@@ -43,18 +42,28 @@ async def request_handler(websocket, path):
 
             print("\nwczytano miasta i agentow do mapy\n")
 
-            cpp_map.run()
+            for x in range(parameters["number_of_simulations"]):
+                cpp_map.restart()
+                cpp_map.run()
 
-            output_json ="["
-            for x in map_agent_ids:
-                output_json += "{ \"history\": "
-                output_json += cpp_map.get_agent_route(x)+", "
-                output_json += "\"statistics\": {"
-                output_json += cpp_map.get_agent_raport(x)+"} },"
-                #print("Agent: "+str(x)+" "+cpp_map.get_agent_raport(x))
+            if parameters["number_of_simulations"] == 1: #graphical mode answer
+                print("graph sim")
+                output_json ="["
+                for x in map_agent_ids:
+                    output_json += "{ \"history\": "
+                    output_json += cpp_map.get_agent_route(x)+", "
+                    output_json += "\"statistics\": {"
+                    output_json += cpp_map.get_agent_raport(x)+"} },"
 
-            output_json = output_json[:-2]
-            output_json += "} ]"
+                output_json = output_json[:-2]
+                output_json += "} ]"
+            else:
+                output_json ="["
+                for x in map_agent_ids:
+                    output_json += cpp_map.get_agent_stats(x,parameters["number_of_simulations"])+","
+                output_json = output_json[:-1]
+                output_json += " ]"
+
             print(output_json)
 
             cpp_map.clean()

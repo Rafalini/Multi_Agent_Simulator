@@ -15,17 +15,34 @@ Agent::Agent(){} //for tests
 Agent::Agent(int _id, std::shared_ptr<City> _origin, std::shared_ptr<City> _destination, int _load, int _cap, data_table _table)
 				: agent_id(_id), origin(_origin), destination(_destination), total_load_to_transport(_load), capacity(_cap), limits(_table)
 				{
+					if(total_load_to_transport > capacity)
+					{
+							current_load = capacity;
+							total_load_to_transport -= capacity;
+					}
+					else
+					{
+							current_load = total_load_to_transport;
+							total_load_to_transport = 0;
+					}
+
 					sem_init(&acces_sem, 0,0);
 					sem_init(&break_sem, 0,0);
 				}
 
-std::weak_ptr<City> Agent::getOrigin() {return origin;}
+std::weak_ptr<City> Agent::getOrigin() 			{return origin;}
 std::weak_ptr<City> Agent::getDestination() {return destination;}
-int Agent::getLoad() {return total_load_to_transport;}
-int Agent::get_id() {return agent_id;}
-std::vector<int> Agent::get_path() {return path;} //ids of nodes
+
+int Agent::getLoad() 									{return total_load_to_transport;}
+int Agent::get_id() 									{return agent_id;}
+int Agent::get_num_of_breaks() 				{return num_of_breaks;}
+int Agent::get_goods_delivered() 			{return goods_delivered;}
+int Agent::get_distance_made() 				{return distance_made;}
+int Agent::get_total_time_on_track() 	{return total_time_on_track;}
+bool Agent::is_running() 							{return running;}
+
+std::vector<int> Agent::get_path()				{return path;} //ids of nodes
 std::vector<std::string> Agent::get_his() {return history;}
-bool Agent::is_running() {return running;}
 
 void Agent::insert_neighbors(	std::vector<std::pair<double,graph_node>> &points, double cost,	graph_node &node,
 															std::shared_ptr<City> &target, std::map<int,int> &history)
@@ -129,6 +146,7 @@ void Agent::hit_the_road(int time_to_travel, neighbor next_city) //jack
 						{
 							history.push_back(print_waiting(next_city.city->get_id(), limits.break_time));
 							time_on_track = 0;
+							++num_of_breaks;
 						}
 
 						if(time_to_travel < limits.non_stop_working_time-time_on_track)	{		//no breaks
@@ -141,14 +159,17 @@ void Agent::hit_the_road(int time_to_travel, neighbor next_city) //jack
 									time_on_this_route += limits.non_stop_working_time-time_on_track;
 									history.push_back(print_moving(next_city.city->get_id(), time_on_this_route, (double)time_on_this_route/(double)time_to_travel));
 									history.push_back(print_waiting(next_city.city->get_id(), limits.break_time));
-									distance_made += time_on_this_route*next_city.road->get_speed()/60; //mins-?hours
+									distance_made += time_on_this_route*next_city.road->get_speed()/60; //mins->hours
 									time_on_track = 0;
+									++num_of_breaks;
 								}
 								history.push_back(print_moving(next_city.city->get_id(), time_to_travel-time_on_this_route));
 								time_on_track += time_to_travel-time_on_this_route;
 					  }
-
 						total_time_on_track+=time_to_travel;
+
+						if(total_time_on_track > 60 * 8)
+							working_hours = false;
 				}
 
 
@@ -157,7 +178,7 @@ void Agent::agent_drive(std::shared_ptr<City> position, std::shared_ptr<City> ta
 					path_finder(position, target); //fill path for the first time
 					std::shared_ptr<City> current_pos = position;
 
-					while(path.size()>1 && !accident_happened)
+					while(path.size()>1 && !accident_happened && working_hours)
 					{
 						std::vector<neighbor> cities = current_pos->get_neighbors();
 						int id = path[path.size()-2]; //last id=this node id, last-1 = next node
@@ -296,19 +317,23 @@ void Agent::agent_travel()
 					std::shared_ptr<City> starting_city = origin.lock();
 					std::shared_ptr<City> ending_city = destination.lock();
 
-					while(total_load_to_transport != 0 && !accident_happened)	{
-							agent_load(); //break_sem down, sched_sem up
-							std::cout << total_time_on_track << " czas pracy agenta"<<std::endl;
+					while((total_load_to_transport != 0 || current_load != 0) && !accident_happened && working_hours)	{
 							agent_drive(starting_city, ending_city);
-							std::cout << total_time_on_track << " czas pracy agenta"<<std::endl;
 
-							if(accident_happened)
+							if(accident_happened || !working_hours)
 									break;
+
 							agent_unload();  //break_sem down, sched_sem up
-							if(total_load_to_transport != 0) //if course done, stay in final location
+
+							if(total_load_to_transport != 0){ //if course done, stay in final location
 								agent_drive(ending_city, starting_city);
+
+								if(accident_happened || !working_hours)
+										break;
+
+								agent_load(); //break_sem down, sched_sem up
+							}
 				 }
-				 std::cout << "exit reason: "<<total_load_to_transport<<" acc: "<<accident_happened << std::endl;
 				 sem_post(&acces_sem); //unlock scheduler on exit from function, forever
 				 running = false;
 				}
@@ -331,6 +356,6 @@ std::string Agent::get_raport()
 								 std::string("\", \"working_time\": \"")+
 			 					 std::to_string(total_time_on_track)+
 								 std::string("\", \"distance\" : \"")+
-								 std::to_string((int)distance_made)+
+								 std::to_string(distance_made)+
 								 std::string(" km.\"");
 				}

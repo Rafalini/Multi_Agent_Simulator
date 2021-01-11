@@ -6,7 +6,6 @@
 
 #include <memory>
 #include <vector>
-#include <semaphore.h>
 
 using namespace boost::unit_test;
 

@@ -50,19 +50,21 @@ class Agent{
         int total_load_to_transport;
         int capacity;
         int current_load=0;
+        int time_on_track=0; //minutes
+        int actual_time=0;   //minutes
 
         data_table limits;
         //statistics
+        int num_of_breaks=0;
         int goods_delivered=0;
-        double distance_made=0;
+        int distance_made=0;
         int total_time_on_track=0;
-        int time_on_track=-1; //minutes
-        int actual_time=0;
 
         std::vector<int> path; //ids of nodes after path finding
         std::vector<std::string> history; //list of events, base of animation
         bool accident_happened = false;
         bool running = true;
+        bool working_hours = true;
 
         std::string print_moving(int loc_id, int duration);
         std::string print_moving(int loc_id, int duration, double procent);
@@ -93,6 +95,11 @@ public:
         std::weak_ptr<City> getDestination();
         int getLoad();
         int get_id();
+        int get_num_of_breaks();
+        int get_goods_delivered();
+        int get_distance_made();
+        int get_total_time_on_track();
+
         void agent_go();
         void agent_stop();
         void agent_travel();
