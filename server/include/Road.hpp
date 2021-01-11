@@ -16,10 +16,14 @@ struct Data_table;
 class Road{
 
     connections connection_type;
+    int id;
     int speed;
+    double efficiency;
   public:
-      Road(int conn, Data_table limits);
+      Road(int id, int conn, Data_table limits);
       int getSpeed();
+      int getId();
+      double getEfficiency();
       connections getConnectionType();
 };
 

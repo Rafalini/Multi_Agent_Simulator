@@ -9,11 +9,10 @@ async def request_handler(websocket, path):
         try:
             request = await asyncio.wait_for(websocket.recv(), timeout = 3600)
             dict = json.loads(request)
-            #print(dict)
+            print(dict)
 
             map = dict["map"]
             map_agents = dict["agents"]
-            map_agent_ids = []
             map_cities = map["cities"]
             map_points = map["points"]
             map_paths = map["paths"]
@@ -34,11 +33,10 @@ async def request_handler(websocket, path):
                 cpp_map.addMapPoint(x["id"],"point_"+str(x["id"]), x["x"], x["y"])
                 print("Punkt:  "+str(x["id"])+" "+"point_"+str(x["id"])+" "+str(x["x"])+" "+str(x["y"]))
             for x in map_agents:
-                map_agent_ids.append(x["id"])
                 cpp_map.addAgent(x["id"],x["begining"], x["destination"], x["load"], x["capacity"])
                 print("Agent: "+str(x["id"])+" "+x["begining"]+" "+x["destination"]+" "+str(x["load"])+str(x["capacity"]))
             for x in map_paths:
-                cpp_map.addPath(x["begining"],x["end"],x["type"])
+                cpp_map.addPath(x["id"],x["begining"],x["end"],x["type"])
 
             print("\nwczytano miasta i agentow do mapy\n")
 
@@ -48,16 +46,18 @@ async def request_handler(websocket, path):
 
 
             if parameters["isGraphical"] == 1: #graphical mode answer
-                print("graph sim")
                 output_json ="["
-                for x in map_agent_ids:
+                for x in map_agents:
                     output_json += "{ \"history\": "
-                    output_json += cpp_map.getAgentRoute(x)+", "
+                    output_json += cpp_map.getAgentRoute(x["id"])+", "
                     output_json += "\"statistics\": {"
-                    output_json += cpp_map.getAgentRaport(x)+"} },"
-
+                    output_json += cpp_map.getAgentRaport(x["id"])+"} },"
                 output_json = output_json[:-2]
-                output_json += "} ]"
+                output_json += "}, { \"paths\" : ["
+                for x in map_paths:
+                    output_json += cpp_map.getPaths(x["id"])+", "
+                output_json = output_json[:-2]
+                output_json += "]}]"
             else:
                 output_json ="["
                 for x in map_agent_ids:

@@ -16,6 +16,7 @@ class Agents_Map{
         Data_table limits;
         std::vector<std::shared_ptr<City>>  points;
         std::vector<std::shared_ptr<Agent>> agents;
+        std::vector<std::shared_ptr<Road>>  roads;
         std::vector<std::shared_ptr<Agent>> agents_backup;
 
         std::vector<std::vector<int>> stats;
@@ -27,7 +28,7 @@ class Agents_Map{
            void scheduler();
            void addMapPoint(int id, std::string name, double ox, double oy);
            void addAgent(int id, std::string origin, std::string destination, int load, int capacity);
-           void addPath(int begin, int end, int type);
+           void addPath(int id, int begin, int end, int type);
            void addSpeeds(int v1, int v2, int v3);
            void addLoadingSpeeds(int load, int unload);
            void addAccident(double n, int work_time, int break_time);
@@ -40,6 +41,7 @@ class Agents_Map{
            std::string getAgentRoute(int id);
            std::string getAgentRaport(int id);
            std::string getAgentStats(int id, int runs);
+           std::string getPaths(int id);
 };
 
 #endif
