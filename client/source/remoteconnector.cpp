@@ -16,6 +16,7 @@ void RemoteConnector::submit(const QJsonObject& parameters) {
     obj["map"] = map->toJson();
     obj["agents"] = agents->toJson();
     obj["parameters"] = parameters;
+    isGraphicalMode = parameters["isGraphical"].toBool();
     QJsonDocument doc(obj);
     qDebug() << "trying to send a message...";
     sendMessage(doc.toJson(QJsonDocument::Compact));
@@ -46,13 +47,21 @@ void RemoteConnector::onConnected() {
 void RemoteConnector::onTextMessageReceived(QString message) {
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
     QJsonArray arr = doc.array();
-    emit answerReceived();
-    for(int i = 0; i < arr.size(); ++i) {
-        QJsonObject agentData = arr[i].toObject();
-        agents->addAgentHistory(i, agentData["history"].toArray());
-        agents->addAgentStatistics(i, agentData["statistics"].toObject());
+    if(isGraphicalMode) {
+        emit answerReceived();
+        for(int i = 0; i < arr.size(); ++i) {
+            QJsonObject agentData = arr[i].toObject();
+            agents->addAgentHistory(i, agentData["history"].toArray());
+            agents->addAgentStatistics(i, agentData["statistics"].toObject());
+        }
+        emit answerParsed();
     }
-    emit answerParsed();
+    else {
+        for(int i = 0; i < arr.size(); ++i) {
+            agents->addAgentStatistics(i, arr[i].toObject());
+        }
+        emit statisticsParsed();
+    }
 }
 
 void RemoteConnector::onDisconnected() {

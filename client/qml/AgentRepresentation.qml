@@ -9,13 +9,13 @@ Item {
     Text {
         id: agentText
         anchors.bottom: rec.top
+        anchors.left: rec.left
+        font.pixelSize: 10
     }
-
-    function animationFinished() {}
 
     Image {
         id: rec
-        width: 15
+        width: 10
         height: width
         source: "../resource/truck_icon.png"
     }
@@ -33,14 +33,12 @@ Item {
         let history = agent_.history;
         if(!history) return;
         if(history.length <= currentAnimationIndex) {
-            animationFinished();
-            agentText.text = "";
+            agentText.text = "Koniec";
             return;
         }
         let current = history[currentAnimationIndex];
         if(current["state"] === "accident") {
             agentText.text = "Wypadek...";
-            animationFinished();
             return;
         }
         animationDuration = current["duration"] * mapFrame.speed;
@@ -58,6 +56,10 @@ Item {
             }
             xAnimation.to = newX;
             yAnimation.to = newY;
+        } else if(current["state"] === "waiting") {
+            agentText.text = "oczekuje";
+            xAnimation.to = x-5;
+            yAnimation.to = y-5;
         } else {
             if(current["state"] === "loading"){
                 agentText.text = "Trwa załadunek...";

@@ -19,6 +19,7 @@ signals:
     void answerReceived();
     void addAgentRepresentation(QJsonObject);
     void answerParsed();
+    void statisticsParsed();
 
 private Q_SLOTS:
     void onConnected();
@@ -33,6 +34,7 @@ private:
     QUrl url;
     bool connected;
     QQueue<QString> messageQueue;
+    bool isGraphicalMode;
 };
 
 #endif // REMOTECONNECTOR_H

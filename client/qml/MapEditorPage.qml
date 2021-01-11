@@ -13,6 +13,11 @@ Page {
             tabBar.currentIndex = 2;
             draggableArea.enabled = false;
         }
+        function onStatisticsParsed() {
+            tabBar.currentIndex = 2;
+            agentsStatisticsListView.isGraphicalMode = false;
+            agentsStatisticsPopup.open();
+        }
         function onAnswerParsed() {
             timeText.visible = true;
         }
@@ -27,7 +32,7 @@ Page {
         width: height
         height: 500
         scale: Math.min(parentItem.width/width, parentItem.height/height)
-        property int speed: 10
+        property int speed: 60
         Image {
             anchors.fill: parent
             source: "../resource/MapOfPoland.png"
@@ -38,7 +43,7 @@ Page {
             anchors.right: parent.right
             anchors.top: parent.top
             color: "black"
-            visible: false //display onlt during animation
+            visible: false //display only during animation
             property int minutes: 0
             property int hour: 100
             onVisibleChanged: {
@@ -66,7 +71,10 @@ Page {
                         restart();
                     else {
                         timeText.visible = false;
-                        agentsStatisticsPopup.open();
+                        draggableArea.enabled = true;
+                        tabBar.visible = true;
+                        draggableArea.enabled = true;
+                        sStatisticsPopup.open();
                     }
                 }
                 duration: mapFrame.speed * 60
@@ -165,20 +173,10 @@ Page {
                 id: agentRepeater
                 anchors.fill: parent
                 model: agents
-                property int finishedAnimations: 0;
-                onFinishedAnimationsChanged: {
-                    if(finishedAnimations === agents.rowCount()) {
-                        tabBar.visible = true;
-                        draggableArea.enabled = true;
-                        finishedAnimations = 0;
-                    }
-                }
+
                 delegate: AgentRepresentation {
                     agent_: agent
                     isAnimationRunning: !draggableArea.enabled
-                    function animationFinished() {
-                        agentRepeater.finishedAnimations++;
-                    }
                 }
             }
 
@@ -322,7 +320,8 @@ Page {
             RowLayout {
                 id: listViewLabel
                 Layout.fillWidth: true
-                property var headers: ["id", "Miasto początkowe","Miasto końcowe", "Dostarczono", "Przejechano"]
+                property var headers: agentsStatisticsListView.isGraphicalMode ? ["id", "Miasto początkowe","Miasto końcowe", "Dostarczono", "Przejechano"]
+                                                                               : ["id", "Miasto początkowe","Miasto końcowe", "Średnio dostarczono", "Średnio przejechano"]
                 Repeater {
                     model: agentsStatisticsListView.columnWidths.length
                     Label {
@@ -339,12 +338,14 @@ Page {
                 model: agents
                 id: agentsStatisticsListView
 
-                property var columnWidths: [30, 150, 150, 70, 100]
+                property var columnWidths: agentsStatisticsListView.isGraphicalMode ? [30, 150, 150, 70, 100] : [30, 150, 150, 150, 150]
 
                 Layout.preferredHeight: contentHeight
                 Layout.preferredWidth: columnWidths.reduce(function(a, b){
                     return a + b;
                 }, 0);
+
+                property bool isGraphicalMode: true
 
                 delegate: ItemDelegate {
                     required property var begining
@@ -354,7 +355,9 @@ Page {
 
                     height: row.height
                     id: delegate
-                    property var repeaterValues: [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? agent.statistics["delivered"]/agent.load*100+"%" : "no data", agent.statistics["distance"] ? agent.statistics["distance"] : "no data"]
+                    property var repeaterValues: agentsStatisticsListView.isGraphicalMode ? [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? Math.round(agent.statistics["delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["distance"] ? agent.statistics["distance"] : "brak danych"]
+                                                                                          : [agent.id, begining.name, destination.name, agent.statistics["avg_delivered"] ?  Math.round(agent.statistics["avg_delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["avg_distance"] ? agent.statistics["avg_distance"] : "brak danych"]
+
                     RowLayout {
                         id: row
                         Repeater {

@@ -14,7 +14,7 @@ Rectangle {
             text: "Droga zwykła"
         }
         Rectangle {
-            Layout.preferredHeight: 10
+            Layout.preferredHeight: 8
             Layout.preferredWidth: 10
             color: "black"
         }
@@ -22,7 +22,7 @@ Rectangle {
             text: "Droga ekspresowa"
         }
         Rectangle {
-            Layout.preferredHeight: 10
+            Layout.preferredHeight: 12
             Layout.preferredWidth: 10
             color: "darkblue"
         }
@@ -30,7 +30,7 @@ Rectangle {
             text: "Autostrada"
         }
         Rectangle {
-            Layout.preferredHeight: 10
+            Layout.preferredHeight: 16
             Layout.preferredWidth: 10
             color: "purple"
         }
