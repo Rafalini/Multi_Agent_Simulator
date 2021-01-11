@@ -31,8 +31,10 @@ void Agents_Map::add_agent(int id, std::string s_origin, std::string s_destin, i
           auto destination =  std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->get_name() == s_destin;});
 
           if(origin != points.end() && destination != points.end()){
-                agents.push_back(std::make_shared<Agent>(id, *origin, *destination, load, capacity, limits));
+                //agents.push_back(std::make_shared<Agent>(id, *origin, *destination, load, capacity, limits));
                 agents_backup.push_back(std::make_shared<Agent>(id, *origin, *destination, load, capacity, limits));
+                std::vector<int> v{id,0,0,0,0};
+                stats.push_back(v);
           }
       }
 
@@ -68,6 +70,7 @@ void Agents_Map::add_accident(double n, int work_time, int break_time)
 void Agents_Map::run()
       {
             std::cout << "running simulation..." << std::endl;
+            agents = agents_backup;
             std::vector<std::thread> running;
 
             std::thread sched(&Agents_Map::scheduler, this);
@@ -76,15 +79,7 @@ void Agents_Map::run()
                 agent->agent_go();
 
             for(auto agent : agents)
-            {
-                  agent->agent_stop();
-                  std::vector<int> v;
-                  v.push_back(agent->get_goods_delivered());
-                  v.push_back(agent->get_total_time_on_track());
-                  v.push_back(agent->get_distance_made());
-                  v.push_back(agent->get_num_of_breaks());
-                  stats.push_back(v);
-            }
+                agent->agent_stop();
 
            sched.join();
       }
@@ -162,18 +157,6 @@ std::string Agents_Map::get_agent_stats(int id, int runs)
 
 void Agents_Map::restart()
 {
-  if(stats.size() == 0)
-    for(auto agent : agents)
-    {
-          std::vector<int> v;
-          v.push_back(agent->get_id());
-          v.push_back(agent->get_goods_delivered());
-          v.push_back(agent->get_total_time_on_track());
-          v.push_back(agent->get_distance_made());
-          v.push_back(agent->get_num_of_breaks());
-          stats.push_back(v);
-    }
-  else
     for(long unsigned int i=0; i<agents.size(); ++i)
     {
           stats[i][1] += agents[i]->get_goods_delivered();
@@ -181,7 +164,6 @@ void Agents_Map::restart()
           stats[i][3] += agents[i]->get_distance_made();
           stats[i][4] += agents[i]->get_num_of_breaks();
     }
-  agents = agents_backup;
 }
 
 
