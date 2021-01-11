@@ -46,24 +46,24 @@ async def request_handler(websocket, path):
 
 
             if parameters["isGraphical"] == 1: #graphical mode answer
-                output_json ="["
+                output_json ="{ \"agents\" : ["
                 for x in map_agents:
                     output_json += "{ \"history\": "
                     output_json += cpp_map.getAgentRoute(x["id"])+", "
                     output_json += "\"statistics\": {"
                     output_json += cpp_map.getAgentRaport(x["id"])+"} },"
-                output_json = output_json[:-2]
-                output_json += "}, { \"paths\" : ["
+                output_json = output_json[:-1]
+                output_json += "], \"paths\" : ["
                 for x in map_paths:
                     output_json += cpp_map.getPaths(x["id"])+", "
                 output_json = output_json[:-2]
-                output_json += "]}]"
+                output_json += "]}"
             else:
                 output_json ="["
                 for x in map_agent_ids:
                     output_json += cpp_map.getAgentStats(x,parameters["number_of_simulations"])+","
                 output_json = output_json[:-1]
-                output_json += " ]"
+                output_json += " ] }"
 
             print(output_json)
 
