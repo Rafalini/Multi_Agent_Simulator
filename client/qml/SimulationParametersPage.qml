@@ -10,6 +10,9 @@ Page {
         function onAnswerParsed() {
             submitButton.enabled = true;
         }
+        function onStatisticsParsed() {
+            submitButton.enabled = true;
+        }
     }
 
     function validate() {
@@ -201,6 +204,7 @@ Page {
                 Layout.rowSpan: 2
                 text: "Wyślij"
                 Layout.alignment: Qt.AlignCenter
+                onClicked: activate()
                 function activate() {
                     if(!simulationParametersPage.validate()) return;
                     let parameters = {
@@ -218,8 +222,8 @@ Page {
                         parameters["number_of_simulations"] = parseInt(numberOfSimulations.text);
                     } else {
                         parameters["number_of_simulations"] = 1;
+                        tabBar.visible = false;
                     }
-                    tabBar.visible = false;
                     remoteConnector.submit(parameters);
                     enabled = false;
                 }
