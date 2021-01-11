@@ -38,14 +38,14 @@ void Agents_Map::addAgent(int id, std::string s_origin, std::string s_destin, in
         }
       }
 
-void Agents_Map::addPath(int begin, int end, int type){
+void Agents_Map::addPath(int id, int begin, int end, int type){
         auto origin =       std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->getId() == begin;});
         auto destination =  std::find_if(points.begin(), points.end(), [&](std::shared_ptr<City> obj){return obj.get()->getId() == end;});
 
-        std::shared_ptr<Road> myroad = std::make_shared<Road>(type, limits);
+        roads.push_back(std::make_shared<Road>(id, type, limits));
 
-        points[origin     -points.begin()].get()->addNeighbor(*destination, myroad);
-        points[destination-points.begin()].get()->addNeighbor(*origin, myroad);
+        points[origin     -points.begin()].get()->addNeighbor(*destination, roads[roads.size()-1]);
+        points[destination-points.begin()].get()->addNeighbor(*origin, roads[roads.size()-1]);
     }
 
 void Agents_Map::addSpeeds(int v1, int v2, int v3){
@@ -151,6 +151,21 @@ void Agents_Map::restart(){
         }
       }
 
+std::string Agents_Map::getPaths(int id){
+        std::string output;
+
+        auto path = std::find_if(roads.begin(), roads.end(), [&id](const std::shared_ptr<Road>&r)
+                                                                    {return r->getId() == id;});
+        if(path != roads.end())
+          output =  std::string("{\"path_id\": \"")+
+                    std::to_string((*path)->getId())+
+                    std::string("\", \"efficiency\" : \"")+
+                    std::to_string((*path)->getEfficiency())+
+                    std::string("\"}");
+
+        return output;
+      }
+
 
 BOOST_PYTHON_MODULE(map_module){
           boost::python::class_<Agents_Map>("Agents_Map", boost::python::init<>())
@@ -161,6 +176,7 @@ BOOST_PYTHON_MODULE(map_module){
               .def("getAgentRoute", &Agents_Map::getAgentRoute)
               .def("getAgentRaport", &Agents_Map::getAgentRaport)
               .def("getAgentStats", &Agents_Map::getAgentStats)
+              .def("getPaths", &Agents_Map::getPaths)
               .def("addPath", &Agents_Map::addPath)
               .def("addSpeeds", &Agents_Map::addSpeeds)
               .def("addLoadingSpeeds", &Agents_Map::addLoadingSpeeds)
