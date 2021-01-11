@@ -43,8 +43,9 @@ async def request_handler(websocket, path):
             print("\nwczytano miasta i agentow do mapy\n")
 
             for x in range(parameters["number_of_simulations"]):
-                cpp_map.restart()
                 cpp_map.run()
+                cpp_map.restart()
+
 
             if parameters["number_of_simulations"] == 1: #graphical mode answer
                 print("graph sim")
