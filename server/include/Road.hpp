@@ -1,3 +1,6 @@
+//300190
+//Klasa reprezentująca drogę.
+
 #ifndef ROAD
 #define ROAD
 
@@ -8,16 +11,16 @@
 
 enum connections {COUNTRY=0,EXPRESS,HIGHWAY};
 
-struct data_table;
+struct Data_table;
 
 class Road{
 
     connections connection_type;
     int speed;
   public:
-      Road(int conn, data_table limits);
-      int get_speed();
-      connections get_connection_type();
+      Road(int conn, Data_table limits);
+      int getSpeed();
+      connections getConnectionType();
 };
 
 #endif
