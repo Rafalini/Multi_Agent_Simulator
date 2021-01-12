@@ -355,8 +355,8 @@ Page {
 
                     height: row.height
                     id: delegate
-                    property var repeaterValues: agentsStatisticsListView.isGraphicalMode ? [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? Math.round(agent.statistics["delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["distance"] ? agent.statistics["distance"] : "brak danych", agent.statistics["working_time"] ? agent.statistics["working_time"]/60 + "h" + agent.statistics["working_time"]%60 + "min" : "brak danych"]
-                                                                                          : [agent.id, begining.name, destination.name, agent.statistics["avg_delivered"] ?  Math.round(agent.statistics["avg_delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["avg_distance"] ? agent.statistics["avg_distance"] : "brak danych", agent.statistics["avg_working_time"] ? agent.statistics["avg_working_time"]/60 + "h" + agent.statistics["avg_working_time"]%60 + "min" : "brak danych"]
+                    property var repeaterValues: agentsStatisticsListView.isGraphicalMode ? [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? Math.round(agent.statistics["delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["distance"] ? agent.statistics["distance"] : "brak danych", agent.statistics["working_time"] ? Math.round(parseFloat(agent.statistics["working_time"])/60) + "h" + Math.round(parseFloat(agent.statistics["working_time"])%60) + "min" : "brak danych"]
+                                                                                          : [agent.id, begining.name, destination.name, agent.statistics["avg_delivered"] ?  Math.round(agent.statistics["avg_delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["avg_distance"] ? Math.round(agent.statistics["avg_distance"]) : "brak danych", agent.statistics["avg_working_time"] ? Math.round(parseFloat(agent.statistics["avg_working_time"])/60) + "h" + Math.round(parseFloat(agent.statistics["avg_working_time"])%60) + "min" : "brak danych"]
 
                     RowLayout {
                         id: row
