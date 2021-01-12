@@ -79,6 +79,9 @@ ApplicationWindow {
         function onFileFormatException() {
             windowDialog.showError("Niepoprawny format pliku!");
         }
+        function onNoCityOfName(cityName) {
+            windowDialog.showError("Nie ma miasta o nazwie " + cityName);
+        }
     }
 
     Popup {

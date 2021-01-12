@@ -26,21 +26,11 @@ int main(int argc, char *argv[]) {
     MapProperties map;
 
     //fill default agents
-    Agents agents;
-
+    Agents agents(&map);
     //clear all agents if map needs to be cleared
     QObject::connect(&map, &MapProperties::aboutToClear, &agents, &Agents::clear);
 
-
-    auto cities = map.getCities();
-//    agents.addAgent(cities[0], cities[1], 20, 200);
-//    agents.addAgent(cities[2], cities[1], 22, 200);
-//    agents.addAgent(cities[1], cities[2], 230, 100);
-//    agents.addAgent(cities[2], cities[0], 160, 50);
-//    agents.addAgent(cities[1], cities[0], 200, 500);
-
     RemoteConnector remote(&map, &agents);
-
     engine.rootContext()->setContextProperty("remoteConnector", &remote);
     engine.rootContext()->setContextProperty("map", &map);
     engine.rootContext()->setContextProperty("agents", &agents);

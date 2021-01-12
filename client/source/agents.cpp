@@ -1,8 +1,13 @@
 #include "agents.h"
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QJsonDocument>
+#include <QFileDialog>
 
-Agents::Agents(QObject *parent) : QAbstractListModel(parent){}
+Agents::Agents(MapProperties* map, QObject *parent) : QAbstractListModel(parent), map(map) {
+    QJsonDocument doc =  QJsonDocument::fromJson(agentsJson.toUtf8());
+    fill(doc);
+}
 
 Agents::~Agents() {
     for(auto& agent : agents) {
@@ -19,6 +24,53 @@ void Agents::clear() {
     }
     endRemoveRows();
 }
+
+void Agents::saveToJson() {
+    QJsonArray agentsJson = toJson();
+    QJsonDocument doc;
+    doc.setArray(agentsJson);
+    QDateTime current_date = QDateTime::currentDateTime();
+    QString date = current_date.toString("yyyy-MM-dd-hh-mm-ss");
+    QString fileName = "agenci"+date+".json";
+    QFileDialog::saveFileContent(doc.toJson(), fileName.toUtf8());
+}
+
+void Agents::readFromJsonFile() {
+    auto fileContentReady = [this](const QString &fileName, const QByteArray &fileContent) {
+        if (!fileName.isEmpty()) {
+            QJsonDocument doc = QJsonDocument::fromJson(fileContent);
+            if(doc.toJson() == "") {
+                emit fileFormatException();
+                return;
+            }
+            clear();
+            fill(doc);
+        }
+    };
+    QFileDialog::getOpenFileContent("Pliki (*.txt *.json)",  fileContentReady);
+}
+
+void Agents::fill(QJsonDocument doc) {
+    if(agents.size() > 0) return;
+    QJsonArray agents_ = doc.array();
+    for(int i = 0; i < agents_.size(); ++i) {
+        QJsonObject agent = agents_[i].toObject();
+        City * begining = map->getCityByName(agent["begining"].toString());
+        if(begining == nullptr) {
+            emit noCityOfName(agent["begining"].toString());
+            continue;
+        }
+        City * destination = map->getCityByName(agent["destination"].toString());
+        if(destination == nullptr) {
+            emit noCityOfName(agent["begining"].toString());
+            continue;
+        }
+        double load = agent["load"].toDouble();
+        double capacity = agent["capacity"].toDouble();
+        addAgent(begining, destination, load, capacity);
+    }
+}
+
 
 void Agents::addAgentHistory(int index, const QJsonArray& history) {
     agents[index]->setHistory(history);

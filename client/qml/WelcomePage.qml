@@ -14,7 +14,7 @@ Page {
             text: "Wczytaj mapę z pliku"
             Layout.alignment: Qt.AlignHCenter
             function activate() {
-                map.readMapFromJsonFile();
+                map.readFromJsonFile();
             }
         }
 
@@ -22,7 +22,7 @@ Page {
             text: "Zapisz mapę do pliku"
             Layout.alignment: Qt.AlignHCenter
             function activate() {
-                map.saveMapToJson();
+                map.saveToJson();
             }
         }
 

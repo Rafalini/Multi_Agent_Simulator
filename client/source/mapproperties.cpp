@@ -37,18 +37,17 @@ QJsonObject MapProperties::toJson() const {
     return obj;
 }
 
-void MapProperties::saveMapToJson() {
+void MapProperties::saveToJson() {
     QJsonObject mapJson = toJson();
     QJsonDocument doc;
     doc.setObject(mapJson);
     QDateTime current_date = QDateTime::currentDateTime();
     QString date = current_date.toString("yyyy-MM-dd-hh-mm-ss");
-    QString fileName = "map"+date+".json";
-    qDebug() << fileName;
+    QString fileName = "mapa"+date+".json";
     QFileDialog::saveFileContent(doc.toJson(), fileName.toUtf8());
 }
 
-void MapProperties::readMapFromJsonFile() {
+void MapProperties::readFromJsonFile() {
     auto fileContentReady = [this](const QString &fileName, const QByteArray &fileContent) {
         if (!fileName.isEmpty()) {
             QJsonDocument doc = QJsonDocument::fromJson(fileContent);
@@ -161,6 +160,13 @@ Point* MapProperties::getPointById(int id) {
         return *city;
     }
     return *point;
+}
+
+City *MapProperties::getCityByName(QString name) {
+    auto city = std::find_if(cities.begin(), cities.end(),
+                             [&name](const City* city) { return city->getName() == name;});
+    if(city == cities.end()) return nullptr;
+    return *city;
 }
 
 Path *MapProperties::getPathById(int id) {

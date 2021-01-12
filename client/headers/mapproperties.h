@@ -30,9 +30,10 @@ public:
     Q_INVOKABLE void splitPath(Path* old_path, double x, double y);
     Q_INVOKABLE void promotePointToCity(Point*, QString name);
     Q_INVOKABLE Point* getPointById(int id);
+    Q_INVOKABLE City* getCityByName(QString name);
     Q_INVOKABLE Path* getPathById(int id);
-    Q_INVOKABLE void readMapFromJsonFile();
-    Q_INVOKABLE void saveMapToJson();
+    Q_INVOKABLE void readFromJsonFile();
+    Q_INVOKABLE void saveToJson();
 
 signals:
     void duplicateCityName(QString);
