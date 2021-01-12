@@ -9,7 +9,6 @@
 
 #include <string>
 #include <boost/python.hpp>
-#include <iostream>
 #include <vector>
 #include <memory>
 #include <ctime>
@@ -64,7 +63,6 @@ void Agents_Map::addAccident(double n, int work_time, int break_time){
     }
 
 void Agents_Map::run(){
-        std::cout << "running simulation..." << std::endl;
         agents = agents_backup;
         std::vector<std::thread> running;
 
@@ -84,7 +82,8 @@ void Agents_Map::scheduler(){
         while(true){
           finished_agents=0;
           for(auto agent : agents) //acquire all tickets = all agents waiting
-            agent->accesSched(); //it will wait for working Agenst, and acces instantly for finished Agents
+            if(agent->isRunning() == true)
+              agent->accesSched(); //it will wait for working Agenst, and acces instantly for finished Agents
 
           for(auto city : points)
             city->organizeTimes(); //organize cities
@@ -149,27 +148,28 @@ void Agents_Map::restart(){
               stats[i][3] += agents[i]->getDistanceMade();
               stats[i][4] += agents[i]->getNumOfBreaks();
         }
-        for(auto road : roads)
-            road->randomTimes();
+        //for(auto road : roads)
+            //road->randomTimes();
       }
 
 std::string Agents_Map::getPaths(){
-        std::string output="";
+        std::string output=" ";
 
         sort(roads.begin(), roads.end(), []
         (const std::shared_ptr<Road>&r1, const std::shared_ptr<Road>&r2)
                       {return r1->getBeginTime() < r2->getBeginTime();});
 
         for(auto path : roads)
-          output += std::string("{\"path_id\": \"")+
-                    std::to_string(path->getId())+
-                    std::string("\", \"trafic_efficiency\" : \"")+
-                    std::to_string(path->getInTraficEfficiency())+
-                    std::string("\", \"begin_time\" : \"")+
-                    std::to_string(path->getBeginTime())+
-                    std::string("\", \"end_time\" : \"")+
-                    std::to_string(path->getEndTime())+
-                    std::string("\" } ,");
+          if(path->getEndTime()!=0)
+            output += std::string("{\"path_id\": \"")+
+                      std::to_string(path->getId())+
+                      std::string("\", \"trafic_efficiency\" : \"")+
+                      std::to_string(path->getInTraficEfficiency())+
+                      std::string("\", \"begin_time\" : \"")+
+                      std::to_string(path->getBeginTime())+
+                      std::string("\", \"end_time\" : \"")+
+                      std::to_string(path->getEndTime())+
+                      std::string("\" } ,");
 
         output = output.substr(0, output.size()-2);
         return output;
