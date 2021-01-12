@@ -2,10 +2,10 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QFileDialog>
-#include "mapproperties.h"
-#include "point.h"
-#include "city.h"
-#include "path.h"
+#include "MapProperties.h"
+#include "Point.h"
+#include "City.h"
+#include "Path.h"
 
 MapProperties::MapProperties() {
     QJsonDocument doc =  QJsonDocument::fromJson(mapJson.toUtf8());
