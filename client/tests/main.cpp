@@ -1,5 +1,4 @@
 #include <QtTest>
-#include "tst_agentstests.hpp"
 #include "tst_pathtests.hpp"
 #include "tst_agenttest.hpp"
 #include "tst_pointtests.hpp"
@@ -9,11 +8,6 @@
 int main(int argc, char *argv[])
 {
    int status = 0;
-
-   {
-      AgentsTests agentsTest;
-       status |= QTest::qExec(&agentsTest, argc, argv);
-   }
 
    {
        AgentTest agentTest;
