@@ -1,5 +1,7 @@
 //300190
-//Klasa reprezentująca miasto.
+//Klasa reprezentująca miasto. Miasto ma swoich sąsiadów i kolejki agentów.
+//Jedna jest kolejką agentów oczekujących, druga jest kolejką agentów którym już został przydzielony
+//czas wjazu do miasta.
 
 #include <math.h>
 #include <memory>
@@ -9,8 +11,6 @@
 
 #include "City.hpp"
 #include "Road.hpp"
-
-#include <iostream>
 
 City::City(int _id, std::string _city, double _ox, double _oy): id(_id), name(_city), ox(_ox), oy(_oy)
 {   sem_init(&queue_sem,0,1); }

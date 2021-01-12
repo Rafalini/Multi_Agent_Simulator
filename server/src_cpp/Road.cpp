@@ -1,5 +1,6 @@
 //300190
-//Klasa reprezentująca drogę.
+//Klasa reprezentująca drogę. W zależności od czasu kiedy agent nią jedzie może mieć korek lub nie.
+//Służy do podawanie prędkości w zależności od agenta i jego godziny.
 
 #include "Road.hpp"
 #include "Agents_Map.hpp"
