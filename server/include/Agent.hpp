@@ -42,8 +42,8 @@ struct Data_table{
 
 class Agent{
     private:
-        static const int accident_rate = 100; //częśtotliwość wypadków, co jaki dystans wypadek może się zdarzyć
-
+        static const int ACCIDENT_RATE = 100; //częśtotliwość wypadków, co jaki dystans wypadek może się zdarzyć
+        static const int STEP_ON_THE_ROAD = 5; //wielkość pjedynczego kroku na mapie (w minutach)
         std::thread t;
 
         int agent_id;
@@ -59,7 +59,7 @@ class Agent{
         //statistics
         int num_of_breaks=0;
         int goods_delivered=0;
-        int distance_made=0;
+        double total_distance_made=0;
         int total_time_on_track=0;
 
         std::vector<int> path;            //aktualna ścieżka (kolekcja identyfikatorów kolejnych węzłów)
@@ -91,6 +91,8 @@ public:
         void agentDrive(std::shared_ptr<City> position, std::shared_ptr<City> target);
         //przemieszczanie agenta między wierzchołkami, uwzględnia sprawdzanie czasu agenta, przerw etc
         void hitTheRoad(int time, Neighbor next_city);//jack
+        void hitTheRoad(std::shared_ptr<City> origin_pos, Neighbor next_city);
+
 
         std::vector<int> getPath();
         Agent(); //do testowania funkcji grafowych
