@@ -33,7 +33,6 @@ Item {
     Connections {
         target: agent_
         function onHistoryUpdated() {
-            totalDuration = 0;
             flame.visible = false;
             agentText.text = "";
             x = agent_.begining.x*parent.width;
