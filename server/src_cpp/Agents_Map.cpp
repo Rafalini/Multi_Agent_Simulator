@@ -1,5 +1,5 @@
 //300190
-//Klasa opakowująca agentów i mapę razem
+//Klasa opakowująca agentów i mapę razem. Zapewnia funkcjonalności odczytu i zapisu danych.
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
 //disable msvc warnings for Boost.Python (Boost 1.63)

@@ -1,5 +1,7 @@
 //300190
-//Klasa reprezentująca agenta.
+//Klasa reprezentująca agenta. Agent posiada towary do przewiezienia, ładowność, cel oraz miejsce startowe.
+//Oprócz tego agent przechowuje dane statystyczne o swojej historii.
+//W tej klasie znajdują się semafory na których zawieszają się agenci wchodzący do miast i planista.
 
 #ifndef AGENT
 #define AGENT
@@ -8,9 +10,10 @@
 #include <vector>
 #include <memory>
 #include <map>
-#include "City.hpp"
 #include <semaphore.h>
 #include <thread>
+
+#include "City.hpp"
 
 class City;
 struct Neighbor;
