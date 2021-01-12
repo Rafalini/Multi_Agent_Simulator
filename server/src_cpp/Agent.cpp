@@ -141,65 +141,43 @@ bool Agent::checkIfAccident(int distance){
 						return false;
 					}
 
-void Agent::hitTheRoad(int time_to_travel, Neighbor next_city){
-						/*int time_on_this_route=0;
-						if(time_on_track >= limits.non_stop_working_time){ //break in city
-							history.push_back(printBreak(next_city.city->getId(), limits.break_time));
-							time_on_track = 0;
-							++num_of_breaks;
-						}
-
-						if(time_to_travel < limits.non_stop_working_time-time_on_track)	{		//no breaks
-							history.push_back(printMoving(next_city.city->getId(), time_to_travel));
-							distance_made += time_to_travel*next_city.road->getSpeed(actual_time)/60;
-							time_on_track += time_to_travel;
-						}else{																														//breaks
-							while(time_to_travel > time_on_this_route + limits.non_stop_working_time - time_on_track){
-								time_on_this_route += limits.non_stop_working_time-time_on_track;
-								history.push_back(printMoving(next_city.city->getId(), time_on_this_route, (double)time_on_this_route/(double)time_to_travel));
-								history.push_back(printBreak(next_city.city->getId(), limits.break_time));
-								total_distance_made += time_on_this_route*next_city.road->getSpeed(actual_time)/60; //mins->hours
-								actual_time += limits.non_stop_working_time-time_on_track;
-								time_on_track = 0;
-								++num_of_breaks;
-							}
-							history.push_back(printMoving(next_city.city->getId(), time_to_travel-time_on_this_route));
-							time_on_track += time_to_travel-time_on_this_route;
-							actual_time += time_to_travel-time_on_this_route;
-					  }
-						total_time_on_track+=time_to_travel;
-
-						if(total_time_on_track > 60 * 8)
-							working_hours = false;*/
-				}
-
 void Agent::hitTheRoad(std::shared_ptr<City> origin_pos, Neighbor next_city){
 					double distance_made=0;
 					double distance_to_do = origin_pos->getDistanceTo(next_city.city)*City::DISTANCE_PER_UNIT;
-					int time_on_this_route = 0;
-					while(distance_made < distance_to_do && working_hours)
+					int time_to_go = 0, last_speed = next_city.road->getSpeed(actual_time);
+					total_distance_made += distance_to_do;
+					while(distance_made <= distance_to_do && working_hours)
 					{
-						if(time_on_track > limits.non_stop_working_time)
-						{
-							if(time_on_this_route != 0) //if in break in city, print break only
-								history.push_back(printMoving(next_city.city->getId(), time_on_this_route, (double)distance_made/(double)distance_to_do));
+						if(time_on_track > limits.non_stop_working_time){
+							if(distance_made != 0) //if in break in city, print break only
+								history.push_back(printMoving(next_city.city->getId(), time_to_go, (double)distance_made/(double)distance_to_do));
 							history.push_back(printBreak(next_city.city->getId(), limits.break_time));
+							distance_to_do -= distance_made;
+							distance_made = 0;
 							time_on_track = 0;
+							time_to_go = 0;
 							actual_time += limits.break_time;
 						}
 
-						if(actual_time > 8*60)
+						if(actual_time > Agent::SIMULATION_TIME)
 							working_hours = false;
+
+						if(last_speed != next_city.road->getSpeed(actual_time)){
+							last_speed = next_city.road->getSpeed(actual_time);
+							history.push_back(printMoving(next_city.city->getId(), time_to_go, (double)distance_made/(double)distance_to_do));
+							distance_to_do -= distance_made;
+							distance_made = 0;
+							time_to_go=0;
+						}
 						//																				         km/min
-						distance_made += next_city.road->getSpeed(actual_time)/60 * Agent::STEP_ON_THE_ROAD;
+						distance_made += (double)next_city.road->getSpeed(actual_time)/60 * Agent::STEP_ON_THE_ROAD;
 						actual_time += Agent::STEP_ON_THE_ROAD;
 						time_on_track += Agent::STEP_ON_THE_ROAD;
-						time_on_this_route += Agent::STEP_ON_THE_ROAD;
+						time_to_go += Agent::STEP_ON_THE_ROAD;
+						total_time_on_track += Agent::STEP_ON_THE_ROAD;
 					}
 					//travel rest
-					history.push_back(printMoving(next_city.city->getId(), time_on_this_route, (double)distance_made/(double)distance_to_do));
-					total_time_on_track += time_on_this_route;
-					total_distance_made += distance_made;
+					history.push_back(printMoving(next_city.city->getId(), time_to_go, (double)distance_made/(double)distance_to_do));
 				}
 
 void Agent::agentDrive(std::shared_ptr<City> position, std::shared_ptr<City> target){
@@ -214,11 +192,9 @@ void Agent::agentDrive(std::shared_ptr<City> position, std::shared_ptr<City> tar
 																												{return n.city->getId() == id;});
 			      if(next_city != cities.end()){
 							if(checkIfAccident((int)(next_city->distance*City::DISTANCE_PER_UNIT)))
-								history.push_back(printAccident(path[path.size()-2],(int)(next_city->road->getSpeed(actual_time)*next_city->distance),(double)std::rand()/(double)RAND_MAX));
+								history.push_back(printAccident(path[path.size()-2],(int)(next_city->road->getSpeed(actual_time)*next_city->distance),(double)(std::rand()%100)/100));
 							else{										// distance_on_map * scale / speed * 60 [for minutes]
-								//int time_to_travel = current_pos->getDistanceTo(next_city->city)*City::DISTANCE_PER_UNIT/next_city->road->getSpeed(actual_time)*60;
 								hitTheRoad(current_pos, *next_city);//jack
-								//hitTheRoad(time_to_travel, *next_city);//jack
 								current_pos = next_city->city;
 							}
 							pathFinder(current_pos, target);
@@ -265,10 +241,7 @@ std::string Agent::printAccident(int loc_id, int duration, double proc){
 
 void Agent::unlockMutex() { sem_post(&break_sem);}
 
-void Agent::accesSched(){
-					 sem_wait(&acces_sem);
-					 sem_post(&acces_sem);
-				}
+void Agent::accesSched()  { sem_wait(&acces_sem);}
 
 void Agent::agentLoad(){
 						if(total_load_to_transport > capacity){
@@ -283,13 +256,12 @@ void Agent::agentLoad(){
 						ori->syncAddToQue(agent_id, actual_time, limits.load_time_per_unit*current_load);
 						sem_post(&acces_sem); //enable scheduler
 						sem_wait(&break_sem); //wait for cheduler
-						sem_wait(&acces_sem);
 
 						int start_time = ori->syncGetStartTime(agent_id);
 
 						if(start_time != actual_time){
 							history.push_back(printWaiting(ori->getId(), start_time-actual_time));
-							actual_time = start_time;
+							actual_time +=  start_time-actual_time;
 						}
 						std::string information, location;
 						information = std::string("{\"state\": ")+
@@ -299,7 +271,7 @@ void Agent::agentLoad(){
 						history.push_back(information);
 						time_on_track=0;
 						actual_time+=limits.load_time_per_unit*current_load;
-						if(actual_time > 8*60)
+						if(actual_time > Agent::SIMULATION_TIME)
 							working_hours = false;
 				}
 
@@ -309,17 +281,16 @@ void Agent::agentUnload(){
 					des->syncAddToQue(agent_id, actual_time, limits.unload_time_per_unit*current_load);
 					sem_post(&acces_sem); //enable wake up sched, if waiting wake up
 					sem_wait(&break_sem); //wait for cheduler
-					sem_wait(&acces_sem);
 
 					int start_time = des->syncGetStartTime(agent_id);
 
 					if(start_time != actual_time){
 						history.push_back(printWaiting(des->getId(), start_time-actual_time));
-						actual_time = start_time;
+						actual_time =  start_time-actual_time;
 					}
 
 					goods_delivered+=current_load;
-					
+
 					std::string information;
 					information = std::string("{\"state\": ")+
 												std::string("\"unloading\", ")+
@@ -328,7 +299,7 @@ void Agent::agentUnload(){
 				  current_load=0;
 					history.push_back(information);
 					actual_time+=limits.load_time_per_unit*current_load;
-					if(actual_time > 8*60)
+					if(actual_time > Agent::SIMULATION_TIME)
 						working_hours = false;
 				}
 
@@ -357,8 +328,8 @@ void Agent::agentTravel(){
 							agentLoad(); //break_sem down, sched_sem up
 						}
 				 }
-				 sem_post(&acces_sem); //unlock scheduler on exit from function, forever
 				 running = false;
+				 sem_post(&acces_sem); //unlock scheduler on exit from function, forever
 				}
 
 

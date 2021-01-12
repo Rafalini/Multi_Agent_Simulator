@@ -42,8 +42,6 @@ struct Data_table{
 
 class Agent{
     private:
-        static const int ACCIDENT_RATE = 100; //częśtotliwość wypadków, co jaki dystans wypadek może się zdarzyć
-        static const int STEP_ON_THE_ROAD = 5; //wielkość pjedynczego kroku na mapie (w minutach)
         std::thread t;
 
         int agent_id;
@@ -56,7 +54,7 @@ class Agent{
         int actual_time=0;   //minutes
 
         Data_table limits;
-        //statistics
+        //do statystyk:
         int num_of_breaks=0;
         int goods_delivered=0;
         double total_distance_made=0;
@@ -68,6 +66,9 @@ class Agent{
         bool running = true;
         bool working_hours = true;
 
+        sem_t acces_sem;
+        sem_t break_sem;
+
 //funkcje wypisujące daną akcję agenta w formacie JSON
         std::string printMoving(int loc_id, int duration);
         std::string printMoving(int loc_id, int duration, double procent);
@@ -76,11 +77,10 @@ class Agent{
         std::string printAccident(int loc_id, int duration, double procent);
 
         bool checkIfAccident(int distance);
-
-        sem_t acces_sem;
-        sem_t break_sem;
 public:
-
+        static const int ACCIDENT_RATE = 100; //częśtotliwość wypadków, co jaki dystans wypadek może się zdarzyć
+        static const int STEP_ON_THE_ROAD = 5; //wielkość pjedynczego kroku na mapie (w minutach)
+        static const int SIMULATION_TIME = 8*60; //czas trwania symulacji
 //metody publiczne ze względu na testy, nie są wykorzystywane poza testami
         void pathFinder(std::shared_ptr<City> origin, std::shared_ptr<City> destination);
         void insertFirstNeighbors(std::vector<std::pair<double,Graph_node>> &points, std::shared_ptr<City> &origin, std::shared_ptr<City> &target, std::map<int,int> &history);
@@ -90,8 +90,7 @@ public:
         //przemieszczanie agenta po grafie
         void agentDrive(std::shared_ptr<City> position, std::shared_ptr<City> target);
         //przemieszczanie agenta między wierzchołkami, uwzględnia sprawdzanie czasu agenta, przerw etc
-        void hitTheRoad(int time, Neighbor next_city);//jack
-        void hitTheRoad(std::shared_ptr<City> origin_pos, Neighbor next_city);
+        void hitTheRoad(std::shared_ptr<City> origin_pos, Neighbor next_city);//jack
 
 
         std::vector<int> getPath();
