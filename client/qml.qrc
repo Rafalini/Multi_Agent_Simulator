@@ -1,12 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/AgentDefiner.qml</file>
-        <file>qml/main.qml</file>
+        <file>qml/Main.qml</file>
         <file>qml/MapEditorPage.qml</file>
         <file>qml/WelcomePage.qml</file>
-        <file>resource/MapOfPoland.png</file>
         <file>qml/StyledButton.qml</file>
-        <file>qml/StyledPopup.qml</file>
         <file>qml/AgentsPage.qml</file>
         <file>qml/CityRepresentation.qml</file>
         <file>qml/PointRepresentation.qml</file>
@@ -17,5 +15,10 @@
         <file>qml/CityContextMenu.qml</file>
         <file>qml/PathContextMenu.qml</file>
         <file>qml/SimplePathRepresentation.qml</file>
+        <file>qml/AgentRepresentation.qml</file>
+        <file>resource/MapOfPoland.png</file>
+        <file>resource/truck_icon.png</file>
+        <file>qml/MapLegend.qml</file>
+        <file>resource/flame.png</file>
     </qresource>
 </RCC>

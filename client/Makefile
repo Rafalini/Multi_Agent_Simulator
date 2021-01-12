@@ -16,10 +16,10 @@ all: emsdk/emsdk_env.sh build/index.html
 emsdk/emsdk_env.sh:
 	git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && git pull && ./emsdk install sdk-1.39.8-64bit && ./emsdk activate sdk-1.39.8-64bit
 
-build/index.html: emsdk/emsdk_env.sh build source/* headers/* qml/* Qt build/Makefile
+build/index.html: emsdk/emsdk_env.sh build source/* headers/* qml/* $(QMAKE) build/Makefile
 	source emsdk/emsdk_env.sh && cd build && make && cp ../resource/Symulator_Wieloagentowy.html index.html
 	
-build/Makefile: Symulator_Wieloagentowy.pro build qml.qrc
+build/Makefile: Symulator_Wieloagentowy.pro build qml.qrc Qt
 	source emsdk/emsdk_env.sh && cd build && $(QMAKE) .. $(QMAKE_FLAGS) && sed -i $(SED_ARGUMENT) Makefile && sed -i 's|LFLAGS        = |LFLAGS        = -s TOTAL_MEMORY=33554432 |' Makefile
 
 run:
@@ -35,20 +35,14 @@ $(QT_INSTALLER):
 build:
 	mkdir build
 	
-tests: generate_tests
-	cd tests && ./run_tests.sh
+tests: source/* headers/* qml/* tests/build
+	cd tests/build && $(GCC_QMAKE) .. $(QCC_QMAKE_FLAGS)
 	
-generate_tests: tests/build source/* headers/* qml/*
-	cd tests/build && $(GCC_QMAKE) .. $(QCC_QMAKE_FLAGS) && make
+wasm_tests: emsdk/emsdk_env.sh source/* headers/* qml/* tests/build_wasm
+	cd tests/build_wasm && $(QMAKE) .. $(QMAKE_FLAGS) && make && mv MultiAgentSimulatorUnitTests.html index.html && $(PYTHON) $(EMRUN) $(EMRUN_FLAGS) --port '8889' ./
 	
 tests/build:
 	mkdir tests/build
-
-wasm_tests: emsdk/emsdk_env.sh tests/build_wasm/index.html source/* headers/* qml/*
-	$(PYTHON) $(EMRUN) $(EMRUN_FLAGS) --port '8889' tests/build_wasm/
-	
-tests/build_wasm/index.html: tests/build_wasm tests/make_index_html.sh
-	source emsdk/emsdk_env.sh && cd tests/build_wasm && $(QMAKE) .. && make && cd .. && ./make_index_html.sh
 
 tests/build_wasm:
 	mkdir tests/build_wasm
@@ -57,3 +51,7 @@ clean:
 	$(RM) -r build
 	$(RM) -r tests/build
 	$(RM) -r tests/build_wasm
+
+full_clean: clean
+	$(RM) -r Qt
+	$(RM) -r emsdk

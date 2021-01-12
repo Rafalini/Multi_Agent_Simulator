@@ -27,4 +27,12 @@ Menu {
             pathRepresentation_ = 0;
         }
     }
+
+    MenuItem {
+        text: "Zmień typ drogi"
+        onTriggered: {
+            pathTypeEditPopup.show(pathRepresentation_.path);
+            pathRepresentation_ = 0;
+        }
+    }
 }
