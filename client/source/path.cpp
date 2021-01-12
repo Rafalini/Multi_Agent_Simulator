@@ -6,8 +6,7 @@ int Path::next_id = 0;
 
 Path::Path(Point* beg, Point* en, RoadType type) : id(next_id++), begining(beg), end(en), type(type) {}
 
-int Path::getId() const
-{
+int Path::getId() const {
     return id;
 }
 
@@ -18,13 +17,11 @@ Path::~Path() {
         end->removePath(this);
 }
 
-Point* Path::getBegining() const
-{
+Point* Path::getBegining() const {
     return begining;
 }
 
-Point* Path::getEnd() const
-{
+Point* Path::getEnd() const {
     return end;
 }
 
@@ -33,17 +30,26 @@ bool Path::operator==(const Path& o) const {
     return (this->begining == o.begining && this->end == o.end) || (this->end == o.begining && this->begining == o.end);
 }
 
-Path::RoadType Path::getType() const
-{
+Path::RoadType Path::getType() const {
     return type;
 }
 
-void Path::setType(const RoadType &value)
-{
+void Path::setType(const RoadType &value) {
     if(type != value) {
         type = value;
         typeChanged();
     }
+}
+
+QJsonObject Path::getTrafficData() const
+{
+    return trafficData;
+}
+
+void Path::setTrafficData(const QJsonObject &value) {
+    trafficData = value;
+    emit trafficDataChanged();
+    qDebug() << id;
 }
 
 void Path::setBegining(Point* begining) {
@@ -60,7 +66,6 @@ void Path::setEnd(Point* end) {
     this->end->addPath(this);
     emit endChanged();
 }
-
 
 QJsonObject Path::toJson() const {
     QJsonObject obj;

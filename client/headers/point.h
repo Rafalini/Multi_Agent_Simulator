@@ -17,14 +17,14 @@ public:
     Point(const double& x, const double& y);
     virtual ~Point() {emit deleted();}
     const double& getX() const;
-    const double& getY() const;
-    Q_INVOKABLE void setX(const double& x);
-    Q_INVOKABLE void setY(const double& y);
-    Q_INVOKABLE void addPath(Path* path);
     void removePath(Path* path);
     QVector<Path*> getPaths() const;
     virtual QJsonObject toJson() const;
     int getId() const;
+    const double& getY() const;
+    Q_INVOKABLE void setX(const double& x);
+    Q_INVOKABLE void setY(const double& y);
+    Q_INVOKABLE void addPath(Path* path);
 
 signals:
     void xChanged(const double&);

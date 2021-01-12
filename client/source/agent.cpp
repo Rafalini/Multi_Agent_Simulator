@@ -18,29 +18,24 @@ QJsonArray Agent::getHistory() const {
     return history;
 }
 
-double Agent::getCapacity() const
-{
+double Agent::getCapacity() const {
     return capacity;
 }
 
-void Agent::setCapacity(double value)
-{
+void Agent::setCapacity(double value) {
     capacity = value;
     emit capacityUpdated();
 }
 
-int Agent::getId() const
-{
+int Agent::getId() const {
     return id;
 }
 
-QJsonObject Agent::getStatistics() const
-{
+QJsonObject Agent::getStatistics() const {
     return statistics;
 }
 
-void Agent::setStatistics(const QJsonObject &value)
-{
+void Agent::setStatistics(const QJsonObject &value) {
     statistics = value;
     emit statisticsUpdated();
 }
@@ -99,8 +94,8 @@ void Agent::setBegining(City* beg) {
     this->beginingCity = beg;
     connect(beginingCity, &City::deleted, this, &Agent::cityDeleted);
     emit beginingUpdated();
-
 }
+
 void Agent::setDestination(City* dest) {
     if(dest == nullptr) {
         emit wrongUpdateArguments("Miasto nie może być puste");

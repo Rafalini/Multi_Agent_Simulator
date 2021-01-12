@@ -20,6 +20,7 @@ public:
     QVector<Path*> getPaths() const;
     QVector<Point*> getPoints() const;
     QVector<City*> getCities() const;
+    void fill();
     Q_INVOKABLE void addCity(const QString& name, const double& x, const double& y);
     Q_INVOKABLE void addPoint(const double& x, const double& y);
     Q_INVOKABLE void addPath(Point* begining, Point* end, Path::RoadType type = Path::STANDARD);
@@ -29,7 +30,7 @@ public:
     Q_INVOKABLE void splitPath(Path* old_path, double x, double y);
     Q_INVOKABLE void promotePointToCity(Point*, QString name);
     Q_INVOKABLE Point* getPointById(int id);
-    void fill();
+    Q_INVOKABLE Path* getPathById(int id);
 
 signals:
     void duplicateCityName(QString);

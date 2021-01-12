@@ -14,8 +14,7 @@ void Agents::addAgentHistory(int index, const QJsonArray& history) {
     agents[index]->setHistory(history);
 }
 
-void Agents::addAgentStatistics(int index, const QJsonObject &statistics)
-{
+void Agents::addAgentStatistics(int index, const QJsonObject &statistics) {
     agents[index]->setStatistics(statistics);
 }
 
@@ -48,8 +47,7 @@ QVariant Agents::data(const QModelIndex &index, int role) const { //unused role
     }
 }
 
-bool Agents::isCityUsed(City *city)
-{
+bool Agents::isCityUsed(City *city) {
     for(auto agent : agents) {
         if(agent->getBegining() == city || agent->getDestination() == city)
             return true;

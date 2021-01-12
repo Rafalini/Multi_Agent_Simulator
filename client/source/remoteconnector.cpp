@@ -28,7 +28,7 @@ void RemoteConnector::sendMessage(QString message) {
         webSocket.open(url);
     } else {
         qint64 numberOfBytesSent = webSocket.sendTextMessage(message);
-        if(numberOfBytesSent == 0 && !connected) {
+        if(numberOfBytesSent == 0 || !connected) {
             messageQueue.enqueue(message);
             webSocket.open(url);
         }
@@ -50,7 +50,13 @@ void RemoteConnector::onTextMessageReceived(QString message) {
         QJsonObject obj = doc.object();
         QJsonArray arr = obj["agents"].toArray();
         QJsonArray arrPaths = obj["paths"].toArray();
-        qDebug() << arrPaths;
+        for(int i = 0; i < arrPaths.size(); ++i) {
+            QJsonObject pathJson = arrPaths[i].toObject();
+            int id = pathJson["path_id"].toString().toInt();
+            pathJson.remove("path_id");
+            Path* path = map->getPathById(id);
+            path->setTrafficData(pathJson);
+        }
         emit answerReceived();
         for(int i = 0; i < arr.size(); ++i) {
             QJsonObject agentData = arr[i].toObject();

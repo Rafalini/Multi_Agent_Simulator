@@ -161,6 +161,11 @@ Point* MapProperties::getPointById(int id) {
     return *point;
 }
 
+Path *MapProperties::getPathById(int id) {
+    return *std::find_if(paths.begin(), paths.end(),
+                              [&id](const Path* path) { return path->getId() == id;});
+}
+
 void MapProperties::promotePointToCity(Point* point, QString name) {
     City* city = new City(name, point->getX(), point->getY());
     cities.push_back(city);
@@ -215,18 +220,15 @@ MapProperties::~MapProperties() {
     }
 }
 
-QVector<City*> MapProperties::getCities() const
-{
+QVector<City*> MapProperties::getCities() const {
     return cities;
 }
 
-QVector<Point*> MapProperties::getPoints() const
-{
+QVector<Point*> MapProperties::getPoints() const {
     return points;
 }
 
-QVector<Path*> MapProperties::getPaths() const
-{
+QVector<Path*> MapProperties::getPaths() const {
     return paths;
 }
 

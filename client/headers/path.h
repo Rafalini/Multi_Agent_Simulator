@@ -4,6 +4,7 @@
 #include <memory>
 #include <QVector>
 #include <QObject>
+#include <QJsonObject>
 #include "point.h"
 
 QT_FORWARD_DECLARE_CLASS(Point); //forward declaration
@@ -15,6 +16,7 @@ class Path : public QObject
     Q_PROPERTY(Point* begining READ getBegining WRITE setBegining NOTIFY beginingChanged);
     Q_PROPERTY(Point* end READ getEnd WRITE setEnd NOTIFY endChanged);
     Q_PROPERTY(RoadType type READ getType WRITE setType NOTIFY typeChanged);
+    Q_PROPERTY(QJsonObject trafficData READ getTrafficData NOTIFY trafficDataChanged);
 
 public:
     enum RoadType {
@@ -35,17 +37,21 @@ public:
     bool operator==(const Path&) const;
     RoadType getType() const;
     void setType(const RoadType &value);
+    QJsonObject getTrafficData() const;
+    void setTrafficData(const QJsonObject &value);
 
 signals:
     void endChanged();
     void beginingChanged();
     void typeChanged();
+    void trafficDataChanged();
 
 private:
     int id;
     Point* begining;
     Point* end;
     RoadType type;
+    QJsonObject trafficData;
     static int next_id;
 };
 

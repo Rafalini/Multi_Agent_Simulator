@@ -21,6 +21,9 @@ class Agents : public QAbstractListModel
 public:
     explicit Agents(QObject *parent = nullptr);
     QJsonArray toJson() const ;
+    void addAgentHistory(int index, const QJsonArray& history);
+    void addAgentStatistics(int index, const QJsonObject& statistics);
+    virtual ~Agents();
     Q_INVOKABLE void addAgent(City* start, City* destination, const double& load, const double& capacity);
     Q_INVOKABLE Agent* getAgent(const QModelIndex &index);
     Q_INVOKABLE void removeAgent(Agent*);
@@ -29,9 +32,6 @@ public:
     Q_INVOKABLE virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     Q_INVOKABLE virtual QHash<int, QByteArray> roleNames() const;
     Q_INVOKABLE bool isCityUsed(City* city);
-    void addAgentHistory(int index, const QJsonArray& history);
-    void addAgentStatistics(int index, const QJsonObject& statistics);
-    ~Agents();
 
 signals:
     void agentsChanged();

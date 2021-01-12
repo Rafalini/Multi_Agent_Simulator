@@ -6,10 +6,20 @@ SimplePathRepresentation {
     property variant path
     property bool isDrawMode: false
     property bool isInAnimationMode: false
+    property bool isTraffic: false
     x2: path && path.end ? path.end.x*parent.width : 0
     y2: path && path.end ? path.end.y*parent.height : 0
     x: path && path.begining ? path.begining.x*parent.width : 0
     y: path && path.begining ? path.begining.y*parent.height : 0
+
+    Connections {
+        target: path
+        function onTrafficDataChanged() {
+            let startTimer = Qt.createQmlObject('import QtQuick 2.15; Timer{ running: true; interval: ' + path.trafficData["begin_time"] * mapFrame.speed + '; onTriggered: { parent.isTraffic = true; destroy();} }', pathRepresentation);
+            let endTimer = Qt.createQmlObject('import QtQuick 2.15; Timer{ running: true; interval: ' + path.trafficData["end_time"] * mapFrame.speed +'; onTriggered: { parent.isTraffic = false; destroy();} }', pathRepresentation);
+
+        }
+    }
 
     //change height and color according to road TYPE
     height: {
@@ -26,6 +36,7 @@ SimplePathRepresentation {
 
     color: {
         if(!path) return 0;
+        if(isTraffic) return "red";
         switch(path.type) {
         case RoadType.HIGHWAY:
             return "purple";
