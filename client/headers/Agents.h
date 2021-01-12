@@ -3,7 +3,6 @@
 
 #include <QAbstractListModel>
 #include <QObject>
-#include <QDebug>
 #include <QVector>
 #include "MapProperties.h"
 #include "Agent.h"

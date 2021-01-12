@@ -56,7 +56,6 @@ QJsonObject Path::getTrafficData() const
 void Path::setTrafficData(const QJsonObject &value) {
     trafficData = value;
     emit trafficDataChanged();
-    qDebug() << id;
 }
 
 void Path::setBegining(Point* begining) {

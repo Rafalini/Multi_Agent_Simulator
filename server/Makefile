@@ -2,24 +2,30 @@ BUILDDIR = build
 TESTDIR = tests
 TARGETDIR = bin
 SRCDIR = src_cpp
-CFLAGS = -Wall -pedantic -Wno-long-long -I include -std=c++11
+CFLAGS = -Wall -pedantic -Wno-long-long -I include -std=c++11 -fPIC
 TESTFLAG = -lboost_unit_test_framework
-INC = -I include -pthread
+INC = -I /usr/include/python3.8 
+SHARED_LIBRARY_FLAGS = -pthread -lboost_python38 -lpython3.8
 CC = g++
 
-server:
-	mkdir -p $(BUILDDIR)
-	scons
+server: $(BUILDDIR)/Agents_Map.o $(BUILDDIR)/City.o $(BUILDDIR)/Agent.o $(BUILDDIR)/Road.o $(BUILDDIR) 
+	$(CC) $(BUILDDIR)/*.o $(INC) $(SHARED_LIBRARY_FLAGS) -shared -o $(BUILDDIR)/map_module.so
+	
+$(BUILDDIR)/Agents_Map.o: $(SRCDIR)/Agents_Map.cpp $(BUILDDIR)
+	$(CC) -c $(SRCDIR)/Agents_Map.cpp $(INC) -o $(BUILDDIR)/Agents_Map.o $(CFLAGS)
 
-serv:
-	mkdir -p $(BUILDDIR)
-	g++ -o src_cpp/Agents_Map.os -c -fPIC -Wall -pedantic -pthread -Wno-long-long -I include -std=c++11 -I/usr/include/python3.7 src_cpp/Agents_Map.cpp
-	g++ -o src_cpp/City.os -c -fPIC -Wall -pedantic -pthread -Wno-long-long -I include -std=c++11 -I/usr/include/python3.7 src_cpp/City.cpp
-	g++ -o src_cpp/Agent.os -c -fPIC -Wall -pedantic -pthread -Wno-long-long -I include -std=c++11 -I/usr/include/python3.7 src_cpp/Agent.cpp
-	g++ -o src_cpp/Road.os -c -fPIC -Wall -pedantic -pthread -Wno-long-long -I include -std=c++11 -I/usr/include/python3.7 src_cpp/Road.cpp
-	g++ -o build/libmap_module.so -Wall -pthread -shared src_cpp/Agents_Map.os src_cpp/City.os src_cpp/Agent.os src_cpp/Road.os -L/usr/lib/python3.7 -lboost_python37
-	shutil.copy(src_cpp/Agents_Map.cpp, build/map_module)
+$(BUILDDIR)/City.o: $(SRCDIR)/City.cpp $(BUILDDIR)
+	$(CC) -c $(SRCDIR)/City.cpp -o $(BUILDDIR)/City.o $(CFLAGS)
 
+$(BUILDDIR)/Agent.o: $(SRCDIR)/Agent.cpp $(BUILDDIR)
+	$(CC) -c $(SRCDIR)/Agent.cpp -o $(BUILDDIR)/Agent.o  $(CFLAGS)
+
+$(BUILDDIR)/Road.o: $(SRCDIR)/Road.cpp $(BUILDDIR)
+	$(CC) -c $(SRCDIR)/Road.cpp -o $(BUILDDIR)/Road.o  $(CFLAGS)
+
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
+	
 run: server
 	python3 server.py
 
