@@ -11,7 +11,7 @@ SOURCES += \
         source/Agents.cpp \
         source/City.cpp \
         source/Main.cpp \
-        source/Mapproperties.cpp \
+        source/MapProperties.cpp \
         source/Path.cpp \
         source/Point.cpp \
         source/RemoteConnector.cpp
