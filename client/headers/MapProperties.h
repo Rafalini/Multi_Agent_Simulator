@@ -15,7 +15,7 @@ class MapProperties : public QObject
 public:
     MapProperties();
     QJsonObject toJson() const;
-    virtual ~MapProperties();
+    ~MapProperties();
     QVector<Path*> getPaths() const;
     QVector<Point*> getPoints() const;
     QVector<City*> getCities() const;
