@@ -33,6 +33,7 @@ Item {
     Connections {
         target: agent_
         function onHistoryUpdated() {
+            totalDuration = 0;
             flame.visible = false;
             agentText.text = "";
             x = agent_.begining.x*parent.width;
@@ -40,6 +41,8 @@ Item {
             currentAnimationIndex = 0;
         }
     }
+    property var totalDuration: 0
+
     onCurrentAnimationIndexChanged: {
         if(currentAnimationIndex < 0) return;
         let history = agent_.history;
@@ -54,6 +57,8 @@ Item {
             return;
         }
         animationDuration = current["duration"] * mapFrame.speed;
+        console.debug("agent total duration:" + totalDuration + ", mapTime:" + timeText.text);
+        totalDuration += parseInt(current["duration"]);
         if(current["state"] === "moving") {
             agentText.text = "";
             let point = map.getPointById(current["locationid"]);
