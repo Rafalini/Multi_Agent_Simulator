@@ -41,7 +41,6 @@ Item {
             currentAnimationIndex = 0;
         }
     }
-    property var totalDuration: 0
 
     onCurrentAnimationIndexChanged: {
         if(currentAnimationIndex < 0) return;
@@ -56,20 +55,6 @@ Item {
             flame.visible = true;
             return;
         }
-
-        let hour = timeText.hour;
-        if(hour === 22 || hour === 23) {
-            hour = hour - 22;
-        } else if(hour === 24) {
-           hour = 0;
-        }else {
-            hour += 2;
-        }
-        let animationTime = hour*60 + timeText.minutes
-        console.debug("agent total duration:" + totalDuration + ", mapTime:" + animationTime);
-
-        totalDuration += parseInt(current["duration"]);
-
         animationDuration = current["duration"] * mapFrame.speed;
         if(current["state"] === "moving") {
             agentText.text = "";

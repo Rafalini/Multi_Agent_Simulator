@@ -12,6 +12,7 @@ Page {
         function onAnswerReceived() {
             tabBar.currentIndex = 2;
             draggableArea.enabled = false;
+            agentsStatisticsListView.isGraphicalMode = true;
         }
         function onStatisticsParsed() {
             tabBar.currentIndex = 2;
@@ -319,8 +320,8 @@ Page {
             RowLayout {
                 id: listViewLabel
                 Layout.fillWidth: true
-                property var headers: agentsStatisticsListView.isGraphicalMode ? ["id", "Miasto początkowe","Miasto końcowe", "Dostarczono", "Przejechano"]
-                                                                               : ["id", "Miasto początkowe","Miasto końcowe", "Średnio dostarczono", "Średnio przejechano"]
+                property var headers: agentsStatisticsListView.isGraphicalMode ? ["id", "Miasto początkowe","Miasto końcowe", "Dostarczono", "Przejechano", "Przepracowano"]
+                                                                               : ["id", "Miasto początkowe","Miasto końcowe", "Średnio dostarczono", "Średnio przejechano", "Średnio przepracowano"]
                 Repeater {
                     model: agentsStatisticsListView.columnWidths.length
                     Label {
@@ -337,7 +338,7 @@ Page {
                 model: agents
                 id: agentsStatisticsListView
 
-                property var columnWidths: agentsStatisticsListView.isGraphicalMode ? [30, 150, 150, 70, 100] : [30, 150, 150, 150, 150]
+                property var columnWidths: agentsStatisticsListView.isGraphicalMode ? [30, 150, 150, 70, 100, 100] : [30, 150, 150, 150, 150, 150]
 
                 Layout.preferredHeight: contentHeight
                 Layout.preferredWidth: columnWidths.reduce(function(a, b){
@@ -354,8 +355,8 @@ Page {
 
                     height: row.height
                     id: delegate
-                    property var repeaterValues: agentsStatisticsListView.isGraphicalMode ? [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? Math.round(agent.statistics["delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["distance"] ? agent.statistics["distance"] : "brak danych"]
-                                                                                          : [agent.id, begining.name, destination.name, agent.statistics["avg_delivered"] ?  Math.round(agent.statistics["avg_delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["avg_distance"] ? agent.statistics["avg_distance"] : "brak danych"]
+                    property var repeaterValues: agentsStatisticsListView.isGraphicalMode ? [agent.id, begining.name, destination.name, agent.statistics["delivered"] ? Math.round(agent.statistics["delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["distance"] ? agent.statistics["distance"] : "brak danych", agent.statistics["working_time"] ? agent.statistics["working_time"]/60 + "h" + agent.statistics["working_time"]%60 + "min" : "brak danych"]
+                                                                                          : [agent.id, begining.name, destination.name, agent.statistics["avg_delivered"] ?  Math.round(agent.statistics["avg_delivered"]/agent.load*100)+"%" : "brak danych", agent.statistics["avg_distance"] ? agent.statistics["avg_distance"] : "brak danych", agent.statistics["avg_working_time"] ? agent.statistics["avg_working_time"]/60 + "h" + agent.statistics["avg_working_time"]%60 + "min" : "brak danych"]
 
                     RowLayout {
                         id: row
