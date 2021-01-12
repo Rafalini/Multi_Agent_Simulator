@@ -45,11 +45,11 @@ Page {
             color: "black"
             visible: false //display only during animation
             property int minutes: 0
-            property int hour: 0
+            property int hour: 22
             onVisibleChanged: {
                 if(!visible) {
                     minutes = 0;
-                    hour = 0;
+                    hour = 22;
                 } else {
                     minutes = 0;
                     hour = 22;
