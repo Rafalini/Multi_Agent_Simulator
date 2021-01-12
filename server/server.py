@@ -58,8 +58,8 @@ async def request_handler(websocket, path):
                 output_json += " ] }"
             else:
                 output_json ="["
-                for x in map_agent_ids:
-                    output_json += cpp_map.getAgentStats(x,parameters["number_of_simulations"])+","
+                for x in map_agents:
+                    output_json += cpp_map.getAgentStats(x["id"],parameters["number_of_simulations"])+","
                 output_json = output_json[:-1]
                 output_json += " ] }"
 

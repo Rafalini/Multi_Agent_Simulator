@@ -32,9 +32,9 @@ int Road::getSpeed(int time){
 
 
 void Road::randomTimes(){
-        int duration = rand()%(5*60);
+        int duration = rand()%(60);
         begin_time = rand()%(3*60);
         end_time = begin_time + duration;
-        overal_efficiency = 1 - (double)(rand()%30)/100;
-        in_trafic_efficiency = overal_efficiency - (double)(rand()%50)/100;
+        overal_efficiency = 1 - (double)(rand()%5)/100;
+        in_trafic_efficiency = overal_efficiency - (double)(rand()%5)/100;
       }

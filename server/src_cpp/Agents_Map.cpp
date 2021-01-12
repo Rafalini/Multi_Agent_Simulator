@@ -163,8 +163,6 @@ std::string Agents_Map::getPaths(){
         for(auto path : roads)
           output += std::string("{\"path_id\": \"")+
                     std::to_string(path->getId())+
-                    std::string("\", \"base_efficiency\" : \"")+
-                    std::to_string(path->getOveralEfficiency())+
                     std::string("\", \"trafic_efficiency\" : \"")+
                     std::to_string(path->getInTraficEfficiency())+
                     std::string("\", \"begin_time\" : \"")+

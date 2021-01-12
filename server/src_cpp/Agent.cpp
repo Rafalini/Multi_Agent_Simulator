@@ -319,6 +319,7 @@ void Agent::agentUnload(){
 					}
 
 					goods_delivered+=current_load;
+					
 					std::string information;
 					information = std::string("{\"state\": ")+
 												std::string("\"unloading\", ")+
