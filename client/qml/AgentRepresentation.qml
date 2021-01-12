@@ -58,9 +58,11 @@ Item {
         }
 
         let hour = timeText.hour;
-        if(hour === 21) {
+        if(hour === 22 || hour === 23) {
             hour = hour - 22;
-        } else {
+        } else if(hour === 24) {
+           hour = 0;
+        }else {
             hour += 2;
         }
         let animationTime = hour*60 + timeText.minutes
