@@ -44,6 +44,7 @@ signals:
     void pathEndOnBegining();
     void aboutToClear();
     void fileFormatException();
+    void readFromFileFinished();
 
 private:
     QVector<City*> cities;

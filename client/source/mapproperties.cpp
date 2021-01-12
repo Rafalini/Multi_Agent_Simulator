@@ -58,6 +58,7 @@ void MapProperties::readFromJsonFile() {
             emit aboutToClear();
             clear();
             fill(doc);
+            emit readFromFileFinished();
         }
     };
     QFileDialog::getOpenFileContent("Pliki (*.txt *.json)",  fileContentReady);

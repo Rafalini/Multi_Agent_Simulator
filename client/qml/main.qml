@@ -71,6 +71,9 @@ ApplicationWindow {
         function onFileFormatException() {
             windowDialog.showError("Niepoprawny format pliku!");
         }
+        function onReadFromFileFinished() {
+            tabBar.currentIndex = 2;
+        }
     }
 
 
@@ -81,6 +84,9 @@ ApplicationWindow {
         }
         function onNoCityOfName(cityName) {
             windowDialog.showError("Nie ma miasta o nazwie " + cityName);
+        }
+        function onReadFromFileFinished() {
+            tabBar.currentIndex = 1;
         }
     }
 

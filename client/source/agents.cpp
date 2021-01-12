@@ -45,6 +45,7 @@ void Agents::readFromJsonFile() {
             }
             clear();
             fill(doc);
+            emit readFromFileFinished();
         }
     };
     QFileDialog::getOpenFileContent("Pliki (*.txt *.json)",  fileContentReady);

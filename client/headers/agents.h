@@ -45,6 +45,7 @@ signals:
     void wrongAddAgentArguments(QString);
     void fileFormatException();
     void noCityOfName(QString);
+    void readFromFileFinished();
 
 private:
     QVector<Agent*> agents;
