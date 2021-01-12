@@ -1,3 +1,4 @@
 # Multi_Agent_Simulator
 Multi_Agent_Simulator
-Authors: https://github.com/macczy i https://github.com/Rafalini
+* [macczy] https://github.com/macczy
+* [Rafalini]  https://github.com/Rafalini
