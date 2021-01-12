@@ -1,6 +1,6 @@
 QT += websockets quick widgets quickcontrols2
 
-CONFIG += c++11
+CONFIG += c++14
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -27,7 +27,7 @@ HEADERS += \
     headers/Agent.h \
     headers/Agents.h \
     headers/City.h \
-    headers/Mapproperties.h \
+    headers/MapProperties.h \
     headers/Path.h \
     headers/Point.h \
     headers/RemoteConnector.h
