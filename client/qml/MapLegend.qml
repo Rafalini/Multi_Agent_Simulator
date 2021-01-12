@@ -34,5 +34,13 @@ Rectangle {
             Layout.preferredWidth: 50
             color: "purple"
         }
+        Label {
+            text: "Korek"
+        }
+        Rectangle {
+            Layout.preferredHeight: 8
+            Layout.preferredWidth: 50
+            color: "red"
+        }
     }
 }
