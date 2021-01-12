@@ -14,6 +14,7 @@ class City : public Point
 
 public:
     City(const QString& name, const double& x, const double& y);
+    City(const QString& name, const double& x, const double& y, const int& id);
     virtual QJsonObject toJson() const;
     const QString& getName() const;
     void setName(const QString& name);

@@ -27,6 +27,7 @@ public:
     Q_ENUMS(RoadType)
 
     Path(Point* beg, Point* en, RoadType type);
+    Path(Point* beg, Point* en, RoadType type, const int& id);
     QJsonObject toJson() const;
     int getId() const;
     virtual ~Path();

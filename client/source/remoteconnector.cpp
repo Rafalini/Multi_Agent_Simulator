@@ -18,7 +18,6 @@ void RemoteConnector::submit(const QJsonObject& parameters) {
     obj["parameters"] = parameters;
     isGraphicalMode = parameters["isGraphical"].toBool();
     QJsonDocument doc(obj);
-    qDebug() << "trying to send a message...";
     sendMessage(doc.toJson(QJsonDocument::Compact));
 }
 
@@ -37,7 +36,6 @@ void RemoteConnector::sendMessage(QString message) {
 
 void RemoteConnector::onConnected() {
     connected = true;
-    qDebug() << "connected";
     while(!messageQueue.isEmpty()) {
         QString message = messageQueue.dequeue();
         sendMessage(message);
@@ -76,5 +74,7 @@ void RemoteConnector::onTextMessageReceived(QString message) {
 
 void RemoteConnector::onDisconnected() {
     connected = false;
-    qDebug() << "disconnected";
+    if(!messageQueue.isEmpty()) {
+        webSocket.open(url);
+    }
 }

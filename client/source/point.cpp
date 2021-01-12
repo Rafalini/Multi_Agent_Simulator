@@ -10,6 +10,14 @@ Point::Point(const double& x, const double& y) : id(next_id++) {
     setY(y);
 }
 
+Point::Point(const double& x, const double& y, const int& id)  {
+    setX(x);
+    setY(y);
+    this->id = id;
+    if(this->id >= next_id)
+        next_id = id+1;
+}
+
 void Point::setX(const double& x) {
     if(x == this->x) return;
     if(x<0) {

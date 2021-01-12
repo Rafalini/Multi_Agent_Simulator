@@ -10,6 +10,16 @@ Agents::~Agents() {
     }
 }
 
+void Agents::clear() {
+    beginRemoveRows(QModelIndex(), 0, agents.size());
+    while(!agents.isEmpty()) {
+        Agent* agent = agents[agents.size()-1];
+        agents.removeOne(agent);
+        agent->deleteLater();
+    }
+    endRemoveRows();
+}
+
 void Agents::addAgentHistory(int index, const QJsonArray& history) {
     agents[index]->setHistory(history);
 }

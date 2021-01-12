@@ -6,6 +6,13 @@ int Path::next_id = 0;
 
 Path::Path(Point* beg, Point* en, RoadType type) : id(next_id++), begining(beg), end(en), type(type) {}
 
+
+Path::Path(Point* beg, Point* en, RoadType type, const int& id) : begining(beg), end(en), type(type) {
+    this->id = id;
+    if(id >= next_id)
+        next_id = id+1;
+}
+
 int Path::getId() const {
     return id;
 }

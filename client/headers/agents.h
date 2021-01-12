@@ -24,6 +24,7 @@ public:
     void addAgentHistory(int index, const QJsonArray& history);
     void addAgentStatistics(int index, const QJsonObject& statistics);
     virtual ~Agents();
+    void clear();
     Q_INVOKABLE void addAgent(City* start, City* destination, const double& load, const double& capacity);
     Q_INVOKABLE Agent* getAgent(const QModelIndex &index);
     Q_INVOKABLE void removeAgent(Agent*);
@@ -38,6 +39,7 @@ signals:
     void agentChanged(Agent*);
     void agentAdded(Agent*);
     void wrongAddAgentArguments(QString);
+    void fileFormatException();
 
 private:
     QVector<Agent*> agents;

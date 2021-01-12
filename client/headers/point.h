@@ -15,6 +15,7 @@ class Point : public QObject
 
 public:
     Point(const double& x, const double& y);
+    Point(const double& x, const double& y, const int& id);
     virtual ~Point() {emit deleted();}
     const double& getX() const;
     void removePath(Path* path);

@@ -66,6 +66,21 @@ ApplicationWindow {
             }
         }
     }
+    Connections {
+        target: map
+        function onFileFormatException() {
+            windowDialog.showError("Niepoprawny format pliku!");
+        }
+    }
+
+
+    Connections {
+        target: agents
+        function onFileFormatException() {
+            windowDialog.showError("Niepoprawny format pliku!");
+        }
+    }
+
     Popup {
         id: windowDialog
         width: 200
