@@ -58,8 +58,10 @@ Item {
         }
 
         let hour = timeText.hour;
-        if(hour > 7) {
+        if(hour === 21) {
             hour = hour - 22;
+        } else {
+            hour += 2;
         }
         let animationTime = hour*60 + timeText.minutes
         console.debug("agent total duration:" + totalDuration + ", mapTime:" + animationTime);
