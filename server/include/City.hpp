@@ -1,5 +1,7 @@
 //300190
-//Klasa reprezentująca miasto.
+//Klasa reprezentująca miasto. Miasto ma swoich sąsiadów i kolejki agentów.
+//Jedna jest kolejką agentów oczekujących, druga jest kolejką agentów którym już został przydzielony
+//czas wjazu do miasta.
 
 #ifndef CITY
 #define CITY

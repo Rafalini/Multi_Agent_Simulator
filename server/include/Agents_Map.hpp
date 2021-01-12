@@ -1,5 +1,5 @@
 //300190
-//Klasa opakowująca agentów i mapę razem
+//Klasa opakowująca agentów i mapę razem. Zapewnia funkcjonalności odczytu i zapisu danych.
 
 #ifndef MAP
 #define MAP

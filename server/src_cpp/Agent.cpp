@@ -1,11 +1,11 @@
 //300190
-//Klasa reprezentująca agenta.
+//Klasa reprezentująca agenta. Agent posiada towary do przewiezienia, ładowność, cel oraz miejsce startowe.
+//Oprócz tego agent przechowuje dane statystyczne o swojej historii.
+//W tej klasie znajdują się semafory na których zawieszają się agenci wchodzący do miast i planista.
 
 #include <memory>
-#include <map>
 #include <algorithm>
 #include <iomanip>
-#include <iostream>
 #include <string>
 #include <cstdlib>
 #include <semaphore.h>

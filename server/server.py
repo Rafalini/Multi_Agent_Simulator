@@ -38,14 +38,9 @@ async def request_handler(websocket, path):
             for x in map_paths:
                 cpp_map.addPath(x["id"],x["begining"],x["end"],x["type"])
 
-            #print("\nwczytano miasta i agentow do mapy\n")
-
-            for x in range(parameters["number_of_simulations"]):
-                cpp_map.run()
-                cpp_map.restart()
-
 
             if parameters["isGraphical"] == 1: #graphical mode answer
+                cpp_map.run()
                 output_json ="{ \"agents\" : ["
                 for x in map_agents:
                     output_json += "{ \"history\": "
@@ -57,13 +52,17 @@ async def request_handler(websocket, path):
                 output_json += cpp_map.getPaths()
                 output_json += " ] }"
             else:
+                for x in range(parameters["number_of_simulations"]):
+                    cpp_map.run()
+                    cpp_map.restart()
+
                 output_json ="["
                 for x in map_agents:
                     output_json += cpp_map.getAgentStats(x["id"],parameters["number_of_simulations"])+","
                 output_json = output_json[:-1]
                 output_json += " ] }"
 
-            #print(output_json)
+            print(output_json)
 
             cpp_map.clean()
 
