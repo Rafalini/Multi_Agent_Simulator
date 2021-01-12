@@ -56,16 +56,17 @@ Item {
             flame.visible = true;
             return;
         }
-        animationDuration = current["duration"] * mapFrame.speed;
 
-        let minutes = timeText.minutes;
         let hour = timeText.hour;
         if(hour > 7) {
             hour = hour - 22;
         }
-        console.debug("agent total duration:" + totalDuration + ", mapTime:" + parseInt(minutes)+parseInt((hour*60)));
+        let animationTime = hour*60 + timeText.minutes
+        console.debug("agent total duration:" + totalDuration + ", mapTime:" + animationTime);
 
         totalDuration += parseInt(current["duration"]);
+
+        animationDuration = current["duration"] * mapFrame.speed;
         if(current["state"] === "moving") {
             agentText.text = "";
             let point = map.getPointById(current["locationid"]);
