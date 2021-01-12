@@ -43,6 +43,8 @@ void RemoteConnector::onConnected() {
 }
 
 void RemoteConnector::onTextMessageReceived(QString message) {
+    qDebug() << isGraphicalMode;
+    qDebug() << message;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
     if(isGraphicalMode) {
         QJsonObject obj = doc.object();
