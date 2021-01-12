@@ -315,7 +315,7 @@ Page {
 
         contentItem: ColumnLayout {
             Layout.fillWidth: true
-            Layout.fillHeight: true
+//            Layout.fillHeight: true
 
             RowLayout {
                 id: listViewLabel
