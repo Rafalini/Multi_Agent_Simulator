@@ -57,7 +57,13 @@ Item {
             return;
         }
         animationDuration = current["duration"] * mapFrame.speed;
-        console.debug("agent total duration:" + totalDuration + ", mapTime:" + timeText.text);
+
+        let minutes = timeText.minutes;
+        let hour = timeText.hour;
+        if(hour > 7) {
+            hour = hour - 22;
+        }
+        console.debug("agent total duration:" + totalDuration + ", mapTime:" + minutes+hour*60);
         totalDuration += parseInt(current["duration"]);
         if(current["state"] === "moving") {
             agentText.text = "";
