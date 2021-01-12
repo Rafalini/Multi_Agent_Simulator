@@ -10,6 +10,8 @@
 #include "City.hpp"
 #include "Road.hpp"
 
+#include <iostream>
+
 City::City(int _id, std::string _city, double _ox, double _oy): id(_id), name(_city), ox(_ox), oy(_oy)
 {   sem_init(&queue_sem,0,1); }
 
@@ -39,12 +41,13 @@ void City::organizeTimes(){
           if(agents_queue.size()>0){
             sort(agents_queue.begin(), agents_queue.end(), []
             (const std::pair<int, std::pair<int, int>>&t1, const std::pair<int, std::pair<int, int>>&t2)
-            { return t1.first > t2.first; }); //sort by arrival_time
+            { return t1.first < t2.first; }); //sort by arrival_time
 
             agents_start_times.clear();            //id, start time
             agents_start_times.push_back(std::make_pair(agents_queue[0].second.second, agents_queue[0].first));
             for(unsigned long int i=1; i<agents_queue.size(); i++)                   //id,  previous_arrival_time + its_load/unload_time
                 agents_start_times.push_back(std::make_pair(agents_queue[i].second.second, agents_queue[i-1].first+agents_queue[i-1].second.first));
+            agents_queue.clear();
         }
       }
 
@@ -55,5 +58,5 @@ int City::syncGetStartTime(int id){
 
           if(iter != agents_start_times.end())
             return iter->second;
-          return -1;
+          return 0;
       }
