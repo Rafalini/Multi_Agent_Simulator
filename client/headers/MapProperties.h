@@ -2,9 +2,9 @@
 #define MAPPROPERTIES_H
 
 #include <QObject>
-#include "city.h"
-#include "path.h"
-#include "point.h"
+#include "City.h"
+#include "Path.h"
+#include "Point.h"
 
 class MapProperties : public QObject
 {

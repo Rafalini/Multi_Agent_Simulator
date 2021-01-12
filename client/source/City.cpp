@@ -1,7 +1,7 @@
-#include "point.h"
-#include "city.h"
 #include <QJsonObject>
 #include <QJsonArray>
+#include "Point.h"
+#include "City.h"
 
 City::City(const QString& name, const double& x, const double& y) : Point(x, y), name(name) {}
 

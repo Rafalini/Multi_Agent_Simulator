@@ -1,5 +1,5 @@
-#include "agent.h"
 #include <QJsonObject>
+#include "Agent.h"
 
 int Agent::next_id = 0;
 

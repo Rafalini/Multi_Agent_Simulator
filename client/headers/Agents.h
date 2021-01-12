@@ -5,8 +5,8 @@
 #include <QObject>
 #include <QDebug>
 #include <QVector>
-#include "mapproperties.h"
-#include "agent.h"
+#include "MapProperties.h"
+#include "Agent.h"
 
 class Agents : public QAbstractListModel
 {

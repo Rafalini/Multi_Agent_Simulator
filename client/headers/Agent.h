@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QJsonArray>
 #include <QJsonObject>
-#include "city.h"
-#include "point.h"
+#include "City.h"
+#include "Point.h"
 
 class Agent : public QObject
 {

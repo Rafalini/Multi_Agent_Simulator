@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QVector>
-#include "path.h"
+#include "Path.h"
 
 QT_FORWARD_DECLARE_CLASS(Path); //forward declaration
 //Class representing a point on map, where roads can split or merge, the coordinates are within range (0,1)

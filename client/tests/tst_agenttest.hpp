@@ -1,8 +1,8 @@
 #include <QtTest>
-#include "../../headers/agent.h"
-#include "../../headers/point.h"
-#include "../../headers/city.h"
-#include "../../headers/path.h"
+#include "Agent.h"
+#include "Point.h"
+#include "City.h"
+#include "Path.h"
 
 // add necessary includes here
 

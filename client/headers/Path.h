@@ -5,7 +5,7 @@
 #include <QVector>
 #include <QObject>
 #include <QJsonObject>
-#include "point.h"
+#include "Point.h"
 
 QT_FORWARD_DECLARE_CLASS(Point); //forward declaration
 

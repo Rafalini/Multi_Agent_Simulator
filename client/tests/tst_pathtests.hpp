@@ -1,6 +1,6 @@
 #include <QtTest>
-#include "../../headers/point.h"
-#include "../../headers/path.h"
+#include "Point.h"
+#include "Path.h"
 
 // add necessary includes here
 

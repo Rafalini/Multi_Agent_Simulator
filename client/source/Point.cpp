@@ -1,7 +1,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
-#include "path.h"
-#include "point.h"
+#include "Path.h"
+#include "Point.h"
 
 int Point::next_id = 0;
 

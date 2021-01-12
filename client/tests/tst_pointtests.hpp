@@ -1,7 +1,6 @@
 #include <QtTest>
-#include "../../headers/point.h"
-#include "../../headers/path.h"
-#include <QDebug>
+#include "Point.h"
+#include "Path.h"
 class PointTests : public QObject
 {
     Q_OBJECT

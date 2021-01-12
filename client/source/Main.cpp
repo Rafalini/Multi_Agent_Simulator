@@ -3,12 +3,12 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
-#include "remoteconnector.h"
-#include "city.h"
-#include "point.h"
-#include "path.h"
-#include "mapproperties.h"
-#include "agents.h"
+#include "RemoteConnector.h"
+#include "City.h"
+#include "Point.h"
+#include "Path.h"
+#include "MapProperties.h"
+#include "Agents.h"
 
 int main(int argc, char *argv[]) {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

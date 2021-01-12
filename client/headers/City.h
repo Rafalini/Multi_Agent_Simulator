@@ -2,7 +2,7 @@
 #define CITY_H
 
 #include <QObject>
-#include "point.h"
+#include "Point.h"
 
 
 QT_FORWARD_DECLARE_CLASS(Path); //forward declaration

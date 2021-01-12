@@ -4,8 +4,8 @@
 #include <QWebSocket> //"qwebsocket.h"
 #include <QQueue>
 #include <QJsonObject>
-#include "mapproperties.h"
-#include "agents.h"
+#include "MapProperties.h"
+#include "Agents.h"
 
 class RemoteConnector : public QObject
 {

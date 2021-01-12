@@ -1,8 +1,8 @@
-#include "agents.h"
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QFileDialog>
+#include "Agents.h"
 
 Agents::Agents(MapProperties* map, QObject *parent) : QAbstractListModel(parent), map(map) {
     QJsonDocument doc =  QJsonDocument::fromJson(agentsJson.toUtf8());

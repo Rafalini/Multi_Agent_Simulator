@@ -1,5 +1,6 @@
 QT += testlib
 QT -= gui
+QT += widgets
 
 CONFIG += qt console warn_on depend_includepath testcase
 CONFIG -= app_bundle
@@ -7,12 +8,13 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES +=  \
-    main.cpp \
-    ../source/agent.cpp \
-    ../source/agents.cpp \
-    ../source/city.cpp \
-    ../source/point.cpp \
-    ../source/path.cpp
+    Main.cpp \
+    ../source/Agent.cpp \
+    ../source/Agents.cpp \
+    ../source/City.cpp \
+    ../source/Point.cpp \
+    ../source/Path.cpp \
+    ../source/MapProperties.cpp
 
 
 INCLUDEPATH += ../headers
@@ -22,8 +24,9 @@ HEADERS += tst_agentstests.hpp \
         tst_agenttest.hpp   \
         tst_pointtests.hpp \
         tst_citytests.hpp \
-        ../headers/agent.h \
-        ../headers/agents.h \
-        ../headers/city.h \
-        ../headers/point.h \
-        ../headers/path.h
+        ../headers/Agent.h \
+        ../headers/Agents.h \
+        ../headers/City.h \
+        ../headers/Point.h \
+        ../headers/Path.h \
+        ../headers/MapProperties.h

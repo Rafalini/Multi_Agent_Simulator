@@ -1,6 +1,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
-#include "path.h"
+#include "Path.h"
 
 int Path::next_id = 0;
 
