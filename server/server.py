@@ -60,7 +60,7 @@ async def request_handler(websocket, path):
                 for x in map_agents:
                     output_json += cpp_map.getAgentStats(x["id"],parameters["number_of_simulations"])+","
                 output_json = output_json[:-1]
-                output_json += " ] }"
+                output_json += " ]"
 
             print(output_json)
 
