@@ -41,7 +41,7 @@ class Agents_Map{
            std::string getAgentRoute(int id);
            std::string getAgentRaport(int id);
            std::string getAgentStats(int id, int runs);
-           std::string getPaths(int id);
+           std::string getPaths();
 };
 
 #endif

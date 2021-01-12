@@ -57,7 +57,7 @@ void Agent::insertNeighbors(	std::vector<std::pair<double,Graph_node>> &points, 
 
 						for(int i=0; i<(int)neighbors.size(); ++i){
 							std::shared_ptr<City> next_city = neighbors[i].city;
-							int speed = neighbors[i].road->getSpeed();
+							int speed = neighbors[i].road->getSpeed(0);
 
 							if(next_city->getId() != previous->getId() && history.find(next_city->getId())==history.end())	{//dont add previously visited node
 
@@ -78,7 +78,7 @@ void Agent::insertFirstNeighbors(std::vector<std::pair<double,Graph_node>> &poin
 
 						for(long unsigned int i=0; i<neighbors.size(); ++i){
 							std::shared_ptr<City> next_city = neighbors[i].city;
-							int speed = neighbors[i].road->getSpeed();
+							int speed = neighbors[i].road->getSpeed(0);
 
 							double metric = origin->getDistanceTo(*next_city)*City::DISTANCE_PER_UNIT/speed+		//cost to neighbor
 															target->getDistanceTo(*next_city)*City::DISTANCE_PER_UNIT/speed;		//direction cost
@@ -151,14 +151,14 @@ void Agent::hitTheRoad(int time_to_travel, Neighbor next_city){
 
 						if(time_to_travel < limits.non_stop_working_time-time_on_track)	{		//no breaks
 							history.push_back(printMoving(next_city.city->getId(), time_to_travel));
-							distance_made += time_to_travel*next_city.road->getSpeed()/60;
+							distance_made += time_to_travel*next_city.road->getSpeed(actual_time)/60;
 							time_on_track += time_to_travel;
 						}else{																														//breaks
 							while(time_to_travel > time_on_this_route + limits.non_stop_working_time - time_on_track){
 								time_on_this_route += limits.non_stop_working_time-time_on_track;
 								history.push_back(printMoving(next_city.city->getId(), time_on_this_route, (double)time_on_this_route/(double)time_to_travel));
 								history.push_back(printBreak(next_city.city->getId(), limits.break_time));
-								distance_made += time_on_this_route*next_city.road->getSpeed()/60; //mins->hours
+								distance_made += time_on_this_route*next_city.road->getSpeed(actual_time)/60; //mins->hours
 								time_on_track = 0;
 								++num_of_breaks;
 							}
@@ -184,9 +184,9 @@ void Agent::agentDrive(std::shared_ptr<City> position, std::shared_ptr<City> tar
 																												{return n.city->getId() == id;});
 			      if(next_city != cities.end()){
 							if(checkIfAccident((int)(next_city->distance*City::DISTANCE_PER_UNIT)))
-								history.push_back(printAccident(path[path.size()-2],(int)(next_city->road->getSpeed()*next_city->distance),(double)std::rand()/(double)RAND_MAX));
+								history.push_back(printAccident(path[path.size()-2],(int)(next_city->road->getSpeed(actual_time)*next_city->distance),(double)std::rand()/(double)RAND_MAX));
 							else{										// distance_on_map * scale / speed * 60 [for minutes]
-								int time_to_travel = current_pos->getDistanceTo(next_city->city)*City::DISTANCE_PER_UNIT/next_city->road->getSpeed()*60;
+								int time_to_travel = current_pos->getDistanceTo(next_city->city)*City::DISTANCE_PER_UNIT/next_city->road->getSpeed(actual_time)*60;
 								hitTheRoad(time_to_travel, *next_city);//jack
 								current_pos = next_city->city;
 							}

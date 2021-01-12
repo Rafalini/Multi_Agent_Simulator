@@ -17,14 +17,23 @@ class Road{
 
     connections connection_type;
     int id;
+    int begin_time;
+    int end_time;
+    double overal_efficiency;
+    double in_trafic_efficiency;
+
     int speed;
-    double efficiency;
   public:
       Road(int id, int conn, Data_table limits);
-      int getSpeed();
+      int getSpeed(int time);
       int getId();
-      double getEfficiency();
+      int getEndTime();
+      int getBeginTime();
+      double getOveralEfficiency();
+      double getInTraficEfficiency();
       connections getConnectionType();
+
+      void randomTimes();
 };
 
 #endif

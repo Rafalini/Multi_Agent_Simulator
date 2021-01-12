@@ -149,20 +149,31 @@ void Agents_Map::restart(){
               stats[i][3] += agents[i]->getDistanceMade();
               stats[i][4] += agents[i]->getNumOfBreaks();
         }
+        for(auto road : roads)
+            road->randomTimes();
       }
 
-std::string Agents_Map::getPaths(int id){
-        std::string output;
+std::string Agents_Map::getPaths(){
+        std::string output="";
 
-        auto path = std::find_if(roads.begin(), roads.end(), [&id](const std::shared_ptr<Road>&r)
-                                                                    {return r->getId() == id;});
-        if(path != roads.end())
-          output =  std::string("{\"path_id\": \"")+
-                    std::to_string((*path)->getId())+
-                    std::string("\", \"efficiency\" : \"")+
-                    std::to_string((*path)->getEfficiency())+
-                    std::string("\"}");
+        sort(roads.begin(), roads.end(), []
+        (const std::shared_ptr<Road>&r1, const std::shared_ptr<Road>&r2)
+                      {return r1->getBeginTime() < r2->getBeginTime();});
 
+        for(auto path : roads)
+          output += std::string("{\"path_id\": \"")+
+                    std::to_string(path->getId())+
+                    std::string("\", \"base_efficiency\" : \"")+
+                    std::to_string(path->getOveralEfficiency())+
+                    std::string("\", \"trafic_efficiency\" : \"")+
+                    std::to_string(path->getInTraficEfficiency())+
+                    std::string("\", \"begin_time\" : \"")+
+                    std::to_string(path->getBeginTime())+
+                    std::string("\", \"end_time\" : \"")+
+                    std::to_string(path->getEndTime())+
+                    std::string("\" } ,");
+
+        output = output.substr(0, output.size()-2);
         return output;
       }
 

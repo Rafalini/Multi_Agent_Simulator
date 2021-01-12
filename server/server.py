@@ -54,10 +54,8 @@ async def request_handler(websocket, path):
                     output_json += cpp_map.getAgentRaport(x["id"])+"} },"
                 output_json = output_json[:-1]
                 output_json += "], \"paths\" : ["
-                for x in map_paths:
-                    output_json += cpp_map.getPaths(x["id"])+", "
-                output_json = output_json[:-2]
-                output_json += "]}"
+                output_json += cpp_map.getPaths()
+                output_json += " ] }"
             else:
                 output_json ="["
                 for x in map_agent_ids:
