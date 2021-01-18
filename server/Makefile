@@ -4,13 +4,13 @@ TARGETDIR = bin
 SRCDIR = src_cpp
 CFLAGS = -Wall -pedantic -Wno-long-long -I include -std=c++11 -fPIC
 TESTFLAG = -lboost_unit_test_framework
-INC = -I /usr/include/python3.8 
-SHARED_LIBRARY_FLAGS = -pthread -lboost_python38 -lpython3.8
+INC = -I /usr/include/python3.7
+SHARED_LIBRARY_FLAGS = -pthread -lboost_python37
 CC = g++
 
-server: $(BUILDDIR)/Agents_Map.o $(BUILDDIR)/City.o $(BUILDDIR)/Agent.o $(BUILDDIR)/Road.o $(BUILDDIR) 
+server: $(BUILDDIR)/Agents_Map.o $(BUILDDIR)/City.o $(BUILDDIR)/Agent.o $(BUILDDIR)/Road.o $(BUILDDIR)
 	$(CC) $(BUILDDIR)/*.o $(INC) $(SHARED_LIBRARY_FLAGS) -shared -o $(BUILDDIR)/map_module.so
-	
+
 $(BUILDDIR)/Agents_Map.o: $(SRCDIR)/Agents_Map.cpp $(BUILDDIR)
 	$(CC) -c $(SRCDIR)/Agents_Map.cpp $(INC) -o $(BUILDDIR)/Agents_Map.o $(CFLAGS)
 
@@ -25,7 +25,7 @@ $(BUILDDIR)/Road.o: $(SRCDIR)/Road.cpp $(BUILDDIR)
 
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
-	
+
 run: server
 	python3 server.py
 

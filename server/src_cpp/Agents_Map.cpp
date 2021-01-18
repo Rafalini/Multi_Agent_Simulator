@@ -90,7 +90,7 @@ void Agents_Map::scheduler(){
 
           for(auto agent : agents){ //acquire all tickets = all agents waiting
             if(agent->isRunning() == false)
-              finished_agents++;
+              ++finished_agents;
             agent->unlockMutex();
           }
 

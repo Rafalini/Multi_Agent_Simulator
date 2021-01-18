@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE(pathTest1_nodeInserts)
      table.max_speed_1   = 50;
      table.max_speed_2   = 50;
 
-     std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+     std::shared_ptr<Road> r = std::make_shared<Road>(0,0,table);
 
 		 c1->addNeighbor(c2,r);  //  c1  ---  c2
 		 c1->addNeighbor(c4,r);  //  |	   		|
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(pathTest2_nodeInserts2)
     table.max_speed_1   = 50;
     table.max_speed_2   = 50;
 
-    std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+    std::shared_ptr<Road> r = std::make_shared<Road>(0,0,table);
 
 		c1->addNeighbor(c2,r);  //  c1  ---  c2
 		c1->addNeighbor(c4,r);  //  |	   		|
@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(pathTest2_pathFinder1)
     table.max_speed_1   = 50;
     table.max_speed_2   = 50;
 
-    std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+    std::shared_ptr<Road> r = std::make_shared<Road>(0,0,table);
 
 		c1->addNeighbor(c2,r);  //  c1  ---  c2
 		c1->addNeighbor(c4,r);  //  |	   		|
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE(pathTest2_pathFinder2)
     table.max_speed_1   = 50;
     table.max_speed_2   = 50;
 
-    std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+    std::shared_ptr<Road> r = std::make_shared<Road>(0,0,table);
 
 		c1->addNeighbor(c2,r);  //  c1  --------- c2
 		c1->addNeighbor(c4,r);  //   \	   		     |
@@ -186,7 +186,7 @@ BOOST_AUTO_TEST_CASE(pathTest2_pathFinder3)
     table.max_speed_1   = 50;
     table.max_speed_2   = 50;
 
-    std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+    std::shared_ptr<Road> r = std::make_shared<Road>(0,0,table);
 
 		c1->addNeighbor(c2,r);  //  c1
 		c2->addNeighbor(c1,r);  //   |
@@ -244,8 +244,8 @@ BOOST_AUTO_TEST_CASE(pathTest2_pathFinder4)
     table.max_speed_1   = 20;
     table.max_speed_2   = 30;
 
-    std::shared_ptr<Road> r1 = std::make_shared<Road>(0,table);
-    std::shared_ptr<Road> r2 = std::make_shared<Road>(2,table);
+    std::shared_ptr<Road> r1 = std::make_shared<Road>(0,0,table);
+    std::shared_ptr<Road> r2 = std::make_shared<Road>(2,0,table);
 
 		c1->addNeighbor(c2,r1);  //  c1 --|
 		c1->addNeighbor(c4,r2);  //   |	 c2_
@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(pathTest2_pathFinder4)
     path = a.getPath();                //path written backwards: c3 <- c4 <- c1
     BOOST_CHECK_EQUAL(path.size(), 3);
     BOOST_CHECK_EQUAL(path[0], 2);
-    BOOST_CHECK_EQUAL(path[1], 3);
+    BOOST_CHECK_EQUAL(path[1], 1);
     BOOST_CHECK_EQUAL(path[2], 0);
 }
 
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE(pathTest2_pathFinderX) //big test
     table.max_speed_1   = 50;
     table.max_speed_2   = 50;
 
-    std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+    std::shared_ptr<Road> r = std::make_shared<Road>(0,0,table);
 
 		c1->addNeighbor(c2,r);  //
 		c2->addNeighbor(c1,r);  //

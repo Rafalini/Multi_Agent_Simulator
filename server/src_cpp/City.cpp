@@ -45,7 +45,7 @@ void City::organizeTimes(){
 
             agents_start_times.clear();            //id, start time
             agents_start_times.push_back(std::make_pair(agents_queue[0].second.second, agents_queue[0].first));
-            for(unsigned long int i=1; i<agents_queue.size(); i++)                   //id,  previous_arrival_time + its_load/unload_time
+            for(unsigned long int i=1; i<agents_queue.size(); ++i)                   //id,  previous_arrival_time + its_load/unload_time
                 agents_start_times.push_back(std::make_pair(agents_queue[i].second.second, agents_queue[i-1].first+agents_queue[i-1].second.first));
             agents_queue.clear();
         }

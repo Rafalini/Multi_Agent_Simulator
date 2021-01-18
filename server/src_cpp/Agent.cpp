@@ -335,7 +335,7 @@ void Agent::agentTravel(){
 
 std::string Agent::getHistory(){
 					std::string output = "[";
-					for(long unsigned int i=0; i<history.size(); i++)
+					for(long unsigned int i=0; i<history.size(); ++i)
 						output += history[i]+", ";
 					output = output.substr(0, output.size()-2);
 					output += "]";

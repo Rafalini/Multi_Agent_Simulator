@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(neighboursCityTest1)
 		table.max_speed_1   = 50;
 		table.max_speed_2   = 50;
 
-		std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+		std::shared_ptr<Road> r = std::make_shared<Road>(0,0,table);
 
 		c1->addNeighbor(c2,r);  //  c1  ---  c2
 		c1->addNeighbor(c4,r);  //  |	   		|
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(neighboursCityTest2)
 		table.max_speed_1   = 50;
 		table.max_speed_2   = 50;
 
-		std::shared_ptr<Road> r = std::make_shared<Road>(0,table);
+		std::shared_ptr<Road> r = std::make_shared<Road>(0,0,table);
 
 		c1->addNeighbor(c2,r);  //  c1  ---- c2
 		c1->addNeighbor(c4,r);  //  | \____	|
